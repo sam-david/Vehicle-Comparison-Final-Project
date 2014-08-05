@@ -1,0 +1,428 @@
+/* ----------------- Color Palette --------------------
+
+Tesla Light Red: #bf0021
+Tesla Dark Red: #831c20
+
+*/
+
+/* ----------------- Body Elements --------------------*/
+
+body {
+	background-image:url(images/microtile.png);
+	font-family: 'Lato', sans-serif;
+}
+
+
+.page-heading {
+	text-align: center;
+	color: white;
+}
+
+.background-div {
+	background-color: rgba(0,0,0,0.5);
+	width: 1000px;
+	margin: 0 auto;
+	border-left: solid 3px #831c20;
+	border-right: solid 3px #831c20;
+	border-top: solid 3px #831c20;
+}
+
+.intro-paragraph p {
+	color: white;
+	text-align: center;
+	text-align: justify;
+	margin-left: 40px;
+	margin-right: 40px;
+}
+
+
+/* ----------------- Header --------------------*/
+
+header {
+	background-image:url(images/elements/header.jpg);
+	height: 266px;
+	border-bottom: solid 3px #831c20;
+}
+
+.page-title {
+	color: #bf0021;
+	text-align: center;
+}
+
+/* ----------------- Tesla Selector --------------------*/
+
+.tesla-selector:after {
+	clear: both;
+}
+
+.tesla-selector:before, .tesla-selector:after {
+	content: "";
+	display: block;
+}
+
+.tesla-selector-list {
+	
+}
+
+.tesla-selector {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.tesla-selector li {
+	background-color:rgba(0,0,0,0.5);
+	float: left;
+	width: 29.5%;
+	height: 105px;
+	margin-right: 1.5%;
+	border: solid #831c20 5px;
+	border-radius: 10px;
+}
+
+.tesla-selector p {
+	text-align: center;
+	margin-top: 0;
+	color: white;
+}
+
+.battery-option {
+	margin-left: 35%;
+	margin-top: 13%;
+}
+
+.battery-p85 {
+	margin-left: 25%;
+	margin-top: 12%;
+}
+
+/* ----------------- Vehicle Selector --------------------*/
+
+.comparison-vehicle-selector {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.selectors:after {
+	clear: both;
+}
+
+.selectors:after, 
+.selectors:before {
+	content: "";
+	display: block;
+}
+
+.selectors {
+	margin-left: 21.5%;
+	border: solid #831c20 5px;
+	border-radius: 10px;
+	width: 52%;
+	padding: 12px;
+}
+
+.year-select-box {
+	width: 15%;
+	height: 25px;
+	margin-right: 3%;
+	font-size: 1.2em;
+	float: left;
+}
+
+.select-box {
+	width: 36%;
+	height: 25px;
+	margin-right: 3%;
+	font-size: 1.2em;
+	float: left;
+}
+
+.model-select-box {
+	width: 42.5%;
+	height: 25px;
+	font-size: 1.2em;
+	float: left;
+}
+
+.long-select-box {
+	clear: both;
+	width: 99.5%;
+	height: 25px;
+	font-size: 1.2em;
+	margin-top: 3%;
+	float: left;
+}
+
+.select-line {
+	clear: both;
+	float: left;
+	width: 98.5%;
+	margin-top: 3%;
+}
+
+.state-select-box {
+	clear: both;
+	width: 25%;
+	height: 25px;
+	margin-top: 3%;
+	margin-right: 3%;
+	font-size: 1.2em;
+	float: left;
+}
+
+.zip-text {
+	margin-top: 3%;
+	
+	width: 24%;
+	height: 25px;
+	font-size: 1.1em;
+	float: left;
+}
+
+.submit-button {
+	float: left;
+	width: 21%;
+	height: 25px;
+	font-size: 1.2em;
+	margin-top: 3%;
+	margin-left: 3%;
+}
+
+/* ----------------- Tables --------------------*/
+
+.fuel-economy:after {
+	clear: both;
+}
+
+.fuel-economy:after, .fuel-economy:before {
+	content: "";
+	display: block;
+}
+
+.fuel-economy {
+	border-top: 3px solid #831c20;
+	margin-top: 3%;
+}
+
+.table1-headings:after {
+	clear: both;
+}
+
+.table1-headings:after, .table1-headings:before {
+	content: "";
+	display: block;
+}
+
+.fuel-heading {
+	color: white;
+	margin-left: 31%;
+	float: left;
+}
+
+.fuel-heading-gas {
+	color: white;
+	margin-left: 34%;
+	float: left;
+}
+
+
+#fuel-economy-table {
+	width: 46%;
+	background-color: black;
+	float: left;
+	border: 2px solid #bf0021;
+	margin-left: 10%;
+	table-layout: fixed;
+}
+
+#fuel-economy-table th {
+	background-color: #bf0021;
+	color: white;
+	width: 30%;
+}
+
+#fuel-economy-table td {
+	text-align: center;
+	color: white;
+	overflow: visible;
+}
+
+#mileslide {
+	width: 5%;
+}
+
+.gas-table {
+	width: 17%;
+	background-color: black;
+	color: white;
+	float: left;
+	margin-left: 14%;
+	border: solid 3px #bf0021;
+	border-radius: 10px;
+}
+
+.gas-table td {
+	text-align: center;
+}
+
+.gas-price {
+	font-family: 'Audiowide', cursive;
+	color: #00FF1B;
+	text-align: center;
+}
+
+.fuel-price {
+	font-family: 'Audiowide', cursive;
+	color: #fcff00;
+	text-align: center;
+}
+
+.bottom-table-headings:after {
+	clear: both;
+}
+
+.bottom-table-headings:after, .bottom-table-headings:before {
+	content: "";
+	display: block;
+}
+
+.cost-heading {
+	color: white;
+	margin-left: 26%;
+	margin-top: 3%;
+	float: left;
+}
+
+.bottom-tables:after {
+	clear: both;
+}
+
+.bottom-tables:after, .bottom-tables:before {
+	content: "";
+	display: block;
+}
+
+.cost-table {
+	width: 49%;
+	background-color: black;
+	float: left;
+	border: 2px solid #bf0021;
+	margin-left: 4%;
+
+}
+
+.cost-table td {
+	color: white;
+	width: 33.3333%;
+	border: solid white 1px;
+	text-align: center;
+	overflow: visible;
+}
+
+.performance-heading {
+	color: white;
+	margin-left: 38%;
+	margin-top: 3%;
+	float: left;
+}
+
+.performance-table {
+	width: 40%;
+	background-color: black;
+	float: left;
+	border: 2px solid #bf0021;
+	margin-left: 30px;
+}
+
+.performance-table td {
+	color: white;
+	border: solid white 1px;
+	text-align: center;
+}
+
+.performance-table th, .cost-table th {
+	background-color: #bf0021;
+	color: white;
+	width: 33.3333%;
+}
+
+/* ----------------- Annual Cost Tables --------------------*/
+
+.tesla-cost-heading {
+	color: white;
+	text-align: center;
+	margin-top: 2%;
+}
+
+.annual-cost-table {
+	width: 93.5%%;
+	background-color: black;
+	float: left;
+	border: 2px solid #bf0021;
+	margin-left: 30px;
+	margin-bottom: 1%;
+}
+
+.annual-cost-table td {
+	width: 10%;
+	color: white;
+	border: solid white 1px;
+	text-align: center;
+}
+
+.annual-cost-table th {
+	background-color: #bf0021;
+	color: white;
+	width: 15%;
+}
+
+.year-heading {
+	width: 10%;
+}
+
+.bottom-margin {
+	margin-bottom: 3%;
+}
+
+/* ----------------- Footer --------------------*/
+
+footer {
+	background-image:url(images/elements/Footer.jpg);
+	background-repeat: no-repeat;
+	height: 205px;
+	border-bottom: solid 3px #831c20;
+}
+
+footer:after {
+	clear: both;
+}
+
+footer:after,
+footer:before {
+	content: "";
+	display: block;
+}
+
+.footer-link {
+	float: left;
+	width: 125px;
+	height: 25px;
+	color: #bf0021;
+	padding-top: 2px;
+	text-decoration: none;
+	text-align: center;
+	text-decoration: underline;
+	border-right: solid 1px #831c20;
+	margin-top: 7px;
+}
+.footer2-link {
+	float: left;
+	width: 123.5px;
+	height: 25px;
+	color: #bf0021;
+	padding-top: 2px;
+	text-decoration: none;
+	text-align: center;
+	text-decoration: underline;
+	border-right: solid 1px #831c20;
+	margin-top: 7px;
+}

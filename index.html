@@ -1,0 +1,513 @@
+<html>
+<head>
+	<title>Tesla Model S Vechicle Comparison</title>
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="style.css" />
+	<link href="css/simple-slider.css" rel="stylesheet" type="text/css" />
+	<link href="css/simple-slider-volume.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery.selectbox.css" rel="stylesheet" type="text/css" />
+	<link href="css/alertify.core.css" rel="stylesheet" type="text/css" />
+	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+<div class="background-div">
+	<header>
+	</header>
+
+<article class="intro-paragraph">
+	<p>This website was made as tool to help you compare the current Tesla vechicles with any other vehcicle on the market. Using the help of Edmunds.com, we are able to show you data side by side with the model S comparing costs, performanc. We use t</p>
+</article>
+	<div class="tesla-selector">
+		<h2 class="page-heading">Select Which Model S</h2>
+
+
+		<ul class="tesla-selector-list">
+			<li id="60kwh"><img class="battery-option" src="images/battery_60.png"> </br> <p>60 kWh Battery</p></li>
+			<li id="85kwh"><img class="battery-option" src="images/battery_85.png"> </br> <p>85 kWh Battery</p></li>
+			<li id="p85kwh"><img class="battery-p85" src="images/battery_p85.png"> </br> <p>85 kWh Performance</p></li>
+		</ul>
+
+	</div>
+
+	<div class="comparison-vehicle-selector">
+		<h2 class="page-heading">Select Vehicle to Compare</h2>
+		<div class="selectors">
+			<select class="year-select-box" id="yearSelect">
+				<option value="" disabled selected>Year</option>
+				<option value="2014">2014</option>
+				<option value="2013">2013</option>
+				<option value="2012">2012</option>
+				<option value="2011">2011</option>
+				<option value="2010">2010</option>
+				<option value="2009">2009</option>
+				<option value="2008">2008</option>
+				<option value="2007">2007</option>
+				<option value="2006">2006</option>
+				<option value="2005">2005</option>
+				<option value="2004">2004</option>
+				<option value="2003">2003</option>
+				<option value="2002">2002</option>
+				<option value="2001">2001</option>
+				<option value="2000">2000</option>
+				<option value="1990">1999</option>
+				<option value="1990">1998</option>
+				<option value="1990">1997</option>
+				<option value="1990">1996</option>
+				<option value="1990">1995</option>
+				<option value="1990">1994</option>
+				<option value="1990">1993</option>
+				<option value="1992">1992</option>
+				<option value="1991">1991</option>
+				<option value="1990">1990</option>
+			</select>
+
+			<select class="select-box" id="makeSelect" disabled>
+				<option value="" disabled>Select Make</option>
+			</select>
+			<select class="model-select-box" id="modelSelect" disabled>
+				<option value="" disabled>Select Base Model</option>
+			</select>
+			<select class="long-select-box" id="specificModelSelect" disabled>
+				<option value="" disabled>Select Specific Model</option>
+			</select>
+			<hr class="select-line">
+			<select class="state-select-box" id="stateSelect" disabled>
+				<option value="0" disabled selected>Select State</option>
+				<option value="AL">AL</option>
+				<option value="AK">AK</option>
+				<option value="AZ">AZ</option>
+				<option value="AR">AR</option>
+				<option value="CA">CA</option>
+				<option value="CO">CO</option>
+				<option value="CT">CT</option>
+				<option value="DE">DE</option>
+				<option value="FL">FL</option>
+				<option value="GA">GA</option>
+				<option value="HI">HI</option>
+				<option value="IA">IA</option>
+				<option value="ID">ID</option>
+				<option value="IL">IL</option>
+				<option value="IN">IN</option>
+				<option value="KS">KS</option>
+				<option value="KY">KY</option>
+				<option value="LA">LA</option>
+				<option value="MA">MA</option>
+				<option value="MD">MD</option>
+				<option value="ME">ME</option>
+				<option value="MI">MI</option>
+				<option value="MN">MN</option>
+				<option value="MS">MS</option>
+				<option value="MO">MO</option>
+				<option value="MT">MT</option>
+				<option value="NC">NC</option>
+				<option value="ND">ND</option>
+				<option value="NE">NE</option>
+				<option value="NH">NH</option>
+				<option value="NJ">NJ</option>
+				<option value="NM">NM</option>
+				<option value="NV">NV</option>
+				<option value="NY">NY</option>
+				<option value="OH">OH</option>
+				<option value="OK">OK</option>
+				<option value="OR">OR</option>
+				<option value="PA">PA</option>
+				<option value="RI">RI</option>
+				<option value="SC">SC</option>
+				<option value="SD">SD</option>
+				<option value="TN">TN</option>
+				<option value="TX">TX</option>
+				<option value="UT">UT</option>
+				<option value="VA">VA</option>
+				<option value="VT">VT</option>
+				<option value="WA">WA</option>
+				<option value="WI">WI</option>
+				<option value="WV">WV</option>
+				<option value="WY">WY</option>
+			</select>
+			<input class="zip-text" id="zipCode" type="text" placeholder="Zip Code" disabled>
+			<button class="submit-button" type="button" onclick="submitCar()">Submit</button>
+			<button class="submit-button" type="button" onclick="reset()">Reset</button>
+		</div>
+	</div>
+
+<div class="fuel-economy">
+	<div class="table1-headings">
+	<h2 class="fuel-heading">Fuel</h2>
+
+	<h2 class="fuel-heading-gas">Gasoline/Energy</h2>
+	</div>
+	<div id="fuel-economy-table">
+		<table>
+<!-- 			<tr>
+				<td></td>
+				<td>Fuel Economy</td>
+				<td></td>
+			</tr> -->
+			<tr>
+				<td></td>
+				<th>Tesla</th>
+				<th>Comparison Car</th>
+			</tr>
+			<tr>
+				<th>MPG combined</th>
+				<td id="tesla-MPG-combined"></td>
+				<td id="comp-MPG-combined"></td>
+			</tr>
+			<tr>
+				<th>MPG city/Highway</th>
+				<td id="tesla-MPG"></td>
+				<td id="comp-MPG"></td>
+			</tr>
+			<tr>
+				<th>Fuel Tank Size</th>
+				<td id="tesla-capacity"></td>
+				<td id="comp-capacity"></td> <!-- 16 Gal.(250 Miles) -->
+			</tr>
+			<tr>
+				<th>Miles Driven</th>
+				<td><input id="mileslide" type="text" data-slider="true" data-slider-range="5000,150000" data-slider-step="5000" data-slider-theme="volume" data-slider-highlight="true"></td>
+				<td><p id="annualMiles">Use Slider</p></td>
+			</tr>
+			<tr>
+				<th>Fuel Cost</th>
+				<td id="tesla-fuel-cost">$0</td>
+				<td id="comp-fuel-cost">$0</td>
+			</tr>
+		</table>
+	</div>
+
+	<div> 
+		<table class="gas-table">
+			<tr><td>Gas Price</td></tr>
+			<tr><td><span id="currentgas" class="gas-price">$3.67</span></td></tr>
+			<tr><td>Energy Price</td></tr>
+			<tr><td><span id="currentenergy" class="fuel-price">$.11</span></td></tr>
+			<!-- <tr><td>Your Gas Price</td></tr>
+			<tr><td><input type="text"></td></tr> -->
+
+		</table>
+
+	</div>
+</div>
+
+<div class="bottom-table-headings">
+<h2 class="cost-heading">Cost</h2>
+<h2 class="performance-heading">Performance</h2>
+</div>
+
+<div class="bottom-tables">
+<table class="cost-table">
+	<tr>
+		<th></th>
+		<th>Tesla</th>
+		<th>Comparison Car</th>
+	</tr>
+	<tr>
+		<th>Fuel</th>
+		<td id="tesla-fuel"></td>
+		<td id="comp-fuel"></td>
+	</tr>
+	<tr>
+		<th>Insurance</th>
+		<td id="tesla-insurance"></td>
+		<td id="comp-insurance"></td>
+	</tr>
+	<tr>
+		<th>Maintenance</th>
+		<td id="tesla-maintenance"></td>
+		<td id="comp-maintenance"></td>
+	</tr>
+	<tr>
+		<th>Repairs</th>
+		<td id="tesla-repairs"></td>
+		<td id="comp-repairs"></td>
+	</tr>
+	<tr>
+		<th>Depreciation</th>
+		<td id="tesla-depreciation"></td>
+		<td id="comp-depreciation"></td>
+	</tr>
+	<tr>
+		<th>Taxes and Fees</th>
+		<td id="tesla-tax"></td>
+		<td id="comp-tax"></td>
+	</tr>
+	<tr>
+		<th>Financing</th>
+		<td id="tesla-financing"></td>
+		<td id="comp-financing"></td>
+	</tr>
+	<tr>
+		<th>Tax Credit</th>
+		<td id="tesla-tax-credit"></td>
+		<td></td>
+	</tr>
+	<tr>
+		<th>Total Cost</th>
+		<td id="tesla-total"></td>
+		<td id="comp-total"></td>
+	</tr>
+</table>
+
+<table class="performance-table">
+	<tr>
+		<th class="top-table-box"></th>
+		<th>Tesla</th>
+		<th>Comparison Car</th>
+	</tr>
+	<tr>
+		<th>Horsepower</th>
+		<td id="tesla-horsepower"></td>
+		<td id="comp-horsepower"></td>
+	</tr>
+	<tr>
+		<th>Torque</th>
+		<td id="tesla-torque"></td>
+		<td id="comp-torque"></td>
+	</tr>
+	<tr>
+		<th>0-60 Speed</th>
+		<td id="tesla-0-60"></td>
+		<td id="comp-0-60"></td>
+	</tr>
+	<tr>
+		<th>Turn Radius</th>
+		<td id="tesla-radius"></td>
+		<td id="comp-radius"></td>
+	</tr>
+	<tr>
+		<th>Air Drag</th>
+		<td id="tesla-airdrag"></td>
+		<td id="comp-airdrag"></td>
+	</tr>
+	<tr>
+		<th>Cargo Cap.</th>
+		<td id="tesla-cargo-capacity"></td>
+		<td></td>
+	</tr>
+	<tr>
+		<th>Total Weight</th>
+		<td id="tesla-weight"></td>
+		<td id="comp-weight"></td>
+	</tr>
+</table>
+</div>
+
+<div class="bottom-table-headings">
+<h2 class="tesla-cost-heading">Tesla Annual Cost</h2>
+</div>
+<div class="bottom-tables">
+<table class="annual-cost-table">
+	<tr>
+		<td class="top-table-box"></td>
+		<td class="year-heading">Year 1</td>
+		<td class="year-heading">Year 2</td>
+		<td class="year-heading">Year 3</td>
+		<td class="year-heading">Year 4</td>
+		<td class="year-heading">Year 5</td>
+		<td class="year-heading">5 Yr Total</td>
+	</tr>
+	<tr>
+		<th>Fuel</th>
+		<td id="tesla-fuel1"></td>
+		<td id="tesla-fuel2"></td>
+		<td id="tesla-fuel3"></td>
+		<td id="tesla-fuel4"></td>
+		<td id="tesla-fuel5"></td>
+		<td id="tesla-fuel-total"></td>
+	</tr>
+	<tr>
+		<th>Insurance</th>
+		<td id="tesla-insurance1"></td>
+		<td id="tesla-insurance2"></td>
+		<td id="tesla-insurance3"></td>
+		<td id="tesla-insurance4"></td>
+		<td id="tesla-insurance5"></td>
+		<td id="tesla-insurance-total"></td>
+	</tr>
+	<tr>
+		<th>Maintenance</th>
+		<td id="tesla-maintenance1"></td>
+		<td id="tesla-maintenance2"></td>
+		<td id="tesla-maintenance3"></td>
+		<td id="tesla-maintenance4"></td>
+		<td id="tesla-maintenance5"></td>
+		<td id="tesla-maintenance-total"></td>
+	</tr>
+	<tr>
+		<th>Repairs</th>
+		<td id="tesla-repairs1"></td>
+		<td id="tesla-repairs2"></td>
+		<td id="tesla-repairs3"></td>
+		<td id="tesla-repairs4"></td>
+		<td id="tesla-repairs5"></td>
+		<td id="tesla-repairs-total"></td>
+	</tr>
+	<tr>
+		<th>Depreciation</th>
+		<td id="tesla-depreciation1"></td>
+		<td id="tesla-depreciation2"></td>
+		<td id="tesla-depreciation3"></td>
+		<td id="tesla-depreciation4"></td>
+		<td id="tesla-depreciation5"></td>
+		<td id="tesla-depreciation-total"></td>
+	</tr>
+	<tr>
+		<th>Taxes and Fees</th>
+		<td id="tesla-tax1"></td>
+		<td id="tesla-tax2"></td>
+		<td id="tesla-tax3"></td>
+		<td id="tesla-tax4"></td>
+		<td id="tesla-tax5"></td>
+		<td id="tesla-tax-total"></td>
+	</tr>
+	<tr>
+		<th>Financing</th>
+		<td id="tesla-financing1"></td>
+		<td id="tesla-financing2"></td>
+		<td id="tesla-financing3"></td>
+		<td id="tesla-financing4"></td>
+		<td id="tesla-financing5"></td>
+		<td id="tesla-financing-total"></td>
+	</tr>
+	<tr>
+		<th>Tax Credit</th>
+		<td id="tesla-tax-credit1"></td>
+		<td id="tesla-tax-credit2"></td>
+		<td id="tesla-tax-credit3"></td>
+		<td id="tesla-tax-credit4"></td>
+		<td id="tesla-tax-credit5"></td>
+		<td id="tesla-tax-credit-total"></td>
+	</tr>
+	<tr>
+		<th>Total Cost</th>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+</div>
+<div class="bottom-table-headings">
+<h2 class="tesla-cost-heading">Comparison Annual Cost</h2>
+</div>
+<div class="bottom-tables">
+<table class="annual-cost-table bottom-margin">
+	<tr>
+		<td class="top-table-box"></td>
+		<td class="year-heading">Year 1</td>
+		<td class="year-heading">Year 2</td>
+		<td class="year-heading">Year 3</td>
+		<td class="year-heading">Year 4</td>
+		<td class="year-heading">Year 5</td>
+		<td class="year-heading">5 Yr Total</td>
+	</tr>
+	<tr>
+		<th>Fuel</th>
+		<td id="comp-fuel1"></td>
+		<td id="comp-fuel2"></td>
+		<td id="comp-fuel3"></td>
+		<td id="comp-fuel4"></td>
+		<td id="comp-fuel5"></td>
+		<td id="comp-fuel-total"></td>
+	</tr>
+	<tr>
+		<th>Insurance</th>
+		<td id="comp-insurance1"></td>
+		<td id="comp-insurance2"></td>
+		<td id="comp-insurance3"></td>
+		<td id="comp-insurance4"></td>
+		<td id="comp-insurance5"></td>
+		<td id="comp-insurance-total"></td>
+	</tr>
+	<tr>
+		<th>Maintenance</th>
+		<td id="comp-maintenance1"></td>
+		<td id="comp-maintenance2"></td>
+		<td id="comp-maintenance3"></td>
+		<td id="comp-maintenance4"></td>
+		<td id="comp-maintenance5"></td>
+		<td id="comp-maintenance-total"></td>
+	</tr>
+	<tr>
+		<th>Repairs</th>
+		<td id="comp-repairs1"></td>
+		<td id="comp-repairs2"></td>
+		<td id="comp-repairs3"></td>
+		<td id="comp-repairs4"></td>
+		<td id="comp-repairs5"></td>
+		<td id="comp-repairs-total"></td>
+	</tr>
+	<tr>
+		<th>Depreciation</th>
+		<td id="comp-depreciation1"></td>
+		<td id="comp-depreciation2"></td>
+		<td id="comp-depreciation3"></td>
+		<td id="comp-depreciation4"></td>
+		<td id="comp-depreciation5"></td>
+		<td id="comp-depreciation-total"></td>
+	</tr>
+	<tr>
+		<th>Taxes and Fees</th>
+		<td id="comp-tax1"></td>
+		<td id="comp-tax2"></td>
+		<td id="comp-tax3"></td>
+		<td id="comp-tax4"></td>
+		<td id="comp-tax5"></td>
+		<td id="comp-tax-total"></td>
+	</tr>
+	<tr>
+		<th>Financing</th>
+		<td id="comp-financing1"></td>
+		<td id="comp-financing2"></td>
+		<td id="comp-financing3"></td>
+		<td id="comp-financing4"></td>
+		<td id="comp-financing5"></td>
+		<td id="comp-financing-total"></td>
+	</tr>
+	<tr>
+		<th>Tax Credit</th>
+		<td id="comp-tax-credit1"></td>
+		<td id="comp-tax-credit2"></td>
+		<td id="comp-tax-credit3"></td>
+		<td id="comp-tax-credit4"></td>
+		<td id="comp-tax-credit5"></td>
+		<td id="comp-tax-credit-total"></td>
+	</tr>
+	<tr>
+		<th>Total Cost</th>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+</table>
+</div>
+	<footer>
+		<a href="mailto:sfd1987@gmail.com" class="footer-link">Contact</a>
+		<a href="mailto:sfd1987@gmail.com" class="footer2-link">About</a>
+		<a href="http://www.teslamotors.com/" class="footer2-link">Tesla</a>
+		<a href="http://www.edmunds.com/" class="footer2-link">Edmunds</a>
+
+	</footer>
+
+
+
+	
+</div>
+	<script src="jquery-2.1.0.js"></script>
+	<script src="js/alertify.js"></script>
+	<script src="js/simple-slider.js"></script>
+	<script src="js/jquery.selectbox-0.2.js"></script>
+	<script src="script.js"></script>
+	
+	
+</body>
+</html>
