@@ -301,10 +301,16 @@ $(document).ready(function(){
             teslaData(teslaType);
             teslaAnnualCost(teslaType);
             populatePerformanceData(carID);
+            populateEnergyPrices(state);
+            populateGasPrices(state);
             console.log(energyPrice);
             alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + carModel);
+        } else if (zip.length === 5 & teslaType === "") { 
+           alertify.alert("Please select Tesla Type");
+        } else if (zip.length != 5 & teslaType != "") { 
+           alertify.alert("Please select a Location");
         } else {
-           alertify.alert("Please select Tesla, Comparison Model, and Location");
+            alertify.alert("Please fill out all of the data forms");
         }
     }
 
@@ -495,12 +501,73 @@ $(document).ready(function(){
                 $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
                 $("#tesla-tax-credit" + (i + 1)).text('$' + tesla85TaxCredit[i]);
             }
+        } else if (tesla === "p85") {
+            for(i = 0; i < 6; i++) {
+                $("#tesla-fuel" + (i + 1)).text('$' + teslap85Fuel[i]);
+                $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
+                $("#tesla-maintenance" + (i + 1)).text('$' + teslap85Maintenance[i]);
+                $("#tesla-repairs" + (i + 1)).text('$' + teslap85Repairs[i]);
+                $("#tesla-depreciation" + (i + 1)).text('$' + teslap85Depreciation[i]);
+                $("#tesla-tax" + (i + 1)).text('$' + teslap85Tax[i]);
+                $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
+                $("#tesla-tax-credit" + (i + 1)).text('$' + teslap85TaxCredit[i]);
+            }
         }
     }
 
-    function stateEnergy () {
-        if (state === "CA") {
-            
+
+    function populateEnergyPrices (state) {
+        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.' + state +'-RES.M ', function(json) {
+            console.log(json.series[0].data[0][1]);
+            energyPrice = (json.series[0].data[0][1] / 100);
+            $("#currentenergy").text(state + ' $' + energyPrice.toFixed(2));
+            });
+    }
+
+    function populateGasPrices (state) {
+        if (state === "ME" || state === "CT" || state === "MA" || state === "NH" || state === "RI" || state === "VT") {
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1X_DPG.W', function(json) {
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
+        } else if (state === "DE" || state === "DC" || state === "MD" || state === "NJ" || state === "NY"|| state === "PA"){
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Y_DPG.W', function(json) {
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
+        } else if (state === "FL" || state === "GA" || state === "NC" || state === "SC" || state === "VA"|| state === "WV"){
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Z_DPG.W', function(json) {
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
+        } else if (state === "IL" || state === "IN" || state === "IO" || state === "KS" || state === "KY"|| state === "MI" || state === "MN" || state === "MO" || state === "NE" || state === "ND" || state === "SD" || state === "OH" || state === "OK" || state === "TN" || state === "WI"){
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R20_DPG.W', function(json) {
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
+        } else if (state === "AL" || state === "AR" || state === "LA" || state === "MS" || state === "NM"|| state === "TX"){
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R30_DPG.W', function(json) {
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
+        } else if (state === "CO" || state === "ID" || state === "MT" || state === "UT" || state === "WY"){
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R40_DPG.W', function(json) {
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
+        } else if (state === "AK" || state === "AZ" || state === "CA" || state === "HI" || state === "NV" || state === "OR" || state === "WA"){
+            $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R50_DPG.W', function(json) {
+            console.log(json);
+            console.log(json.series[0].data[0][1]);
+            gasPrice = (json.series[0].data[0][1]);
+            $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
+            });
         }
     }
 
