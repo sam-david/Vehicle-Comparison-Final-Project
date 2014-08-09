@@ -14,27 +14,26 @@
 </head>
 <body>
 <div class="background-div">
+
 	<header>
 	</header>
 
-<article class="intro-paragraph">
-	<p>This website was made as tool to help you compare the current Tesla vechicles available with any other vehcicle on the market. Using the help of Edmunds.com, we are able to show you data side by side of Model S vs. your vehicle annual comparing costs and performance. By entering you vehicle and location we are able to give you Total Cost of Ownership for the vehicle based on your location. We also update gas prices and energy prices based on your location. Feel free to adjust each as necessary. </p>
-</article>
-	<div class="tesla-selector">
-		<h2 class="page-heading">Select Which Model S</h2>
+	<article class="intro-paragraph">
+		<p>Pick your Tesla and Comparison car to get started!</p>
+	</article>
+<div class="all-selectors">
+	<div class="vehicle-selector">
+		<div class="tesla-selector-list">
+			<div id="60kwh" class="battery-option"><img src="images/battery_60.png" class="battery-image"></div><div class="battery-description"><p class="battery-title">60 kWh Battery</p><p class="model-description">208 miles range, 0-60: 5.9 sec, 302 hp</p>
+		</div>
 
+			<div id="85kwh" class="battery-option"><img src="images/battery_85.png" class="battery-image"></div><div class="battery-description"><p class="battery-title">85 kWh Battery</p><p class="model-description">265 miles range, 0-60: 5.4 sec, 362 hp</p></div>
+			<div id="p85kwh" class="battery-option"><img src="images/battery_p85.png" class="battery-image"></div><div class="battery-description"><p class="battery-title">85 kWh Performance</p><p class="model-description">265 miles range, 0-60: 4.2 sec, 416 hp</p></div>
+		</div>
 
-		<ul class="tesla-selector-list">
-			<li id="60kwh"><img class="battery-option" src="images/battery_60.png"> </br> <p>60 kWh Battery</p></li>
-			<li id="85kwh"><img class="battery-option" src="images/battery_85.png"> </br> <p>85 kWh Battery</p></li>
-			<li id="p85kwh"><img class="battery-p85" src="images/battery_p85.png"> </br> <p>85 kWh Performance</p></li>
-		</ul>
-
+		<div><img src="images/elements/vs.png" class="vs-image"></div>
 	</div>
-
-	<div class="comparison-vehicle-selector">
-		<h2 class="page-heading">Select Vehicle to Compare</h2>
-		<div class="selectors">
+		<div class="comparison-vehicle-selector">
 			<select class="year-select-box" id="yearSelect">
 				<option value="" disabled selected>Year</option>
 				<option value="2014">2014</option>
@@ -131,7 +130,9 @@
 			<button class="submit-button" type="button" onclick="submitCar()">Submit</button>
 			<button class="submit-button" type="button" onclick="reset()">Reset</button>
 		</div>
-	</div>
+	
+</div>
+	
 
 <div class="fuel-economy">
 	<div class="table1-headings">
@@ -182,7 +183,7 @@
 	<div> 
 		<table class="gas-table">
 			<tr><td>Gas Price</td></tr>
-			<tr><td><span id="currentgas" class="gas-price">$3.67</span><img src="images/elements/energy-button.png"></td></tr>
+			<tr><td><span id="currentgas" class="gas-price">$3.67</span></td></tr>
 			<tr><td>Energy Price</td></tr>
 			<tr><td><span id="currentenergy" class="fuel-price">$.11</span></td></tr>
 			<!-- <tr><td>Your Gas Price</td></tr>

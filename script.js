@@ -589,3 +589,12 @@ function reset () {
     console.log("poop");
 }
 
+function populatePhoto (id) {
+    // http://media.ed.edmunds-media.com/bmw/3-series/2011/oem/2011_bmw_3-series_sedan_335d_fbdg_oem_1_87.jpg
+    $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/'+ id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+    console.log(json);
+    console.log(json.model.name);
+    alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
+    });
+}
+
