@@ -10,6 +10,7 @@ var carMakes = [],
  state = "",
  gasPrice = 0,
  energyPrice = 0,
+ vehiclePhoto = [],
 
  carYear = 0,
  carIDs = [],
@@ -61,19 +62,6 @@ var carMakes = [],
 
 $(document).ready(function(){
 
-// 	 //  $.getJSON( "https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=2014&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw", function(json) {
-//   //   console.log(json.makes[0].name);
-//   //   	for (i = 0; i < json.makes.length; i++) {
-//   //   		carMakes[i] = json.makes[i].name;
-//   //   	}
-//   //   	console.log(carMakes);
-// 		// for (j = 0; j < carMakes.length; j++){
-//   //   	 $('#makeSelect').append('<option value="' + carMakes[j] + '">' + carMakes[j] + '</option>');
-//   //   	console.log(carMakes[j]);
-//   //   	console.log(carMakes.length);
-//   //   	}
-
-
     	$("#60kwh").mouseover(function() {
                 $("#60kwh").css("border-color", "#fff");
     	});
@@ -109,12 +97,10 @@ $(document).ready(function(){
 
 	$.getJSON("http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_NUS_DPG.W", function(json) {
 	 	gasPrice = json.series[0].data[0][1];
-		console.log(gasPrice);
         $("#currentgas").text("$" + gasPrice.toFixed(2));
 	});
 
     $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.US-RES.M', function(json) {
-        console.log(json.series[0].data[0][1]);
         energyPrice = (json.series[0].data[0][1] / 100).toFixed(2);
         $("#currentenergy").text('$' + energyPrice);
     });
@@ -123,7 +109,6 @@ $(document).ready(function(){
         teslaFuelCost = ((data.value * .33) * energyPrice).toFixed(0);
         $("#tesla-fuel-cost").text('$ ' + teslaFuelCost);
         compFuelCost = ((data.value / combinedMPG) * gasPrice).toFixed(0);
-        console.log(compFuelCost);
         $("#comp-fuel-cost").text('$ ' + compFuelCost);
         $("#annualMiles").text(data.value + " Miles");
     });
@@ -136,7 +121,6 @@ $(document).ready(function(){
             $("#60kwh").css("border-color", "#fff");
             $("#85kwh").css("border-color", "#831c20");
             $("#p85kwh").css("border-color", "#831c20");
-            console.log(teslaType);
         });
 
         $("#85kwh").click(function () {
@@ -144,7 +128,6 @@ $(document).ready(function(){
             $("#85kwh").css("border-color", "#fff");
             $("#60kwh").css("border-color", "#831c20");
             $("#p85kwh").css("border-color", "#831c20");
-            console.log(teslaType);
         });
 
          $("#p85kwh").click(function () {
@@ -152,7 +135,6 @@ $(document).ready(function(){
             $("#p85kwh").css("border-color", "#fff");
             $("#85kwh").css("border-color", "#831c20");
             $("#60kwh").css("border-color", "#831c20");
-            console.log(teslaType);
         });
 
 		$("#yearSelect").change(function() {
@@ -247,7 +229,6 @@ $(document).ready(function(){
         carID =  $("#specificModelSelect").val();
         zip = $("#zipCode").val();
         state = $("#stateSelect").val();
-        console.log(zip.length);
         console.log(carID);
         if (zip.length === 5 & teslaType != "") {
             populateTCOData(carID,zip,state);
@@ -256,7 +237,7 @@ $(document).ready(function(){
             populatePerformanceData(carID);
             populateEnergyPrices(state);
             populateGasPrices(state);
-            console.log(energyPrice);
+            populatePhoto(carID);
             comparisonAlertify(carID);
         } else if (zip.length === 5 & teslaType === "") { 
            alertify.alert("Please select Tesla Type");
@@ -347,6 +328,8 @@ $(document).ready(function(){
             $("#tesla-capacity").text(teslaMileCapacity[0] + " miles");
             $("#tesla-0-60").text(tesla60Sec[0] + ' sec.');
             $("#tesla-radius").text(teslaTurnRadius + ' ft.');
+            $("#tesla-photo").attr('src','images/model-s-60.jpg');
+            $("#tesla-title").text('Tesla Model S 60');
         } else if (tesla === "85") {
             teslaTotalCost = tesla85Fuel[0] + teslaInsurance[0] + tesla85Maintenance[0] + tesla85Repairs[0] + tesla85Depreciation[0] + tesla85Tax[0] + teslaFinancing[0] + tesla85TaxCredit[0];
             $("#tesla-fuel").text('$' + tesla85Fuel[0]);
@@ -368,7 +351,8 @@ $(document).ready(function(){
             $("#tesla-capacity").text(teslaMileCapacity[1] + " miles");
             $("#tesla-0-60").text(tesla60Sec[1] + ' sec.');
             $("#tesla-radius").text(teslaTurnRadius + ' ft.');
-
+            $("#tesla-photo").attr('src','images/model-s-85.jpg');
+            $("#tesla-title").text('Tesla Model S 85');
         } else {
             teslaTotalCost = teslap85Fuel[0] + teslaInsurance[0] + teslap85Maintenance[0] + teslap85Repairs[0] + teslap85Depreciation[0] + teslap85Tax[0] + teslaFinancing[0] + teslap85TaxCredit[0];
             $("#tesla-fuel").text('$' + teslap85Fuel[0]);
@@ -390,6 +374,8 @@ $(document).ready(function(){
             $("#tesla-capacity").text(teslaMileCapacity[2] + " miles");
             $("#tesla-0-60").text(tesla60Sec[2] + ' sec.');
             $("#tesla-radius").text(teslaTurnRadius + ' ft.');
+            $("#tesla-photo").attr('src','images/model-s-p85.jpg');
+            $("#tesla-title").text('Tesla Model S p85');
         }
     }
 
@@ -400,14 +386,14 @@ $(document).ready(function(){
             $("#comp-MPG").text(json.MPG.city + ' / ' + json.MPG.highway);
             $("#comp-horsepower").text(json.engine.horsepower + ' hp');
             $("#comp-torque").text(json.engine.torque + ' lbs');
+            alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
+            $("#comparison-title").text(carMake + " " + json.model.name);
         });
         $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + id + '/equipment?availability=standard&equipmentType=OTHER&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
             for (j = 0; j < json.equipment.length; j++) {
                 if (json.equipment[j].name === "Specifications") {
                     for (q = 0; q < json.equipment[j].attributes.length; q++) {
-                        console.log(json.equipment[j].attributes[q].name);
                         if (json.equipment[j].attributes[q].name === "Aerodynamic Drag (cd)") {
-                            
                             $("#comp-airdrag").text(json.equipment[j].attributes[q].value);
                         } else if (json.equipment[j].attributes[q].name === "Curb Weight") {
                             $("#comp-weight").text(json.equipment[j].attributes[q].value + ' lbs');
@@ -471,7 +457,6 @@ $(document).ready(function(){
 
     function populateEnergyPrices (state) {
         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.' + state +'-RES.M ', function(json) {
-            console.log(json.series[0].data[0][1]);
             energyPrice = (json.series[0].data[0][1] / 100);
             $("#currentenergy").text(state + ' $' + energyPrice.toFixed(2));
             });
@@ -480,97 +465,97 @@ $(document).ready(function(){
     function populateGasPrices (state) {
         if (state === "ME" || state === "CT" || state === "NH" || state === "RI" || state === "VT") {
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1X_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "DE" || state === "DC" || state === "MD" || state === "NJ" || state === "NY"|| state === "PA"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Y_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "GA" || state === "NC" || state === "SC" || state === "VA"|| state === "WV"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Z_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "IL" || state === "IN" || state === "IO" || state === "KS" || state === "KY"|| state === "MI" || state === "MO" || state === "NE" || state === "ND" || state === "SD" || state === "OH" || state === "OK" || state === "TN" || state === "WI"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R20_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "AL" || state === "AR" || state === "LA" || state === "MS" || state === "NM"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R30_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+           
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "ID" || state === "MT" || state === "UT" || state === "WY"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R40_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+           
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "AK" || state === "AZ" || state === "HI" || state === "NV" || state === "OR"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R50_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "CA"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMR_PTE_SCA_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "CO"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SCO_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "FL"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SFL_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "MA"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMR_PTE_SMA_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "MN"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SMN_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "NY"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SNY_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "OH"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SOH_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "TX"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_STX_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
         } else if (state === "WA"){
             $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SWA_DPG.W', function(json) {
-            console.log(json.series[0].data[0][1]);
+            
             gasPrice = (json.series[0].data[0][1]);
             $("#currentgas").text(state + ' $' + gasPrice.toFixed(2));
             });
@@ -578,11 +563,10 @@ $(document).ready(function(){
     }
 
 function comparisonAlertify (id) {
-    $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/'+ id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    console.log(json);
-    console.log(json.model.name);
-    alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
-    });
+    // $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/'+ id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+    // alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
+    // $("#comparison-title").text(carMake + " " + json.model.name);
+    // });
 }
 
 function reset () {
@@ -590,11 +574,21 @@ function reset () {
 }
 
 function populatePhoto (id) {
-    // http://media.ed.edmunds-media.com/bmw/3-series/2011/oem/2011_bmw_3-series_sedan_335d_fbdg_oem_1_87.jpg
-    $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/'+ id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    console.log(json);
-    console.log(json.model.name);
-    alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
+    $.getJSON('https://api.edmunds.com/v1/api/vehiclephoto/service/findphotosbystyleid?styleId=' + id + '&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+        for(j = 0; j < json.length; j++) {
+            if (json[j].subType === "exterior" && json[j].shotTypeAbbreviation === "FQ") {
+                for(i = 0; i < json[j].photoSrcs.length; i++) {
+                    var photo = json[j].photoSrcs[i];
+                    if (photo.indexOf(500) > -1) {
+                        vehiclePhoto.push(json[j].photoSrcs[i]);
+                    }
+                }
+            }
+        }
+        $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[0]);
     });
+
 }
 
+
+// vehiclePhoto[Math.floor(Math.random() * vehiclePhoto.length)]

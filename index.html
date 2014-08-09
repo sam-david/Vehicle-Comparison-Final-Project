@@ -6,9 +6,9 @@
 	<link rel="stylesheet" href="style.css" />
 	<link href="css/simple-slider.css" rel="stylesheet" type="text/css" />
 	<link href="css/simple-slider-volume.css" rel="stylesheet" type="text/css" />
-	<link href="css/jquery.selectbox.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
+	<!-- <link href="css/chosen.css" rel="stylesheet" type="text/css" /> -->
 
 
 </head>
@@ -132,9 +132,41 @@
 		</div>
 	
 </div>
-	
+
+<div class="car-battle-display">
+	<div class="tesla-display">
+		<img src="images/model-s-60.jpg" class="car-photo" id="tesla-photo">
+		<h2 class="car-display-title" id="tesla-title">Tesla</h2>
+	</div>
+	<div class="vs-display">
+			<img src="images/elements/vs-big-red.png" class="vs-icon">
+	</div>
+	<div class="comparison-display">
+		<img src="images/model-s-60.jpg" class="car-photo" id="comparison-photo">
+		<h2 class="car-display-title" id="comparison-title">Comparison Auto</h2>
+	</div>
+
+</div>
+
+<div class="fuel-price-bar">
+	<div class="gas-price">
+		<span>Current Gas Price: </span><span id="currentgas" class="gas-price-number">$3.67</span><img src="images/elements/fuel-icon-small.png" class="gas-icon">
+	</div>
+	<div class="energy-price">
+		<span>Current Energy Price: </span><span id="currentenergy" class="energy-price-number">$.11</span><img src="images/elements/electric-icon-small.png" class="electric-icon">
+	</div>
+</div>
+
+<div class="fuel-economy-comparison">
+	<div class="tesla-fuel-economy">
+		<div class="fuel-heading">Test</div>
+		<div class="fuel-heading">TEst</div>
+		<div class="fuel-heading">Test</div>
+	</div>
+</div>
 
 <div class="fuel-economy">
+	
 	<div class="table1-headings">
 	<h2 class="fuel-heading">Fuel</h2>
 
@@ -181,15 +213,15 @@
 	</div>
 
 	<div> 
-		<table class="gas-table">
+		<!-- <table class="gas-table">
 			<tr><td>Gas Price</td></tr>
 			<tr><td><span id="currentgas" class="gas-price">$3.67</span></td></tr>
 			<tr><td>Energy Price</td></tr>
 			<tr><td><span id="currentenergy" class="fuel-price">$.11</span></td></tr>
 			<!-- <tr><td>Your Gas Price</td></tr>
-			<tr><td><input type="text"></td></tr> -->
+			<tr><td><input type="text"></td></tr>
 
-		</table>
+		</table> --> 
 
 	</div>
 </div>
@@ -506,7 +538,8 @@
 	<script src="jquery-2.1.0.js"></script>
 	<script src="js/alertify.js"></script>
 	<script src="js/simple-slider.js"></script>
-	<script src="js/jquery.selectbox-0.2.js"></script>
+	<!-- <script src="js/chosen.jquery.js"></script>
+	<script src="js/chosen.proto.js"></script> -->
 	<script src="script.js"></script>
 	
 	

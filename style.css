@@ -62,6 +62,9 @@ header {
 	display: block;
 }
 
+.all-selectors {
+	border-bottom: solid #831c20 2px;
+}
 
 .all-selectors:after {
 	clear: both;
@@ -82,6 +85,7 @@ header {
 	margin: 0 auto;
 	float: left;
 	margin-left: 5%;
+	margin-bottom: 2%;
 }
 
 
@@ -142,7 +146,7 @@ header {
 	border: solid #831c20 5px;
 	border-radius: 10px;
 	width: 45%;
-	height: 211px;
+	height: 120px;
 	padding: 12px;
 }
 
@@ -223,6 +227,50 @@ header {
 	margin-top: 3%;
 	margin-left: 3%;
 }
+/* ----------------- Car Photos --------------------*/
+
+.car-battle-display:after {
+	clear: both;
+}
+
+.car-battle-display:after, 
+.car-battle-display:before {
+	content: "";
+	display: block;
+}
+
+.comparison-display, .tesla-display {
+	float: left;
+	width: 35%;
+}
+
+.vs-icon {
+	float: left;
+	width: 13%;
+	margin-top: 5%;
+	margin-left: -2%;
+	z-index: 2;
+}
+
+.tesla-display {
+	margin-left: 10%;
+	z-index: -1;
+}
+
+.comparison-display {
+	z-index: -1;
+}
+
+.car-photo {
+	width: 95%;
+	margin-top: 9%;
+	border: solid #bf0021 2px;
+	border-radius: 10px;
+}
+
+.car-display-title {
+	text-align: center;
+}
 
 /* ----------------- Tables --------------------*/
 
@@ -237,7 +285,6 @@ header {
 
 .fuel-economy {
 	border-top: 3px solid #bf0021;
-	margin-top: 3%;
 }
 
 .table1-headings:after {
@@ -287,31 +334,68 @@ header {
 	width: 5%;
 }
 
-.gas-table {
-	width: 17%;
+/* ----------------- Fuel Price Bar --------------------*/
+
+.fuel-price-bar:after {
+	clear: both;
+}
+
+.fuel-price-bar:after,
+.fuel-price-bar:before {
+	content: "";
+	display: block;
+}
+
+.fuel-price-bar {
+	border-top: 2px solid #bf0021;
+	height: 5%;
 	background-color: black;
 	color: white;
+}
+
+.gas-price, .energy-price {
 	float: left;
-	margin-left: 14%;
-	border: solid 3px #bf0021;
-	border-radius: 10px;
+	margin-bottom: 0%;
+	margin-top: 0%;
+	margin-left: 20%;
 }
 
-.gas-table td {
-	text-align: center;
-}
-
-.gas-price {
+.gas-price-number {
 	font-family: 'Audiowide', cursive;
 	color: #00FF1B;
-	text-align: center;
 }
 
-.fuel-price {
+.gas-icon {
+	width: 4.5%;
+	margin-left: 1%;
+}
+
+.electric-icon {
+	width: 3.5%;
+	margin-left: 1%;
+}
+
+.energy-price {
+	
+}
+.energy-price-number {
 	font-family: 'Audiowide', cursive;
 	color: #fcff00;
-	text-align: center;
 }
+
+/* ----------------- Fuel Economy --------------------*/
+
+.fuel-economy-comparison:after {
+	clear: both;
+}
+
+.fuel-economy-comparison:after, 
+.fuel-economy-comparison:before {
+	content: "";
+	display: block;
+}
+
+/* ----------------- Tables --------------------*/
 
 .bottom-table-headings:after {
 	clear: both;
