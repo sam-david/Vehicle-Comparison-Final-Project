@@ -3,11 +3,13 @@
 	<title>Tesla Model S Vechicle Comparison</title>
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Fugaz+One|Racing+Sans+One|Black+Ops+One|Bangers' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="style.css" />
 	<link href="css/simple-slider.css" rel="stylesheet" type="text/css" />
 	<link href="css/simple-slider-volume.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<!-- <link href="css/chosen.css" rel="stylesheet" type="text/css" /> -->
 
 
@@ -24,11 +26,11 @@
 <div class="all-selectors">
 	<div class="vehicle-selector">
 		<div class="tesla-selector-list">
-			<div id="60kwh" class="battery-option"><img src="images/battery_60.png" class="battery-image"></div><div class="battery-description"><p class="battery-title">60 kWh Battery</p><p class="model-description">208 miles range, 0-60: 5.9 sec, 302 hp</p>
+			<div id="60kwh" class="battery-option"><img src="images/battery_60.png" class="battery-image"></div><div class="battery-description" id="60kwh-description"><p class="battery-title">60 kWh Battery</p><p class="model-description">208 miles range, 0-60: 5.9 sec, 302 hp</p>
 		</div>
 
-			<div id="85kwh" class="battery-option"><img src="images/battery_85.png" class="battery-image"></div><div class="battery-description"><p class="battery-title">85 kWh Battery</p><p class="model-description">265 miles range, 0-60: 5.4 sec, 362 hp</p></div>
-			<div id="p85kwh" class="battery-option"><img src="images/battery_p85.png" class="battery-image"></div><div class="battery-description"><p class="battery-title">85 kWh Performance</p><p class="model-description">265 miles range, 0-60: 4.2 sec, 416 hp</p></div>
+			<div id="85kwh" class="battery-option"><img src="images/battery_85.png" class="battery-image"></div><div class="battery-description" id="85kwh-description"><p class="battery-title">85 kWh Battery</p><p class="model-description">265 miles range, 0-60: 5.4 sec, 362 hp</p></div>
+			<div id="p85kwh" class="battery-option"><img src="images/battery_p85.png" class="battery-image"></div><div class="battery-description" id="p85kwh-description"><p class="battery-title">85 kWh Performance</p><p class="model-description">265 miles range, 0-60: 4.2 sec, 416 hp</p></div>
 		</div>
 
 		<div><img src="images/elements/vs.png" class="vs-image"></div>
@@ -136,95 +138,72 @@
 <div class="car-battle-display">
 	<div class="tesla-display">
 		<img src="images/model-s-60.jpg" class="car-photo" id="tesla-photo">
-		<h2 class="car-display-title" id="tesla-title">Tesla</h2>
+		<h2 class="car-display-title tesla-color" id="tesla-title">Tesla</h2>
 	</div>
 	<div class="vs-display">
 			<img src="images/elements/vs-big-red.png" class="vs-icon">
 	</div>
 	<div class="comparison-display">
 		<img src="images/model-s-60.jpg" class="car-photo" id="comparison-photo">
-		<h2 class="car-display-title" id="comparison-title">Comparison Auto</h2>
+		<h2 class="car-display-title comp-color" id="comparison-title">Comparison Auto</h2>
 	</div>
 
 </div>
 
 <div class="fuel-price-bar">
-	<div class="gas-price">
-		<span>Current Gas Price: </span><span id="currentgas" class="gas-price-number">$3.67</span><img src="images/elements/fuel-icon-small.png" class="gas-icon">
-	</div>
 	<div class="energy-price">
 		<span>Current Energy Price: </span><span id="currentenergy" class="energy-price-number">$.11</span><img src="images/elements/electric-icon-small.png" class="electric-icon">
+	</div>
+	<div class="gas-price">
+		<span>Current Gas Price: </span><span id="currentgas" class="gas-price-number">$3.67</span><img src="images/elements/fuel-icon-small.png" class="gas-icon">
 	</div>
 </div>
 
 <div class="fuel-economy-comparison">
 	<div class="tesla-fuel-economy">
-		<div class="fuel-heading">Test</div>
-		<div class="fuel-heading">TEst</div>
-		<div class="fuel-heading">Test</div>
+		<div class="tesla-fuel-cell border-top-class"><span id="tesla-MPG-combined"></span><span class="small-label"> combined</span></div>
+		<div class="tesla-fuel-cell"><span id="tesla-MPG"></span><span class="small-label"> city/Highway</span></div>
+		<div class="tesla-bottom-fuel-cell"><span id="tesla-capacity"></span><span class="small-label"> electric range</span></div>
+	</div>
+	<div class="comp-fuel-economy">
+		<div class="comp-fuel-cell border-top-class"><span id="comp-MPG-combined"></span><span class="small-label"> combined</span></div>
+		<div class="comp-fuel-cell"><span id="comp-MPG"></span><span class="small-label"> city/Highway</span></div>
+		<div class="comp-bottom-fuel-cell"><span id="comp-capacity"></span><span class="small-label"> cap (total miles)</span></div>
+	</div>
+	<div class="fuel-milage-slider">
+		<h2 class="mile-heading">Miles Driven <span id="annualMiles"></span></h2>
+ 		<input id="mileslide" type="text" data-slider="true" data-slider-range="5000,150000" data-slider-step="5000" data-slider-theme="volume" data-slider-highlight="true">
+ 		<div class="mile-slider-label">
+ 			<div class="mile-box">10k</div>
+ 			<div class="mile-box">20k</div>
+ 			<div class="mile-box">30k</div>
+ 			<div class="mile-box">40k</div>
+ 			<div class="mile-box">50k</div>
+ 			<div class="mile-box">60k</div>
+ 			<div class="mile-box">70k</div>
+ 			<div class="mile-box">80k</div>
+ 			<div class="mile-box">90k</div>
+ 			<div class="mile-box">100k</div>
+ 			<div class="mile-box">110k</div>
+ 			<div class="mile-box">120k</div>
+ 			<div class="mile-box">130k</div>
+ 			<div class="mile-box">140k</div>
+ 			<div class="mile-box">150k</div>
+ 		</div>
+	</div>
+	<div class="final-fuel-costs">
+		<div class="final-fuel-economy">
+			<div class="final-fuel-cell tesla-color-cell"><span id="tesla-fuel-cost"></span><span class="small-label"></span></div>
+		</div>
+		<div class="final-fuel-economy-difference">
+			<div class="final-fuel-cell-difference gas-color"><span id="fuel-cost-difference"></span><span class="small-label"> difference</span></div>
+		</div>
+		<div class="final-fuel-economy">
+			<div class="final-fuel-cell-comp comp-color-cell"><span id="comp-fuel-cost"></span><span class="small-label"></span></div>
+		</div>
 	</div>
 </div>
 
-<div class="fuel-economy">
-	
-	<div class="table1-headings">
-	<h2 class="fuel-heading">Fuel</h2>
-
-	<h2 class="fuel-heading-gas">Gasoline/Energy</h2>
-	</div>
-	<div id="fuel-economy-table">
-		<table>
-<!-- 			<tr>
-				<td></td>
-				<td>Fuel Economy</td>
-				<td></td>
-			</tr> -->
-			<tr>
-				<td></td>
-				<th>Tesla</th>
-				<th>Comparison Car</th>
-			</tr>
-			<tr>
-				<th>MPG combined</th>
-				<td id="tesla-MPG-combined"></td>
-				<td id="comp-MPG-combined"></td>
-			</tr>
-			<tr>
-				<th>MPG city/Highway</th>
-				<td id="tesla-MPG"></td>
-				<td id="comp-MPG"></td>
-			</tr>
-			<tr>
-				<th>Fuel Tank Size</th>
-				<td id="tesla-capacity"></td>
-				<td id="comp-capacity"></td> <!-- 16 Gal.(250 Miles) -->
-			</tr>
-			<tr>
-				<th>Miles Driven</th>
-				<td><input id="mileslide" type="text" data-slider="true" data-slider-range="5000,150000" data-slider-step="5000" data-slider-theme="volume" data-slider-highlight="true"></td>
-				<td><p id="annualMiles">Use Slider</p></td>
-			</tr>
-			<tr>
-				<th>Fuel Cost</th>
-				<td id="tesla-fuel-cost">$0</td>
-				<td id="comp-fuel-cost">$0</td>
-			</tr>
-		</table>
-	</div>
-
-	<div> 
-		<!-- <table class="gas-table">
-			<tr><td>Gas Price</td></tr>
-			<tr><td><span id="currentgas" class="gas-price">$3.67</span></td></tr>
-			<tr><td>Energy Price</td></tr>
-			<tr><td><span id="currentenergy" class="fuel-price">$.11</span></td></tr>
-			<!-- <tr><td>Your Gas Price</td></tr>
-			<tr><td><input type="text"></td></tr>
-
-		</table> --> 
-
-	</div>
-</div>
 
 <div class="bottom-table-headings">
 <h2 class="cost-heading">Cost</h2>
@@ -536,6 +515,7 @@
 	
 </div>
 	<script src="jquery-2.1.0.js"></script>
+	<script src="js/jquery-ui.js"></script>
 	<script src="js/alertify.js"></script>
 	<script src="js/simple-slider.js"></script>
 	<!-- <script src="js/chosen.jquery.js"></script>

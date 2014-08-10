@@ -23,7 +23,7 @@ body {
 }
 
 .background-div {
-	background-color: rgba(255,255,255,.75);
+	background-color: rgba(14,53,136,.75);
 	width: 1000px;
 	margin: 0 auto;
 	border-left: solid 5px #bf0021;
@@ -62,9 +62,6 @@ header {
 	display: block;
 }
 
-.all-selectors {
-	border-bottom: solid #831c20 2px;
-}
 
 .all-selectors:after {
 	clear: both;
@@ -101,11 +98,11 @@ header {
 	float: left;
 	width: 20%;
 	height: 75px;
-	border: solid #831c20 2px;
-	border-radius: 10px;
+	border-top: solid #831c20 2px;
+	border-left: solid #831c20 2px;
+	border-bottom: solid #831c20 2px;
 	clear: left;
 	margin-bottom: 4px;
-	margin-right: 2px;
 }
 
 .battery-description {
@@ -113,8 +110,9 @@ header {
 	float: left;
 	width: 60%;
 	height: 75px;
-	border: solid #831c20 2px;
-	border-radius: 10px;
+	border-top: solid #831c20 2px;
+	border-right: solid #831c20 2px;
+	border-bottom: solid #831c20 2px;
 	
 }
 
@@ -143,11 +141,15 @@ header {
 .comparison-vehicle-selector {
 	margin: 0 auto;
 	float: left;
-	border: solid #831c20 5px;
+	border: solid #831c20 3px;
 	border-radius: 10px;
 	width: 45%;
 	height: 120px;
 	padding: 12px;
+}
+
+.ui-accordian-overlay {
+	background-color: blue;
 }
 
 .comparison-vehicle-selector:after {
@@ -250,6 +252,7 @@ header {
 	margin-top: 5%;
 	margin-left: -2%;
 	z-index: 2;
+	display: none;
 }
 
 .tesla-display {
@@ -264,74 +267,26 @@ header {
 .car-photo {
 	width: 95%;
 	margin-top: 9%;
-	border: solid #bf0021 2px;
+	border: solid #bf0021 3px;
 	border-radius: 10px;
+	display: none;
 }
 
 .car-display-title {
 	text-align: center;
+	font-family: 'Bangers', cursive;
+	font-size: 1.8em;
+	-webkit-text-stroke-width: .1px;
+	-webkit-text-stroke-color: #bf0021;
+	display: none;
 }
 
-/* ----------------- Tables --------------------*/
-
-.fuel-economy:after {
-	clear: both;
+.tesla-color {
+	color: #dbde00;
 }
 
-.fuel-economy:after, .fuel-economy:before {
-	content: "";
-	display: block;
-}
-
-.fuel-economy {
-	border-top: 3px solid #bf0021;
-}
-
-.table1-headings:after {
-	clear: both;
-}
-
-.table1-headings:after, .table1-headings:before {
-	content: "";
-	display: block;
-}
-
-.fuel-heading {
-	color: white;
-	margin-left: 31%;
-	float: left;
-}
-
-.fuel-heading-gas {
-	color: white;
-	margin-left: 34%;
-	float: left;
-}
-
-
-#fuel-economy-table {
-	width: 46%;
-	background-color: black;
-	float: left;
-	border: 2px solid #bf0021;
-	margin-left: 10%;
-	table-layout: fixed;
-}
-
-#fuel-economy-table th {
-	background-color: #bf0021;
-	color: white;
-	width: 30%;
-}
-
-#fuel-economy-table td {
-	text-align: center;
-	color: white;
-	overflow: visible;
-}
-
-#mileslide {
-	width: 5%;
+.comp-color {
+	color: #4ED514;
 }
 
 /* ----------------- Fuel Price Bar --------------------*/
@@ -348,7 +303,8 @@ header {
 
 .fuel-price-bar {
 	border-top: 2px solid #bf0021;
-	height: 5%;
+	border-bottom: 2px solid #bf0021;
+	height: 20px;
 	background-color: black;
 	color: white;
 }
@@ -358,6 +314,10 @@ header {
 	margin-bottom: 0%;
 	margin-top: 0%;
 	margin-left: 20%;
+}
+
+.gas-price {
+	margin-left: 17%;
 }
 
 .gas-price-number {
@@ -394,6 +354,269 @@ header {
 	content: "";
 	display: block;
 }
+
+.fuel-economy-comparison {
+	margin-top: 1%;
+}
+
+.tesla-fuel-economy,.comp-fuel-economy {
+	float: left;
+	width: 50%;
+
+}
+
+.outside-border {
+	border: solid #831c20 2px;
+}
+
+.comp-fuel-cell {
+	color: white;
+	float: left;
+	clear: left;
+	margin-left: 23%;
+	margin-bottom: 0%;
+	width: 42%;
+	height: 28px;
+	border-right: solid #831c20 2px;
+	border-left: solid #831c20 2px;
+	text-align: center;
+	padding-top: 1%;
+	background-color: rgba(52,175,0,.5);
+}
+
+.comp-bottom-fuel-cell {
+	color: white;
+	float: left;
+	clear: left;
+	margin-left: 23%;
+	margin-bottom: 0%;
+	width: 42%;
+	height: 28px;
+	border-right: solid #831c20 2px;
+	border-left: solid #831c20 2px;
+	border-bottom: solid #831c20 2px;
+	text-align: center;
+	padding-top: 1%;
+	background-color: rgba(52,175,0,.5);
+}
+
+.border-bottom-class {
+	border-bottom: solid #831c20 2px;
+}
+
+.border-top-class {
+	border-top: solid #831c20 2px;
+}
+
+.tesla-fuel-cell {
+	color: white;
+	float: left;
+	clear: left;
+	margin-left: 42%;
+	margin-bottom: 0%;
+	width: 40%;
+	height: 28px;
+	border-right: solid #831c20 2px;
+	border-left: solid #831c20 2px;
+	text-align: center;
+	padding-top: 1%;
+	background-color: rgba(252,255,0,.5);
+}
+
+.tesla-bottom-fuel-cell {
+	color: white;
+	float: left;
+	clear: left;
+	margin-left: 42%;
+	margin-bottom: 0%;
+	width: 40%;
+	height: 28px;
+	border-right: solid #831c20 2px;
+	border-left: solid #831c20 2px;
+	border-bottom: solid #831c20 2px;
+	text-align: center;
+	padding-top: 1%;
+	background-color: rgba(252,255,0,.5)
+}
+
+.small-label {
+	font-size: .2em;
+}
+
+.fuel-milage-slider:after {
+	clear: both;
+}
+
+.fuel-milage-slider:after,
+.fuel-milage-slider:before {
+	content: "";
+	display: block;
+}
+
+.mile-heading {
+	text-align: center;
+	color: white;
+	font-size: 1.2em; 
+}
+
+.fuel-milage-slider {
+	margin-left: 5%;
+	margin-bottom: 1%;
+}
+
+.mile-slider-label:after {
+	clear: both;
+}
+
+.mile-slider-label:before,
+.mile-slider-label:after {
+	content: "";
+	display: block;
+}
+
+.mile-box {
+	float: left;
+	width:6.2%;
+	color: white;
+	text-align: center;
+}
+
+.final-fuel-costs:after {
+	clear: both;
+}
+
+.final-fuel-costs:after,
+.final-fuel-costs:before {
+	content: "";
+	display: block;
+}
+
+.final-fuel-costs {
+	margin-left: 21%;
+	width: 70%;
+}
+
+.final-fuel-economy {
+	float: left;
+	width: 33%;
+}
+
+.final-fuel-economy-difference {
+	float: left;
+	width: 25%;
+}
+
+
+.final-fuel-cell {
+	color: white;
+	float: left;
+	clear: left;
+	margin-bottom: 5%;
+	width: 85%;
+	height: 28px;
+	border: solid #831c20 2px;
+	border-radius: 5px;
+	text-align: center;
+	padding-top: 1%;
+}
+
+.final-fuel-cell-difference {
+	color: white;
+	float: left;
+	clear: left;
+	margin-bottom:5%;
+	width: 80%;
+	height: 28px;
+	border: solid #831c20 2px;
+	border-radius: 5px;
+	text-align: center;
+	padding-top: 1%;
+}
+
+.final-fuel-cell-comp {
+	color: white;
+	float: left;
+	clear: left;
+	margin-bottom: 5%;
+	width: 91%;
+	height: 28px;
+	border: solid #831c20 2px;
+	border-radius: 5px;
+	text-align: center;
+	padding-top: 1%;
+}
+
+.tesla-color-cell {
+	background-color: rgba(252,255,0,.5)
+}
+
+.comp-color-cell {
+	background-color: rgba(52,175,0,.5);
+}
+
+.gas-color {
+	color: #00FF1B;
+}
+/* ----------------- Tables --------------------*/
+
+.fuel-economy:after {
+	clear: both;
+}
+
+.fuel-economy:after, .fuel-economy:before {
+	content: "";
+	display: block;
+}
+
+.fuel-economy {
+	border-top: 3px solid #bf0021;
+}
+
+.table1-headings:after {
+	clear: both;
+}
+
+.table1-headings:after, .table1-headings:before {
+	content: "";
+	display: block;
+}
+
+
+
+.fuel-heading-gas {
+	color: white;
+	margin-left: 34%;
+	float: left;
+}
+
+
+#fuel-economy-table {
+	width: 46%;
+	background-color: black;
+	float: left;
+	border: 2px solid #bf0021;
+	margin-left: 10%;
+	table-layout: fixed;
+}
+
+#fuel-economy-table th {
+	background-color: #bf0021;
+	color: white;
+	width: 30%;
+}
+
+#fuel-economy-table td {
+	text-align: center;
+	color: white;
+	overflow: visible;
+}
+
+#mileslide {
+	width: 5%;
+}
+
+
+
 
 /* ----------------- Tables --------------------*/
 
