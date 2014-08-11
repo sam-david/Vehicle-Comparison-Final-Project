@@ -381,7 +381,7 @@ header {
 	border-left: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(52,175,0,.5);
+	background-color: rgba(52,175,0,1);
 }
 
 .comp-bottom-fuel-cell {
@@ -397,7 +397,7 @@ header {
 	border-bottom: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(52,175,0,.5);
+	background-color: rgba(52,175,0,1);
 }
 
 .border-bottom-class {
@@ -420,7 +420,7 @@ header {
 	border-left: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(252,255,0,.5);
+	background-color: rgba(204,135,0,1);
 }
 
 .tesla-bottom-fuel-cell {
@@ -436,7 +436,7 @@ header {
 	border-bottom: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(252,255,0,.5)
+	background-color: rgba(204,135,0,1)
 }
 
 .small-label {
@@ -547,15 +547,34 @@ header {
 }
 
 .tesla-color-cell {
-	background-color: rgba(252,255,0,.5)
+	background-color: rgba(204,135,0,1)
 }
 
 .comp-color-cell {
-	background-color: rgba(52,175,0,.5);
+	background-color: rgba(52,175,0,1);
 }
 
 .gas-color {
 	color: #00FF1B;
+}
+
+/* ----------------- Performance --------------------*/
+
+.performance-section:after {
+	clear: both;
+}
+
+
+.performance-section:after,
+.performance-section:before {
+	content: "";
+	display: block;
+}
+
+.tesla-performance,.comp-performance {
+	float: left;
+	width: 50%;
+
 }
 /* ----------------- Tables --------------------*/
 
