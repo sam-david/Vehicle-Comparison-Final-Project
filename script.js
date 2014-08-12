@@ -58,7 +58,8 @@ var carMakes = [],
  teslap85Fuel = [340,340,340,340,340],
  teslap85Maintenance = [600,600,600,600,600],
  teslap85Repairs = [0,0,0,0,0],
- teslap85TaxCredit = [-7500,0,0,0,0];
+ teslap85TaxCredit = [-7500,0,0,0,0],
+ year1TeslaCost = 0;
 
 $(document).ready(function(){
 

@@ -12,7 +12,8 @@ Green: #34AF00;
 /* ----------------- Body Elements --------------------*/
 
 body {
-	background-image:url(images/microtile.png);
+	/*background-image:url(images/microtile.png);*/
+	background: linear-gradient(#fff, #bdbdbd);
 	font-family: 'Lato', sans-serif;
 }
 
@@ -23,7 +24,8 @@ body {
 }
 
 .background-div {
-	background-color: rgba(14,53,136,.75);
+	background-color: rgba(255,255,255,.5);
+	background: linear-gradient(#585858,#bdbdbd, #585858);
 	width: 1000px;
 	margin: 0 auto;
 	border-left: solid 5px #bf0021;
@@ -370,7 +372,6 @@ header {
 }
 
 .comp-fuel-cell {
-	color: white;
 	float: left;
 	clear: left;
 	margin-left: 23%;
@@ -381,11 +382,10 @@ header {
 	border-left: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(52,175,0,1);
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .comp-bottom-fuel-cell {
-	color: white;
 	float: left;
 	clear: left;
 	margin-left: 23%;
@@ -397,7 +397,7 @@ header {
 	border-bottom: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(52,175,0,1);
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .border-bottom-class {
@@ -409,7 +409,6 @@ header {
 }
 
 .tesla-fuel-cell {
-	color: white;
 	float: left;
 	clear: left;
 	margin-left: 42%;
@@ -420,11 +419,10 @@ header {
 	border-left: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(204,135,0,1);
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .tesla-bottom-fuel-cell {
-	color: white;
 	float: left;
 	clear: left;
 	margin-left: 42%;
@@ -436,7 +434,7 @@ header {
 	border-bottom: solid #831c20 2px;
 	text-align: center;
 	padding-top: 1%;
-	background-color: rgba(204,135,0,1)
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .small-label {
@@ -508,50 +506,45 @@ header {
 
 
 .final-fuel-cell {
-	color: white;
 	float: left;
 	clear: left;
 	margin-bottom: 5%;
 	width: 85%;
 	height: 28px;
 	border: solid #831c20 2px;
-	border-radius: 5px;
 	text-align: center;
 	padding-top: 1%;
 }
 
 .final-fuel-cell-difference {
-	color: white;
 	float: left;
 	clear: left;
 	margin-bottom:5%;
 	width: 80%;
 	height: 28px;
 	border: solid #831c20 2px;
-	border-radius: 5px;
 	text-align: center;
 	padding-top: 1%;
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .final-fuel-cell-comp {
-	color: white;
 	float: left;
 	clear: left;
 	margin-bottom: 5%;
 	width: 91%;
 	height: 28px;
 	border: solid #831c20 2px;
-	border-radius: 5px;
 	text-align: center;
 	padding-top: 1%;
 }
 
 .tesla-color-cell {
-	background-color: rgba(204,135,0,1)
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .comp-color-cell {
-	background-color: rgba(52,175,0,1);
+	background: linear-gradient(#fff, #bdbdbd);
 }
 
 .gas-color {
