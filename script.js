@@ -687,14 +687,17 @@ function populatePhoto (id) {
             }
         }
         $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[0]);
+        $("#comparison-photo2").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[1]);
     });
 
 }
 
 function fightAppear ( ) {
     $( ".car-photo" ).fadeIn( 1000 );
+    $( ".car-photo-small" ).fadeIn( 1000 );
     $( ".car-display-title" ).fadeIn( 1000 );
     $( ".vs-icon" ).fadeIn( 1000 );
+    $( ".fuel-economy-comparison" ).fadeIn( 1000 );
 }
 
 

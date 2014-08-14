@@ -32,7 +32,7 @@
 			<div id="p85kwh" class="battery-option"><img src="images/battery_p85.png" class="battery-image"></div><div class="battery-description" id="p85kwh-description"><p class="battery-title">85 kWh Performance</p><p class="model-description">265 miles range, 0-60: 4.2 sec, 416 hp</p></div>
 		</div>
 
-		<div><img src="images/elements/vs.png" class="vs-image"></div>
+		<div class="middle-divider"></div>
 	</div>
 		<div class="comparison-vehicle-selector">
 			<select class="year-select-box" id="yearSelect">
@@ -216,13 +216,41 @@
 		<div class="comp-bottom-fuel-cell"><span id="comp-capacity"></span><span class="small-label"> cap (total miles)</span></div>
 	</div>
 </div> -->
-<div class="bottom-table-headings">
-<h2 class="cost-heading">Cost</h2>
-<h2 class="performance-heading">Performance</h2>
+
+<div class="performance-section">
+<img src="images/model-s-60.jpg" class="car-photo-small" id="tesla-photo2">
+
+<img src="images/model-s-60.jpg" class="car-photo-small" id="comparison-photo2">
+
+<h2 class="comparison-heading">Performance</h2>
+
+<div class="performance-comparison">
+	<div class="performance-cell"><span class="tesla-stat" id="tesla-horsepower"></span><span class="small-label performance-label">Horsepower</span><span class="comp-stat" id="comp-horsepower"></span></div>
+	<div class="performance-cell"><span class="tesla-stat" id="tesla-torque"></span><span class="small-label performance-label">Torque</span><span class="comp-stat" id="comp-torque"></span></div>
+	<div class="performance-cell"><span class="tesla-stat" id="tesla-0-60"></span><span class="small-label performance-label">0-60 Speed</span><span class="comp-stat" id="comp-0-60"></span></div>
+	<div class="performance-cell"><span class="tesla-stat" id="tesla-radius"></span><span class="small-label performance-label">Turn Radius</span><span class="comp-stat" id="comp-radius"></span></div>
+	<div class="performance-cell"><span class="tesla-stat" id="tesla-airdrag"></span><span class="small-label performance-label">Air Drag</span><span class="comp-stat" id="comp-airdrag"></span></div>
+	<div class="performance-cell"><span class="tesla-stat" id="tesla-weight"></span><span class="small-label performance-label">Curb Weight</span><span class="comp-stat" id="comp-weight"></span></div>
+</div>
+
+</div>
+
+<h2 class="comparison-heading">Year One Cost</h2>
+
+<div class="cost-comparison">
+	<div class="performance-cell"><span id="tesla-fuel"></span><span class="small-label performance-label">Fuel</span><span id="comp-fuel"></span></div>
+	<div class="performance-cell"><span id="tesla-insurance"></span><span class="small-label performance-label">Insurance</span><span id="comp-insurance"></span></div>
+	<div class="performance-cell"><span id="tesla-maintenance"></span><span class="small-label performance-label">Maintenance</span><span id="comp-maintenance"></span></div>
+	<div class="performance-cell"><span id="tesla-repairs"></span><span class="small-label performance-label">Repairs</span><span id="comp-repairs"></span></div>
+	<div class="performance-cell"><span id="tesla-depreciation"></span><span class="small-label performance-label">Depreciation</span><span id="comp-depreciation"></span></div>
+	<div class="performance-cell"><span id="tesla-tax"></span><span class="small-label performance-label">Taxes and Fees</span><span id="comp-tax"></span></div>
+	<div class="performance-cell"><span id="tesla-financing"></span><span class="small-label performance-label">Financing</span><span id="comp-financing"></span></div>
+	<div class="performance-cell"><span id="tesla-tax-credit"></span><span class="small-label performance-label">Tax Credit</span><span id="comp-tax-credit"></span></div>
+	<div class="performance-cell"><span id="tesla-total"></span><span class="small-label performance-label">Total Cost</span><span id="comp-total"></span></div>
 </div>
 
 <div class="bottom-tables">
-<table class="cost-table">
+<!-- <table class="cost-table">
 	<tr>
 		<th></th>
 		<th>Tesla</th>
@@ -273,9 +301,9 @@
 		<td id="tesla-total"></td>
 		<td id="comp-total"></td>
 	</tr>
-</table>
+</table> -->
 
-<table class="performance-table">
+<!-- <table class="performance-table">
 	<tr>
 		<th class="top-table-box"></th>
 		<th>Tesla</th>
@@ -316,13 +344,25 @@
 		<td id="tesla-weight"></td>
 		<td id="comp-weight"></td>
 	</tr>
-</table>
+</table> -->
 </div>
 
 <div class="bottom-table-headings">
 <h2 class="tesla-cost-heading">Tesla Annual Cost</h2>
 </div>
 <div class="bottom-tables">
+
+<div>
+	<div>
+		<div></div>
+		<div>Year 1</div>
+		<div>Year 2</div>
+		<div>Year 3</div>
+		<div>Year 4</div>
+		<div>Year 5</div>
+		<div>5 Year Total</div>
+	</div>
+</div>
 <table class="annual-cost-table">
 	<tr>
 		<td class="top-table-box"></td>
