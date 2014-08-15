@@ -16,6 +16,13 @@ Light Grey: #D9D9D9;
 Dark Grey: #999999;
 
 Additional:
+
+Yellow: #FFB426;
+Very Light Blue: #CDF8FF;
+Maroon: #241E26;
+Grey: #A4A4A6;
+Steel Blue: #4D5D73;
+Whitish: #F2F2F2;
 ;
 */
 
@@ -23,7 +30,7 @@ Additional:
 
 body {
 	/*background-image:url(images/microtile.png);*/
-	background: linear-gradient(#D9D9D9, #333333);
+	background-color: #4D5D73;
 	font-family: 'Lato', sans-serif;
 }
 
@@ -52,9 +59,11 @@ body {
 /* ----------------- Header --------------------*/
 
 header {
-	background-image:url(images/elements/header2.jpg);
+	background-image:url(images/elements/Tesla-Header-1000-thin.jpg);
 	height: 165px;
-	border-radius: 14px;
+	border-top-left-radius: 14px;
+	border-top-right-radius: 14px;
+	border-bottom: solid 6px #bf0021;
 }
 
 .page-title {
@@ -793,7 +802,8 @@ footer {
 	background-image:url(images/elements/Footer.jpg);
 	background-repeat: no-repeat;
 	height: 205px;
-	border-bottom: solid 3px #bf0021;
+	border-bottom-left-radius: 14px;
+	border-bottom-right-radius: 14px;
 }
 
 footer:after {
