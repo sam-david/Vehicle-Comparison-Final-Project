@@ -61,97 +61,99 @@ var carMakes = [],
  teslap85TaxCredit = [-7500,0,0,0,0],
  year1TeslaCost = 0;
 
+ var myDataRef = new Firebase('https://tesla-comparison.firebaseio.com/')
+
 $(document).ready(function(){
 
 
     	$("#60kwh").mouseover(function() {
-            $("#60kwh").css("border-color", "#fff");
-            $("#60kwh-description").css("border-color", "#fff");
+            $("#60kwh").css("border-color", "#FFB426");
+            $("#60kwh-description").css("border-color", "#FFB426");
     	});
 
         $("#60kwh-description").mouseover(function() {
-            $("#60kwh").css("border-color", "#fff");
-            $("#60kwh-description").css("border-color", "#fff");
+            $("#60kwh").css("border-color", "#FFB426");
+            $("#60kwh-description").css("border-color", "#FFB426");
         });
 
     	$("#60kwh").mouseout(function() {
             if(teslaType === "60") {
-                $("#60kwh").css("border-color", "#fff");
-                $("#60kwh-description").css("border-color", "#fff");
+                $("#60kwh").css("border-color", "#FFB426");
+                $("#60kwh-description").css("border-color", "#FFB426");
             } else {
-                $("#60kwh").css("border-color", "#831c20");
-                $("#60kwh-description").css("border-color", "#831c20");
+                $("#60kwh").css("border-color", "#bf0021");
+                $("#60kwh-description").css("border-color", "#bf0021");
             }
     	});
 
         $("#60kwh-description").mouseout(function() {
             if(teslaType === "60") {
-                $("#60kwh").css("border-color", "#fff");
-                $("#60kwh-description").css("border-color", "#fff");
+                $("#60kwh").css("border-color", "#FFB426");
+                $("#60kwh-description").css("border-color", "#FFB426");
             } else {
-                $("#60kwh").css("border-color", "#831c20");
-                $("#60kwh-description").css("border-color", "#831c20");
+                $("#60kwh").css("border-color", "#bf0021");
+                $("#60kwh-description").css("border-color", "#bf0021");
             }
         });
 
         
     	$("#85kwh").mouseover(function() {
-    		$("#85kwh").css("border-color", "#fff");
-            $("#85kwh-description").css("border-color", "#fff");
+    		$("#85kwh").css("border-color", "#FFB426");
+            $("#85kwh-description").css("border-color", "#FFB426");
     	});
 
         $("#85kwh-description").mouseover(function() {
-            $("#85kwh").css("border-color", "#fff");
-            $("#85kwh-description").css("border-color", "#fff");
+            $("#85kwh").css("border-color", "#FFB426");
+            $("#85kwh-description").css("border-color", "#FFB426");
         });
 
     	$("#85kwh").mouseout(function() {
             if(teslaType === "85") {
-                $("#85kwh").css("border-color", "#fff");
-                $("#85kwh-description").css("border-color", "#fff");
+                $("#85kwh").css("border-color", "#FFB426");
+                $("#85kwh-description").css("border-color", "#FFB426");
             } else {
-                $("#85kwh").css("border-color", "#831c20");
-                $("#85kwh-description").css("border-color", "#831c20");
+                $("#85kwh").css("border-color", "#bf0021");
+                $("#85kwh-description").css("border-color", "#bf0021");
             }
     	});
 
         $("#85kwh-description").mouseout(function() {
             if(teslaType === "85") {
-                $("#85kwh").css("border-color", "#fff");
-                $("#85kwh-description").css("border-color", "#fff");
+                $("#85kwh").css("border-color", "#FFB426");
+                $("#85kwh-description").css("border-color", "#FFB426");
             } else {
-                $("#85kwh").css("border-color", "#831c20");
-                $("#85kwh-description").css("border-color", "#831c20");
+                $("#85kwh").css("border-color", "#bf0021");
+                $("#85kwh-description").css("border-color", "#bf0021");
             }
         });
 
     	$("#p85kwh").mouseover(function() {
-    		$("#p85kwh").css("border-color", "#fff");
-            $("#p85kwh-description").css("border-color", "#fff");
+    		$("#p85kwh").css("border-color", "#FFB426");
+            $("#p85kwh-description").css("border-color", "#FFB426");
     	});
 
         $("#p85kwh-description").mouseover(function() {
-            $("#p85kwh").css("border-color", "#fff");
-            $("#p85kwh-description").css("border-color", "#fff");
+            $("#p85kwh").css("border-color", "#FFB426");
+            $("#p85kwh-description").css("border-color", "#FFB426");
         });
 
     	$("#p85kwh").mouseout(function() {
             if(teslaType === "p85") {
-                $("#p85kwh").css("border-color", "#fff");
-                $("#p85kwh-description").css("border-color", "#fff");
+                $("#p85kwh").css("border-color", "#FFB426");
+                $("#p85kwh-description").css("border-color", "#FFB426");
             } else {
-                $("#p85kwh").css("border-color", "#831c20");
-                $("#p85kwh-description").css("border-color", "#831c20");
+                $("#p85kwh").css("border-color", "#bf0021");
+                $("#p85kwh-description").css("border-color", "#bf0021");
             }
     	});
 
         $("#p85kwh-description").mouseout(function() {
             if(teslaType === "p85") {
-                $("#p85kwh").css("border-color", "#fff");
-                $("#p85kwh-description").css("border-color", "#fff");
+                $("#p85kwh").css("border-color", "#FFB426");
+                $("#p85kwh-description").css("border-color", "#FFB426");
             } else {
-                $("#p85kwh").css("border-color", "#831c20");
-                $("#p85kwh-description").css("border-color", "#831c20");
+                $("#p85kwh").css("border-color", "#bf0021");
+                $("#p85kwh-description").css("border-color", "#bf0021");
             }
         });
 
@@ -179,62 +181,62 @@ $(document).ready(function(){
 
         $("#60kwh").click(function () {
             teslaType = "60";
-            $("#60kwh").css("border-color", "#fff");
-            $("#85kwh").css("border-color", "#831c20");
-            $("#p85kwh").css("border-color", "#831c20");
-            $("#60kwh-description").css("border-color", "#fff");
-            $("#85kwh-description").css("border-color", "#831c20");
-            $("#p85kwh-description").css("border-color", "#831c20");
+            $("#60kwh").css("border-color", "#FFB426");
+            $("#85kwh").css("border-color", "#bf0021");
+            $("#p85kwh").css("border-color", "#bf0021");
+            $("#60kwh-description").css("border-color", "#FFB426");
+            $("#85kwh-description").css("border-color", "#bf0021");
+            $("#p85kwh-description").css("border-color", "#bf0021");
         });
 
         $("#60kwh-description").click(function () {
             teslaType = "60";
-            $("#60kwh").css("border-color", "#fff");
-            $("#85kwh").css("border-color", "#831c20");
-            $("#p85kwh").css("border-color", "#831c20");
-            $("#60kwh-description").css("border-color", "#fff");
-            $("#85kwh-description").css("border-color", "#831c20");
-            $("#p85kwh-description").css("border-color", "#831c20");
+            $("#60kwh").css("border-color", "#FFB426");
+            $("#85kwh").css("border-color", "#bf0021");
+            $("#p85kwh").css("border-color", "#bf0021");
+            $("#60kwh-description").css("border-color", "#FFB426");
+            $("#85kwh-description").css("border-color", "#bf0021");
+            $("#p85kwh-description").css("border-color", "#bf0021");
         });
 
         $("#85kwh").click(function () {
             teslaType = "85";
-            $("#85kwh").css("border-color", "#fff");
-            $("#60kwh").css("border-color", "#831c20");
-            $("#p85kwh").css("border-color", "#831c20");
-            $("#60kwh-description").css("border-color", "#831c20");
-            $("#85kwh-description").css("border-color", "#fff");
-            $("#p85kwh-description").css("border-color", "#831c20");
+            $("#85kwh").css("border-color", "#FFB426");
+            $("#60kwh").css("border-color", "#bf0021");
+            $("#p85kwh").css("border-color", "#bf0021");
+            $("#60kwh-description").css("border-color", "#bf0021");
+            $("#85kwh-description").css("border-color", "#FFB426");
+            $("#p85kwh-description").css("border-color", "#bf0021");
         });
 
         $("#85kwh-description").click(function () {
             teslaType = "85";
-            $("#85kwh").css("border-color", "#fff");
-            $("#60kwh").css("border-color", "#831c20");
-            $("#p85kwh").css("border-color", "#831c20");
-            $("#60kwh-description").css("border-color", "#831c20");
-            $("#85kwh-description").css("border-color", "#fff");
-            $("#p85kwh-description").css("border-color", "#831c20");
+            $("#85kwh").css("border-color", "#FFB426");
+            $("#60kwh").css("border-color", "#bf0021");
+            $("#p85kwh").css("border-color", "#bf0021");
+            $("#60kwh-description").css("border-color", "#bf0021");
+            $("#85kwh-description").css("border-color", "#FFB426");
+            $("#p85kwh-description").css("border-color", "#bf0021");
         });
 
          $("#p85kwh").click(function () {
             teslaType = "p85";
-            $("#p85kwh").css("border-color", "#fff");
-            $("#85kwh").css("border-color", "#831c20");
-            $("#60kwh").css("border-color", "#831c20");
-            $("#60kwh-description").css("border-color", "#831c20");
-            $("#85kwh-description").css("border-color", "#831c20");
-            $("#p85kwh-description").css("border-color", "#fff");
+            $("#p85kwh").css("border-color", "#FFB426");
+            $("#85kwh").css("border-color", "#bf0021");
+            $("#60kwh").css("border-color", "#bf0021");
+            $("#60kwh-description").css("border-color", "#bf0021");
+            $("#85kwh-description").css("border-color", "#bf0021");
+            $("#p85kwh-description").css("border-color", "#FFB426");
         });
 
          $("#p85kwh-description").click(function () {
             teslaType = "p85";
-            $("#p85kwh").css("border-color", "#fff");
-            $("#85kwh").css("border-color", "#831c20");
-            $("#60kwh").css("border-color", "#831c20");
-            $("#60kwh-description").css("border-color", "#831c20");
-            $("#85kwh-description").css("border-color", "#831c20");
-            $("#p85kwh-description").css("border-color", "#fff");
+            $("#p85kwh").css("border-color", "#FFB426");
+            $("#85kwh").css("border-color", "#bf0021");
+            $("#60kwh").css("border-color", "#bf0021");
+            $("#60kwh-description").css("border-color", "#bf0021");
+            $("#85kwh-description").css("border-color", "#bf0021");
+            $("#p85kwh-description").css("border-color", "#FFB426");
         });
 
 		$("#yearSelect").change(function() {
@@ -340,6 +342,7 @@ $(document).ready(function(){
             populatePhoto(carID);
             comparisonAlertify(carID);
             fightAppear();
+            submitFirebase();
         } else if (zip.length === 5 & teslaType === "") { 
            alertify.alert("Please select Tesla Type");
         } else if (zip.length != 5 & teslaType != "") { 
@@ -700,5 +703,18 @@ function fightAppear ( ) {
     $( ".fuel-economy-comparison" ).fadeIn( 1000 );
 }
 
+
+function submitFirebase () {
+    console.log("firebase");
+    // var contact = $('#email').val();
+    myDataRef.push({
+        caryear: carYear,
+        make: carMake,
+        model: carModel,
+        edmundsID: carID,
+        state: state,
+        zipcode: zip
+        });
+}
 
 // vehiclePhoto[Math.floor(Math.random() * vehiclePhoto.length)]

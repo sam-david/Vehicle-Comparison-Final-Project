@@ -4,13 +4,14 @@
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Fugaz+One|Racing+Sans+One|Black+Ops+One|Bangers' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Michroma|Fredoka+One' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="style.css" />
 	<link href="css/simple-slider.css" rel="stylesheet" type="text/css" />
 	<link href="css/simple-slider-volume.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
 	<!-- <link href="css/chosen.css" rel="stylesheet" type="text/css" /> -->
-
+	<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
 
 </head>
 <body>
@@ -152,14 +153,18 @@
 
 <div class="fuel-economy-comparison">
 	<div class="tesla-fuel-economy">
+		<div class="tesla-fuel-background">
 		<div class="tesla-fuel-cell border-top-class"><span id="tesla-MPG-combined"></span><span class="small-label"> combined</span></div>
 		<div class="tesla-fuel-cell"><span id="tesla-MPG"></span><span class="small-label"> city/Highway</span></div>
 		<div class="tesla-bottom-fuel-cell"><span id="tesla-capacity"></span><span class="small-label"> electric range</span></div>
+		</div>
 	</div>
 	<div class="comp-fuel-economy">
+		<div class="comp-fuel-background">
 		<div class="comp-fuel-cell border-top-class"><span id="comp-MPG-combined"></span><span class="small-label"> combined</span></div>
 		<div class="comp-fuel-cell"><span id="comp-MPG"></span><span class="small-label"> city/Highway</span></div>
 		<div class="comp-bottom-fuel-cell"><span id="comp-capacity"></span><span class="small-label"> cap (total miles)</span></div>
+		</div>
 	</div>
 	<div class="fuel-milage-slider">
 		<h2 class="mile-heading">Miles Driven <span id="annualMiles"></span></h2>
