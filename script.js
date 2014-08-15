@@ -25,7 +25,6 @@ var carMakes = [],
  teslaFuelCost = 0,
  compFuelCost = 0,
 
- teslaFuelTotal = 0,
 
  teslaType = "",
  teslaCityMPG = [94,88,88],
@@ -59,7 +58,25 @@ var carMakes = [],
  teslap85Maintenance = [600,600,600,600,600],
  teslap85Repairs = [0,0,0,0,0],
  teslap85TaxCredit = [-7500,0,0,0,0],
- year1TeslaCost = 0;
+ year1TeslaCost = 0,
+ teslaFuelTotal = 0,
+ teslaInsuranceTotal = 0,
+ teslaMaintenanceTotal = 0,
+ teslaRepairsTotal = 0,
+ teslaDepreciationTotal = 0,
+ teslaTaxTotal = 0,
+ teslaFinancingTotal = 0,
+ teslaTaxCreditTotal = 0,
+ teslaGrandTotal = 0,
+ compFuelTotal = 0,
+ compInsuranceTotal = 0,
+ compMaintenanceTotal = 0,
+ compRepairsTotal = 0,
+ compDepreciationTotal = 0,
+ compTaxTotal = 0,
+ compFinancingTotal = 0,
+ compTaxCreditTotal = 0,
+ compGrandTotal = 0;
 
  var myDataRef = new Firebase('https://tesla-comparison.firebaseio.com/')
 
@@ -361,6 +378,7 @@ $(document).ready(function(){
 
                 }
                 $("#comp-fuel").text('$' + json.fuel.values[0]);
+                
                 $("#comp-insurance").text('$' + json.insurance.values[0]);
                 $("#comp-maintenance").text('$' + json.maintenance.values[0]);
                 $("#comp-repairs").text('$' + json.repairs.values[0]);
@@ -368,7 +386,7 @@ $(document).ready(function(){
                 $("#comp-tax").text('$' + json.taxandfees.values[0]);
                 $("#comp-financing").text('$' + json.financing.values[0]);
                 $("#comp-total").text('$' + compCost);
-                for (j = 0; j < 6; j++) {
+                for (j = 0; j < 5; j++) {
                     if (isNaN(json.fuel.values[j]) === true ) {
                         $("#comp-fuel" + (j + 1)).text("N/A");
                     } else {
@@ -380,6 +398,8 @@ $(document).ready(function(){
                         $("#comp-insurance" + (j + 1)).text('$' + json.insurance.values[j]);
                     }
                    $("#comp-maintenance" + (j + 1)).text('$' + json.maintenance.values[j]);
+                   compMaintenanceTotal = json.maintenance.values[j];
+                   console.log(compMaintenanceTotal);
                    $("#comp-repairs" + (j + 1)).text('$' + json.repairs.values[j]);
                    $("#comp-depreciation" + (j + 1)).text('$' + json.depreciation.values[j]);
                    $("#comp-tax" + (j + 1)).text('$' + json.taxandfees.values[j]);
@@ -408,6 +428,8 @@ $(document).ready(function(){
                 }
             });
         }
+        $("#comp-fuel-total").text('$' + compFuelTotal);
+        $("#comp-maintenance-total").text('$' + compFuelTotal);
     }
 
     function teslaData (tesla) {
@@ -522,27 +544,49 @@ $(document).ready(function(){
 
     function teslaAnnualCost (tesla) {
         if (tesla === "60") {
-            for(i = 0; i < 6; i++) {
+            for(i = 0; i < 5; i++) {
                 $("#tesla-fuel" + (i + 1)).text('$' + tesla60Fuel[i]);
+                teslaFuelTotal += tesla60Fuel[i];
                 $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
+                teslaInsuranceTotal += teslaInsurance[i];
                 $("#tesla-maintenance" + (i + 1)).text('$' + tesla60Maintenance[i]);
+                teslaMaintenanceTotal += tesla60Maintenance[i];
                 $("#tesla-repairs" + (i + 1)).text('$' + tesla60Repairs[i]);
+                teslaRepairsTotal += tesla60Repairs[i];
                 $("#tesla-depreciation" + (i + 1)).text('$' + tesla60Depreciation[i]);
+                teslaDepreciationTotal += tesla60Depreciation[i];
                 $("#tesla-tax" + (i + 1)).text('$' + tesla60Tax[i]);
+                teslaTaxTotal += tesla60Tax[i];
                 $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
+                teslaFinancingTotal += teslaFinancing[i];
                 $("#tesla-tax-credit" + (i + 1)).text('$' + tesla60TaxCredit[i]);
+                teslaTaxCreditTotal += tesla60TaxCredit[i];
+                var total = tesla60TaxCredit[i] + tesla60Fuel[i] + teslaInsurance[i] + tesla60Maintenance[i] + tesla60Repairs[i] + tesla60Depreciation[i] + tesla60Tax[i]  + teslaFinancing[i];
+                teslaGrandTotal += total;
+                $("#tesla-total-year" + (i + 1)).text('$' + total);
             }
             
         } else if (tesla === "85") {
-            for(i = 0; i < 6; i++) {
+            for(i = 0; i < 5; i++) {
                 $("#tesla-fuel" + (i + 1)).text('$' + tesla85Fuel[i]);
+                teslaFuelTotal += tesla85Fuel[i];
                 $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
+                teslaInsuranceTotal += teslaInsurance[i];
                 $("#tesla-maintenance" + (i + 1)).text('$' + tesla85Maintenance[i]);
+                teslaMaintenanceTotal += tesla85Maintenance[i];
                 $("#tesla-repairs" + (i + 1)).text('$' + tesla85Repairs[i]);
+                teslaRepairsTotal += tesla85Repairs[i];
                 $("#tesla-depreciation" + (i + 1)).text('$' + tesla85Depreciation[i]);
+                teslaDepreciationTotal += tesla85Depreciation[i];
                 $("#tesla-tax" + (i + 1)).text('$' + tesla85Tax[i]);
+                teslaTaxTotal += tesla85Tax[i];
                 $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
+                teslaFinancingTotal += teslaFinancing[i];
                 $("#tesla-tax-credit" + (i + 1)).text('$' + tesla85TaxCredit[i]);
+                teslaTaxCreditTotal += tesla85TaxCredit[i];
+                var total = tesla85TaxCredit[i] + tesla85Fuel[i] + teslaInsurance[i] + tesla85Maintenance[i] + tesla85Repairs[i] + tesla85Depreciation[i] + tesla85Tax[i]  + teslaFinancing[i];
+                teslaGrandTotal += total;
+                $("#tesla-total-year" + (i + 1)).text('$' + total);
             }
         } else if (tesla === "p85") {
             for(i = 0; i < 6; i++) {
@@ -556,6 +600,15 @@ $(document).ready(function(){
                 $("#tesla-tax-credit" + (i + 1)).text('$' + teslap85TaxCredit[i]);
             }
         }
+        $("#tesla-fuel-total").text('$' + teslaFuelTotal);
+        $("#tesla-insurance-total").text('$' + teslaInsuranceTotal);
+        $("#tesla-maintenance-total").text('$' + teslaMaintenanceTotal);
+        $("#tesla-repairs-total").text('$' + teslaRepairsTotal);
+        $("#tesla-depreciation-total").text('$' + teslaDepreciationTotal);
+        $("#tesla-tax-total").text('$' + teslaTaxTotal);
+        $("#tesla-financing-total").text('$' + teslaFinancingTotal);
+        $("#tesla-tax-credit-total").text('$' + teslaTaxCreditTotal);
+        $("#tesla-grand-total").text('$' + teslaGrandTotal);
     }
 
 
@@ -690,7 +743,6 @@ function populatePhoto (id) {
             }
         }
         $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[0]);
-        $("#comparison-photo2").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[1]);
     });
 
 }
@@ -705,7 +757,6 @@ function fightAppear ( ) {
 
 
 function submitFirebase () {
-    console.log("firebase");
     // var contact = $('#email').val();
     myDataRef.push({
         caryear: carYear,
@@ -716,5 +767,3 @@ function submitFirebase () {
         zipcode: zip
         });
 }
-
-// vehiclePhoto[Math.floor(Math.random() * vehiclePhoto.length)]
