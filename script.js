@@ -25,6 +25,8 @@ var carMakes = [],
  teslaFuelCost = 0,
  compFuelCost = 0,
 
+ compPerformanceTest = 6,
+ compPerformanceNames = [],
 
  teslaType = "",
  teslaCityMPG = [94,88,88],
@@ -378,6 +380,7 @@ $(document).ready(function(){
             fightAppear();
             submitFirebase();
             totalCarValue(zip, carID);
+            navLinks();
         } else if (zip.length === 5 & teslaType === "") { 
            alertify.alert("Please select Tesla Type");
         } else if (zip.length != 5 & teslaType != "") { 
@@ -540,6 +543,7 @@ $(document).ready(function(){
             $("#tesla-radius").text(teslaTurnRadius + ' ft.');
             $("#tesla-photo").attr('src','images/model-s-60.jpg');
             $("#tesla-title").text('Tesla Model S 60');
+            $("#tesla-title-performance").text('Tesla Model S 60');
         } else if (tesla === "85") {
             teslaTotalCost = tesla85Fuel[0] + teslaInsurance[0] + tesla85Maintenance[0] + tesla85Repairs[0] + tesla85Depreciation[0] + tesla85Tax[0] + teslaFinancing[0] + tesla85TaxCredit[0];
             $("#tesla-fuel").text('$' + tesla85Fuel[0]);
@@ -563,6 +567,7 @@ $(document).ready(function(){
             $("#tesla-radius").text(teslaTurnRadius + ' ft.');
             $("#tesla-photo").attr('src','images/model-s-85.jpg');
             $("#tesla-title").text('Tesla Model S 85');
+            $("#tesla-title-performance").text('Tesla Model S 85');
         } else {
             teslaTotalCost = teslap85Fuel[0] + teslaInsurance[0] + teslap85Maintenance[0] + teslap85Repairs[0] + teslap85Depreciation[0] + teslap85Tax[0] + teslaFinancing[0] + teslap85TaxCredit[0];
             $("#tesla-fuel").text('$' + teslap85Fuel[0]);
@@ -586,6 +591,7 @@ $(document).ready(function(){
             $("#tesla-radius").text(teslaTurnRadius + ' ft.');
             $("#tesla-photo").attr('src','images/model-s-p85.jpg');
             $("#tesla-title").text('Tesla Model S p85');
+            $("#tesla-title-performance").text('Tesla Model S p85');
         }
     }
 
@@ -594,8 +600,18 @@ $(document).ready(function(){
             combinedMPG = Math.round((json.MPG.city * .55) + (json.MPG.highway * .45));
             $("#comp-MPG-combined").text(combinedMPG + ' MPG');
             $("#comp-MPG").text(json.MPG.city + ' / ' + json.MPG.highway);
-            $("#comp-horsepower").text(json.engine.horsepower + ' hp');
-            $("#comp-torque").text(json.engine.torque + ' lbs');
+            if (isNaN(json.engine.horsepower) === true ) {
+                $("#comp-horsepower").text('N/A');
+            } else {
+                $("#comp-horsepower").text(json.engine.horsepower + ' hp');
+                compPerformanceTest -= 1;
+            }
+            if (isNaN(json.engine.torque) === true ) {
+                $("#comp-torque").text('N/A');
+            } else {
+                $("#comp-torque").text(json.engine.torque + ' lbs');
+                compPerformanceTest -= 1;
+            }
             alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
             $("#comparison-title").text(carMake + " " + json.model.name);
             $("#comparison-title-performance").text(carMake + " " + json.model.name);
@@ -605,8 +621,11 @@ $(document).ready(function(){
                 if (json.equipment[j].name === "Specifications") {
                     for (q = 0; q < json.equipment[j].attributes.length; q++) {
                         if (json.equipment[j].attributes[q].name === "Aerodynamic Drag (cd)") {
+                            compPerformanceTest -= 1;
+                            compPerformanceNames.push('AD');
                             $("#comp-airdrag").text(json.equipment[j].attributes[q].value);
                         } else if (json.equipment[j].attributes[q].name === "Curb Weight") {
+                            compPerformanceTest -= 1;
                             $("#comp-weight").text(json.equipment[j].attributes[q].value + ' lbs');
                         } else if (json.equipment[j].attributes[q].name === "Epa Combined Mpg") {
                             combinedMPG = json.equipment[j].attributes[q].value;
@@ -615,15 +634,19 @@ $(document).ready(function(){
                             var totalMilesCapacity = (compFuelTankSize * combinedMPG).toFixed(0);
                             $("#comp-capacity").text(json.equipment[j].attributes[q].value + ' gal (' + totalMilesCapacity + ' miles)');
                         } else if (json.equipment[j].attributes[q].name === "Manufacturer 0 60mph Acceleration Time (seconds)") {
+                            compPerformanceTest -= 1;
+                            compPerformanceNames.push('60');
                             $("#comp-0-60").text(json.equipment[j].attributes[q].value + ' sec.');
                         } else if (json.equipment[j].attributes[q].name === "Turning Diameter") {
+                            compPerformanceTest -= 1;
                             $("#comp-radius").text(json.equipment[j].attributes[q].value + ' ft.');
                         }
                     }
                 }
             }
-            
+            console.log(compPerformanceTest);
         });
+        
     }
 
 
@@ -846,7 +869,6 @@ function populatePhoto (id) {
         
             });
         });
-
 }
 
 function fightAppear ( ) {
@@ -905,4 +927,16 @@ function totalCarValue (zip, id) {
           
             console.log(json);
             });
+}
+
+function navLinks () {
+    console.log(compPerformanceTest);
+    console.log(compPerformanceNames);
+    if (compPerformanceTest < 1 ) {
+        console.log("les than 1");
+    } else if (compPerformanceTest >= 1 && compPerformanceTest < 3) {
+        console.log("between 1 and 3");
+    } else {
+        console.log("watever");
+    }
 }

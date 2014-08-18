@@ -56,6 +56,14 @@ body {
 	margin-right: 40px;
 }
 
+a.disabled {
+	pointer-events: none;
+	cursor: default;
+}
+
+.clear-both {
+	clear: both;
+}
 
 /* ----------------- Header --------------------*/
 
@@ -161,7 +169,7 @@ header {
 
 .middle-divider {
 	border-right: solid black 3px;
-	height: 152px;
+	height: 251px;
 	margin-right: 9%;
 }
 
@@ -173,6 +181,7 @@ header {
 	width: 45%;
 	height: 120px;
 	padding: 12px;
+	background-color: rgba(51,51,51,.85);
 }
 
 .ui-accordian-overlay {
@@ -251,10 +260,46 @@ header {
 .submit-button {
 	float: left;
 	width: 21%;
-	height: 25px;
-	font-size: 1.2em;
+	height: 28px;
+	font-size: 1.05em;
 	margin-top: 3%;
 	margin-left: 3%;
+	border-radius: 5px;
+	border: solid #831c20 2px;
+	color: white;
+	background-color: black;
+}
+
+.page-navigator:after {
+	clear: both;
+}
+
+.page-navigator:after,
+.page-navigator:before {
+	content: "";
+	display: block;
+}
+
+.page-navigator {
+}
+
+.navigator-cell {
+	margin-top: 10px;
+	margin-right: 3px;
+	width: 154px;
+	height: 31px;
+	padding-top: 5px;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	float: left;
+	border: solid #831c20 2px;
+	border-radius: 5px;
+	background-color: #333333;
+}
+
+.bottom-nav {
+	width: 234.5px;
 }
 /* ----------------- Car Photos --------------------*/
 
@@ -294,7 +339,6 @@ header {
 	width: 95%;
 	margin-top: 9%;
 	border: solid #bf0021 5px;
-	border-radius: 10px;
 }
 
 .car-display-title {
@@ -421,7 +465,6 @@ header {
 	width: 60%;
 	height: 94px;
 	border:solid black 2px;
-	border-radius: 5px;
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
 }
 
@@ -431,7 +474,6 @@ header {
 	width: 60%;
 	height: 94px;
 	border:solid black 2px;
-	border-radius: 5px;
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
 }
 
@@ -498,16 +540,29 @@ header {
 	display: block;
 }
 
-.mile-heading {
-	text-align: center;
-	color: white;
-	font-size: 1.2em; 
+.fuel-milage-slider {
+	margin-bottom: 1%;
+	margin-top: 10px;
+	padding-bottom: 10px;
+	float: left;
+	border-bottom: solid #831c20 2px;
+	border-top: solid #831c20 2px;
 }
 
-.fuel-milage-slider {
-	margin-left: 5%;
-	margin-bottom: 1%;
+.slider-box {
+	float: left;
+	margin-left: 42px;
 }
+
+.mile-heading {
+	float: left;
+	color: white;
+	font-size: 1.2em; 
+	margin-left: 290px;
+	margin-top: 5px;
+}
+
+
 
 .mile-slider-label:after {
 	clear: both;
@@ -624,6 +679,8 @@ header {
 	font-family: 'Michroma', sans-serif;
 	font-size: 1.3em;
 	margin-bottom: 0%;
+	text-decoration: underline;
+	text-decoration-color: red;
 }
 
 .performance-section:after {
@@ -675,7 +732,7 @@ header {
 .comparison-heading {
 	text-align: center;
 	font-family: 'Michroma', sans-serif;
-	font-size: 1.2em;
+	font-size: 1.1em;
 }
 
 .car-photo-small {
@@ -788,6 +845,7 @@ header {
 	float: left;
 	width: 115px;
 	height: 25px;
+	color: #bf0021;
 	background: white;
 	border: solid black 1px;
 	text-align: center;
@@ -808,7 +866,6 @@ header {
 	margin-right: 8px;
 	padding-top: 5px;
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
-	color: #831c20;
 }
 
 .cost-cell-bold {
@@ -817,8 +874,11 @@ header {
 
 .cost-cell-tesla-bold {
 	font-weight: bold;
-	color: #bf0021;
 
+}
+
+.comp-color {
+	color: #831c20;
 }
 
 .cost-heading {

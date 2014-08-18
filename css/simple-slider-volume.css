@@ -1,5 +1,7 @@
 .slider-volume {
   width: 700px;
+  float: left;
+  margin-left: 30px;
 }
 
 .slider-volume > .dragger {
