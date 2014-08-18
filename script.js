@@ -76,11 +76,22 @@ var carMakes = [],
  compTaxTotal = 0,
  compFinancingTotal = 0,
  compTaxCreditTotal = 0,
- compGrandTotal = 0;
+ compGrandTotal = 0,
+ compYear1 = 0,
+ compYear2 = 0,
+ compYear3 = 0,
+ compYear4 = 0,
+ compYear5 = 0;
 
  var myDataRef = new Firebase('https://tesla-comparison.firebaseio.com/')
 
 $(document).ready(function(){
+
+        // $("#yearSelect").chosen().change(console.log("chosen sucks") console.log("test"));
+
+        // $("#makeSelect").chosen({
+            
+        // });
 
 
     	$("#60kwh").mouseover(function() {
@@ -188,6 +199,7 @@ $(document).ready(function(){
         teslaFuelCost = ((data.value * .33) * energyPrice).toFixed(0);
         $("#tesla-fuel-cost").text('$ ' + teslaFuelCost);
         compFuelCost = ((data.value / combinedMPG) * gasPrice).toFixed(0);
+        console.log(data.value, combinedMPG, gasPrice);
         $("#comp-fuel-cost").text('$ ' + compFuelCost);
         $("#annualMiles").text(data.value + " Miles");
         $("#fuel-cost-difference").text('$ ' + (compFuelCost - teslaFuelCost));
@@ -261,6 +273,11 @@ $(document).ready(function(){
 			carYear = $("#yearSelect").val();
             populateMakeSelect(carYear);
 		});
+
+        // $('#yearSelect').chosen().change(
+        //     carYear = $("#yearSelect").val();
+        //     populateMakeSelect(carYear);
+        //     );
 
 
 		$("#makeSelect").change(function() {
@@ -360,6 +377,7 @@ $(document).ready(function(){
             comparisonAlertify(carID);
             fightAppear();
             submitFirebase();
+            totalCarValue(zip, carID);
         } else if (zip.length === 5 & teslaType === "") { 
            alertify.alert("Please select Tesla Type");
         } else if (zip.length != 5 & teslaType != "") { 
@@ -372,39 +390,106 @@ $(document).ready(function(){
     function populateTCOData (id, zip, state) {
         if (carYear > 2013) {
             $.getJSON('https://api.edmunds.com/api/tco/v1/details/allnewtcobystyleidzipandstate/' + id + '/' + zip + '/' + state + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-                compCost = json.fuel.values[0] + json.insurance.values[0] + json.maintenance.values[0] + json.repairs.values[0] + json.depreciation.values[0] + json.taxandfees.values[0] + json.financing.values[0];
+                // compCost = json.fuel.values[0] + json.insurance.values[0] + json.maintenance.values[0] + json.repairs.values[0] + json.depreciation.values[0] + json.taxandfees.values[0] + json.financing.values[0];
                 if (isNaN(json.fuel.values[0]) === true ) {
-                    $("#comp-fuel").text("N/A");
-
-                }
-                $("#comp-fuel").text('$' + json.fuel.values[0]);
-                
-                $("#comp-insurance").text('$' + json.insurance.values[0]);
-                $("#comp-maintenance").text('$' + json.maintenance.values[0]);
-                $("#comp-repairs").text('$' + json.repairs.values[0]);
-                $("#comp-depreciation").text('$' + json.depreciation.values[0]);
-                $("#comp-tax").text('$' + json.taxandfees.values[0]);
-                $("#comp-financing").text('$' + json.financing.values[0]);
+                        $("#comp-fuel").text("N/A");
+                    } else {
+                        $("#comp-fuel").text('$' + json.fuel.values[0]);
+                        compCost += json.fuel.values[0];
+                    }
+                if (isNaN(json.insurance.values[0]) === true ) {
+                        $("#comp-insurance").text("N/A");
+                    } else {
+                        $("#comp-insurance").text('$' + json.insurance.values[0]);
+                        compCost += json.insurance.values[0];
+                    }
+                if (isNaN(json.maintenance.values[0]) === true ) {
+                        $("#comp-maintenance").text("N/A");
+                    } else {
+                        $("#comp-maintenance").text('$' + json.maintenance.values[0]);
+                        compCost += json.maintenance.values[0];
+                    }
+                if (isNaN(json.repairs.values[0]) === true ) {
+                        $("#comp-repairs").text("N/A");
+                    } else {
+                        $("#comp-repairs").text('$' + json.repairs.values[0]);
+                        compCost += json.repairs.values[0];
+                    }
+                if (isNaN(json.depreciation.values[0]) === true ) {
+                        $("#comp-depreciation").text("N/A");
+                    } else {
+                        $("#comp-depreciation").text('$' + json.depreciation.values[0]);
+                        compCost += json.depreciation.values[0];
+                    }
+                if (isNaN(json.taxandfees.values[0]) === true ) {
+                        $("#comp-tax").text("N/A");
+                    } else {
+                        $("#comp-tax").text('$' + json.taxandfees.values[0]);
+                        compCost += json.taxandfees.values[0];
+                    }
+                if (isNaN(json.financing.values[0]) === true ) {
+                        $("#comp-financing").text("N/A");
+                    } else {
+                        $("#comp-financing").text('$' + json.financing.values[0]);
+                        compCost += json.financing.values[0];
+                    }
+                $("#comp-tax-credit").text('$' + 0);
                 $("#comp-total").text('$' + compCost);
-                for (j = 0; j < 5; j++) {
+                for (j = 0; j < 5; j++) { //Annual Cost For Loop Through API
                     if (isNaN(json.fuel.values[j]) === true ) {
                         $("#comp-fuel" + (j + 1)).text("N/A");
                     } else {
                         $("#comp-fuel" + (j + 1)).text('$' + json.fuel.values[j]);
+                        compFuelTotal += json.fuel.values[j];
                     }
                     if (isNaN(json.insurance.values[j]) === true ) {
                         $("#comp-insurance" + (j + 1)).text("N/A");
                     } else {
                         $("#comp-insurance" + (j + 1)).text('$' + json.insurance.values[j]);
+                        compInsuranceTotal += json.insurance.values[j];
                     }
-                   $("#comp-maintenance" + (j + 1)).text('$' + json.maintenance.values[j]);
-                   compMaintenanceTotal = json.maintenance.values[j];
-                   console.log(compMaintenanceTotal);
-                   $("#comp-repairs" + (j + 1)).text('$' + json.repairs.values[j]);
-                   $("#comp-depreciation" + (j + 1)).text('$' + json.depreciation.values[j]);
-                   $("#comp-tax" + (j + 1)).text('$' + json.taxandfees.values[j]);
-                   $("#comp-financing" + (j + 1)).text('$' + json.financing.values[j]); 
+                    if (isNaN(json.maintenance.values[j]) === true ) {
+                        $("#comp-maintenance" + (j + 1)).text("N/A");
+                    } else {
+                        $("#comp-maintenance" + (j + 1)).text('$' + json.maintenance.values[j]);
+                        compMaintenanceTotal += json.maintenance.values[j];
+                    }
+                    if (isNaN(json.repairs.values[j]) === true ) {
+                        $("#comp-repairs" + (j + 1)).text("N/A");
+                    } else {
+                        $("#comp-repairs" + (j + 1)).text('$' + json.repairs.values[j]);
+                        compRepairsTotal += json.repairs.values[j];
+                    }
+                    if (isNaN(json.depreciation.values[j]) === true ) {
+                        $("#comp-depreciation" + (j + 1)).text("N/A");
+                    } else {
+                        $("#comp-depreciation" + (j + 1)).text('$' + json.depreciation.values[j]);
+                        compDepreciationTotal += json.depreciation.values[j];
+                    }
+                    if (isNaN(json.taxandfees.values[j]) === true ) {
+                        $("#comp-tax" + (j + 1)).text("N/A");
+                    } else {
+                        $("#comp-tax" + (j + 1)).text('$' + json.taxandfees.values[j]);
+                        compTaxTotal += json.taxandfees.values[j];
+                    }
+                    if (isNaN(json.financing.values[j]) === true ) {
+                        $("#comp-financing" + (j + 1)).text("N/A");
+                    } else {
+                        $("#comp-financing" + (j + 1)).text('$' + json.financing.values[j]);
+                        compFinancingTotal += json.financing.values[j];
+                    }
+                   $("#comp-tax-credit" + (j + 1)).text('$' + 0); 
                 }
+                $("#comp-fuel-total").text('$' + compFuelTotal);
+                $("#comp-insurance-total").text('$' + compInsuranceTotal);
+                $("#comp-maintenance-total").text('$' + compMaintenanceTotal);
+                $("#comp-repairs-total").text('$' + compRepairsTotal);
+                $("#comp-depreciation-total").text('$' + compDepreciationTotal);
+                $("#comp-tax-total").text('$' + compTaxTotal);
+                $("#comp-financing-total").text('$' + compFinancingTotal);
+                $("#comp-tax-credit-total").text('$' + 0);
+                compYear1 = 
+                $("#comp-grand-total").text('$' + (compFuelTotal + compInsuranceTotal + compMaintenanceTotal + compRepairsTotal + compDepreciationTotal + compTaxTotal + compFinancingTotal));
             });
         } else {
             $.getJSON('https://api.edmunds.com/api/tco/v1/details/allusedtcobystyleidzipandstate/' + id + '/' + zip + '/' + state + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
@@ -428,8 +513,7 @@ $(document).ready(function(){
                 }
             });
         }
-        $("#comp-fuel-total").text('$' + compFuelTotal);
-        $("#comp-maintenance-total").text('$' + compFuelTotal);
+        
     }
 
     function teslaData (tesla) {
@@ -514,6 +598,7 @@ $(document).ready(function(){
             $("#comp-torque").text(json.engine.torque + ' lbs');
             alertify.log("Tesla " + teslaType + " VS. " + carMake + " " + json.model.name);
             $("#comparison-title").text(carMake + " " + json.model.name);
+            $("#comparison-title-performance").text(carMake + " " + json.model.name);
         });
         $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + id + '/equipment?availability=standard&equipmentType=OTHER&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
             for (j = 0; j < json.equipment.length; j++) {
@@ -743,7 +828,24 @@ function populatePhoto (id) {
             }
         }
         $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[0]);
-    });
+        
+    }).fail(function() {
+        console.log("failed but worked");
+            $.getJSON('https://api.edmunds.com/v1/api/vehiclephoto/service/findphotosbystyleid?styleId=' + id + '&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+        for(j = 0; j < json.length; j++) {
+            if (json[j].subType === "exterior" && json[j].shotTypeAbbreviation === "FQ") {
+                for(i = 0; i < json[j].photoSrcs.length; i++) {
+                    var photo = json[j].photoSrcs[i];
+                    if (photo.indexOf(500) > -1) {
+                        vehiclePhoto.push(json[j].photoSrcs[i]);
+                    }
+                }
+            }
+        }
+        $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + vehiclePhoto[0]);
+        
+            });
+        });
 
 }
 
@@ -757,7 +859,7 @@ function fightAppear ( ) {
 
 
 function submitFirebase () {
-    // var contact = $('#email').val();
+    var contact = $('#email').val();
     myDataRef.push({
         caryear: carYear,
         make: carMake,
@@ -766,4 +868,41 @@ function submitFirebase () {
         state: state,
         zipcode: zip
         });
+    // myDataRef.remove(); remove all data!!
+}
+
+function adjustEnergyPrice (adjust) { 
+        if (energyPrice <= .01) {
+             alertify.alert("Energy must be more than .01");
+        } else {
+                if (adjust === "up") {
+                energyPrice = (parseFloat(energyPrice) + .01).toFixed(2);
+                $("#currentenergy").text('$' + energyPrice);
+            } else if (adjust === "down") {
+                energyPrice = (parseFloat(energyPrice) - .01).toFixed(2);
+                $("#currentenergy").text('$' + energyPrice);
+            }
+        }   
+}
+
+function adjustGasPrice (adjust) {
+        if (gasPrice <= .01) {
+             alertify.alert("Gas must be more than .01");
+        } else {
+                if (adjust === "up") {
+                gasPrice = (parseFloat(gasPrice) + .01).toFixed(2);
+                $("#currentgas").text('$' + gasPrice);
+            } else if (adjust === "down") {
+                gasPrice = (parseFloat(gasPrice) - .01).toFixed(2);
+                $("#currentgas").text('$' + gasPrice);
+            }
+        } 
+}
+
+function totalCarValue (zip, id) {
+    $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/' + id + '/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+            
+          
+            console.log(json);
+            });
 }

@@ -10,7 +10,7 @@
 	<link href="css/simple-slider-volume.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
-	<!-- <link href="css/chosen.css" rel="stylesheet" type="text/css" /> -->
+	<link href="css/chosen.css" rel="stylesheet" type="text/css" />
 	<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
 
 </head>
@@ -141,7 +141,7 @@
 		<h2 class="car-display-title tesla-color" id="tesla-title">Tesla</h2>
 	</div>
 	<div class="vs-display">
-			<img src="images/elements/vs-big-red.png" class="vs-icon">
+			<img src="images/elements/vs-formal.png" class="vs-icon">
 	</div>
 	<div class="comparison-display">
 		<img src="images/model-s-60.jpg" class="car-photo" id="comparison-photo">
@@ -189,23 +189,23 @@
 	</div>
 	<div class="final-fuel-costs">
 		<div class="final-fuel-economy">
-			<div class="final-fuel-cell tesla-color-cell"><span id="tesla-fuel-cost"></span><span class="small-label"></span></div>
+			<div class="final-fuel-cell tesla-color-cell"><span id="tesla-fuel-cost">Move Slider</span><span class="small-label"></span></div>
 		</div>
 		<div class="final-fuel-economy-difference">
 			<div class="final-fuel-cell-difference gas-color"><span id="fuel-cost-difference"></span><span class="small-label"> difference</span></div>
 		</div>
 		<div class="final-fuel-economy">
-			<div class="final-fuel-cell-comp comp-color-cell"><span id="comp-fuel-cost"></span><span class="small-label"></span></div>
+			<div class="final-fuel-cell-comp comp-color-cell"><span id="comp-fuel-cost">Move Slider</span><span class="small-label"></span></div>
 		</div>
 	</div>
 </div>
 
 <div class="fuel-price-bar">
 	<div class="energy-price">
-		<span>Current Energy Price: </span><span id="currentenergy" class="energy-price-number">$.11</span><img src="images/elements/electric-icon-small.png" class="electric-icon">
+		<span class="energy-heading">Current Energy Price: </span><img src="images/elements/electric-button-up-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('up')"><img src="images/elements/electric-button-down-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('down')"><span id="currentenergy" class="energy-price-number">$.11</span><img src="images/elements/electric-icon-small.png" class="electric-icon">
 	</div>
 	<div class="gas-price">
-		<span>Current Gas Price: </span><span id="currentgas" class="gas-price-number">$3.67</span><img src="images/elements/fuel-icon-small.png" class="gas-icon">
+		<span class="gas-heading">Current Gas Price: </span><img src="images/elements/gas-button-up-normal.png" class="gas-arrow" onclick="adjustGasPrice('up')"><img src="images/elements/gas-button-down-normal2.png" class="gas-arrow" onclick="adjustGasPrice('down')"><span id="currentgas" class="gas-price-number">$3.67</span><img src="images/elements/fuel-icon-small.png" class="gas-icon">
 	</div>
 </div>
 <!-- 
@@ -223,19 +223,45 @@
 </div> -->
 
 <div class="performance-section">
-<h2 class="car-display-title tesla-color" id="tesla-title">Tesla</h2>
+	<div class="car-titles">
+<h2 class="car-performance-title tesla-color" id="tesla-title">Tesla</h2>
 
-<h2 class="car-display-title comp-color" id="comparison-title">Comparison Auto</h2>
+<h2 class="car-performance-title comp-color" id="comparison-title-performance">Comparison Auto</h2>
+</div>
 
 <h2 class="comparison-heading">Performance</h2>
 
 <div class="performance-comparison">
-	<div class="performance-cell"><span class="tesla-stat" id="tesla-horsepower"></span><span class="small-label performance-label">Horsepower</span><span class="comp-stat" id="comp-horsepower"></span></div>
-	<div class="performance-cell"><span class="tesla-stat" id="tesla-torque"></span><span class="small-label performance-label">Torque</span><span class="comp-stat" id="comp-torque"></span></div>
-	<div class="performance-cell"><span class="tesla-stat" id="tesla-0-60"></span><span class="small-label performance-label">0-60 Speed</span><span class="comp-stat" id="comp-0-60"></span></div>
-	<div class="performance-cell"><span class="tesla-stat" id="tesla-radius"></span><span class="small-label performance-label">Turn Radius</span><span class="comp-stat" id="comp-radius"></span></div>
-	<div class="performance-cell"><span class="tesla-stat" id="tesla-airdrag"></span><span class="small-label performance-label">Air Drag</span><span class="comp-stat" id="comp-airdrag"></span></div>
-	<div class="performance-cell"><span class="tesla-stat" id="tesla-weight"></span><span class="small-label performance-label">Curb Weight</span><span class="comp-stat" id="comp-weight"></span></div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-horsepower"></div>
+		<div class="performance-stat small-label">Horsepower</div>
+		<div class="performance-stat" id="comp-horsepower"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-torque"></div>
+		<div class="performance-stat small-label">Torque</div>
+		<div class="performance-stat" id="comp-torque"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-0-60"></div>
+		<div class="performance-stat small-label">0-60 Speed</div>
+		<div class="performance-stat" id="comp-0-60"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-radius"></div>
+		<div class="performance-stat small-label">Turn Radius</div>
+		<div class="performance-stat" id="comp-radius"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-radius"></div>
+		<div class="performance-stat small-label">Air Drag</div>
+		<div class="performance-stat" id="comp-radius"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-weight"></div>
+		<div class="performance-stat small-label">Curb Weight</div>
+		<div class="performance-stat" id="comp-weight"></div>
+	</div>
 </div>
 
 </div>
@@ -243,113 +269,51 @@
 <h2 class="comparison-heading">Year One Cost</h2>
 
 <div class="cost-comparison">
-	<div class="performance-cell"><span id="tesla-fuel"></span><span class="small-label performance-label">Fuel</span><span id="comp-fuel"></span></div>
-	<div class="performance-cell"><span id="tesla-insurance"></span><span class="small-label performance-label">Insurance</span><span id="comp-insurance"></span></div>
-	<div class="performance-cell"><span id="tesla-maintenance"></span><span class="small-label performance-label">Maintenance</span><span id="comp-maintenance"></span></div>
-	<div class="performance-cell"><span id="tesla-repairs"></span><span class="small-label performance-label">Repairs</span><span id="comp-repairs"></span></div>
-	<div class="performance-cell"><span id="tesla-depreciation"></span><span class="small-label performance-label">Depreciation</span><span id="comp-depreciation"></span></div>
-	<div class="performance-cell"><span id="tesla-tax"></span><span class="small-label performance-label">Taxes and Fees</span><span id="comp-tax"></span></div>
-	<div class="performance-cell"><span id="tesla-financing"></span><span class="small-label performance-label">Financing</span><span id="comp-financing"></span></div>
-	<div class="performance-cell"><span id="tesla-tax-credit"></span><span class="small-label performance-label">Tax Credit</span><span id="comp-tax-credit"></span></div>
-	<div class="performance-cell"><span id="tesla-total"></span><span class="small-label performance-label">Total Cost</span><span id="comp-total"></span></div>
-</div>
-
-<div class="bottom-tables">
-<!-- <table class="cost-table">
-	<tr>
-		<th></th>
-		<th>Tesla</th>
-		<th>Comparison Car</th>
-	</tr>
-	<tr>
-		<th>Fuel</th>
-		<td id="tesla-fuel"></td>
-		<td id="comp-fuel"></td>
-	</tr>
-	<tr>
-		<th>Insurance</th>
-		<td id="tesla-insurance"></td>
-		<td id="comp-insurance"></td>
-	</tr>
-	<tr>
-		<th>Maintenance</th>
-		<td id="tesla-maintenance"></td>
-		<td id="comp-maintenance"></td>
-	</tr>
-	<tr>
-		<th>Repairs</th>
-		<td id="tesla-repairs"></td>
-		<td id="comp-repairs"></td>
-	</tr>
-	<tr>
-		<th>Depreciation</th>
-		<td id="tesla-depreciation"></td>
-		<td id="comp-depreciation"></td>
-	</tr>
-	<tr>
-		<th>Taxes and Fees</th>
-		<td id="tesla-tax"></td>
-		<td id="comp-tax"></td>
-	</tr>
-	<tr>
-		<th>Financing</th>
-		<td id="tesla-financing"></td>
-		<td id="comp-financing"></td>
-	</tr>
-	<tr>
-		<th>Tax Credit</th>
-		<td id="tesla-tax-credit"></td>
-		<td></td>
-	</tr>
-	<tr>
-		<th>Total Cost</th>
-		<td id="tesla-total"></td>
-		<td id="comp-total"></td>
-	</tr>
-</table> -->
-
-<!-- <table class="performance-table">
-	<tr>
-		<th class="top-table-box"></th>
-		<th>Tesla</th>
-		<th>Comparison Car</th>
-	</tr>
-	<tr>
-		<th>Horsepower</th>
-		<td id="tesla-horsepower"></td>
-		<td id="comp-horsepower"></td>
-	</tr>
-	<tr>
-		<th>Torque</th>
-		<td id="tesla-torque"></td>
-		<td id="comp-torque"></td>
-	</tr>
-	<tr>
-		<th>0-60 Speed</th>
-		<td id="tesla-0-60"></td>
-		<td id="comp-0-60"></td>
-	</tr>
-	<tr>
-		<th>Turn Radius</th>
-		<td id="tesla-radius"></td>
-		<td id="comp-radius"></td>
-	</tr>
-	<tr>
-		<th>Air Drag</th>
-		<td id="tesla-airdrag"></td>
-		<td id="comp-airdrag"></td>
-	</tr>
-	<tr>
-		<th>Cargo Cap.</th>
-		<td id="tesla-cargo-capacity"></td>
-		<td></td>
-	</tr>
-	<tr>
-		<th>Total Weight</th>
-		<td id="tesla-weight"></td>
-		<td id="comp-weight"></td>
-	</tr>
-</table> -->
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-fuel"></div>
+		<div class="performance-stat small-label">Fuel</div>
+		<div class="performance-stat" id="comp-fuel"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-insurance"></div>
+		<div class="performance-stat small-label">Insurance</div>
+		<div class="performance-stat" id="comp-insurance"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-maintenance"></div>
+		<div class="performance-stat small-label">Maintenance</div>
+		<div class="performance-stat" id="comp-maintenance"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-repairs"></div>
+		<div class="performance-stat small-label">Repairs</div>
+		<div class="performance-stat" id="comp-repairs"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-depreciation"></div>
+		<div class="performance-stat small-label">Depreciation</div>
+		<div class="performance-stat" id="comp-depreciation"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-tax"></div>
+		<div class="performance-stat small-label">Taxes and Fees</div>
+		<div class="performance-stat" id="comp-tax"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-financing"></div>
+		<div class="performance-stat small-label">Financing</div>
+		<div class="performance-stat" id="comp-financing"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-tax-credit"></div>
+		<div class="performance-stat small-label">Tax Credit</div>
+		<div class="performance-stat" id="comp-tax-credit"></div>
+	</div>
+	<div class="performance-cell">
+		<div class="performance-stat" id="tesla-total"></div>
+		<div class="performance-stat small-label">Total Cost</div>
+		<div class="performance-stat" id="comp-total"></div>
+	</div>
 </div>
 
 <div class="bottom-table-headings">
@@ -357,7 +321,8 @@
 </div>
 
 <div class="bottom-tables">
-	<div class="cost-row-top">
+	<div class="cost-row">
+		<div class="cost-cell-heading" id="tesla-value">Fuel</div>
 		<div class="cost-cell-heading">Year 1</div>
 		<div class="cost-cell-heading">Year 2</div>
 		<div class="cost-cell-heading">Year 3</div>
@@ -372,7 +337,7 @@
 		<div class="cost-cell" id="tesla-fuel3"></div>
 		<div class="cost-cell" id="tesla-fuel4"></div>
 		<div class="cost-cell" id="tesla-fuel5"></div>
-		<div class="cost-cell" id="tesla-fuel-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-fuel-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Insurance</div>
@@ -381,7 +346,7 @@
 		<div class="cost-cell" id="tesla-insurance3"></div>
 		<div class="cost-cell" id="tesla-insurance4"></div>
 		<div class="cost-cell" id="tesla-insurance5"></div>
-		<div class="cost-cell" id="tesla-insurance-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-insurance-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Maintenance</div>
@@ -390,7 +355,7 @@
 		<div class="cost-cell" id="tesla-maintenance3"></div>
 		<div class="cost-cell" id="tesla-maintenance4"></div>
 		<div class="cost-cell" id="tesla-maintenance5"></div>
-		<div class="cost-cell" id="tesla-maintenance-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-maintenance-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Repairs</div>
@@ -399,7 +364,7 @@
 		<div class="cost-cell" id="tesla-repairs3"></div>
 		<div class="cost-cell" id="tesla-repairs4"></div>
 		<div class="cost-cell" id="tesla-repairs5"></div>
-		<div class="cost-cell" id="tesla-repairs-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-repairs-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Depreciation</div>
@@ -408,7 +373,7 @@
 		<div class="cost-cell" id="tesla-depreciation3"></div>
 		<div class="cost-cell" id="tesla-depreciation4"></div>
 		<div class="cost-cell" id="tesla-depreciation5"></div>
-		<div class="cost-cell" id="tesla-depreciation-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-depreciation-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Taxes and Fees</div>
@@ -417,7 +382,7 @@
 		<div class="cost-cell" id="tesla-tax3"></div>
 		<div class="cost-cell" id="tesla-tax4"></div>
 		<div class="cost-cell" id="tesla-tax5"></div>
-		<div class="cost-cell" id="tesla-tax-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-tax-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Financing</div>
@@ -426,7 +391,7 @@
 		<div class="cost-cell" id="tesla-financing3"></div>
 		<div class="cost-cell" id="tesla-financing4"></div>
 		<div class="cost-cell" id="tesla-financing5"></div>
-		<div class="cost-cell" id="tesla-financing-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-financing-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Tax Credit</div>
@@ -435,16 +400,16 @@
 		<div class="cost-cell" id="tesla-tax-credit3"></div>
 		<div class="cost-cell" id="tesla-tax-credit4"></div>
 		<div class="cost-cell" id="tesla-tax-credit5"></div>
-		<div class="cost-cell" id="tesla-tax-credit-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-tax-credit-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Total Cost</div>
-		<div class="cost-cell" id="tesla-total-year1"></div>
-		<div class="cost-cell" id="tesla-total-year2"></div>
-		<div class="cost-cell" id="tesla-total-year3"></div>
-		<div class="cost-cell" id="tesla-total-year4"></div>
-		<div class="cost-cell" id="tesla-total-year5"></div>
-		<div class="cost-cell" id="tesla-grand-total"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-total-year1"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-total-year2"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-total-year3"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-total-year4"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-total-year5"></div>
+		<div class="cost-cell cost-cell-tesla-bold" id="tesla-grand-total"></div>
 	</div>
 </div>
 
@@ -453,7 +418,8 @@
 </div>
 
 <div class="bottom-tables">
-	<div class="cost-row-top">
+	<div class="cost-row">
+		<div class="cost-cell-heading" id="comp-value"></div>
 		<div class="cost-cell-heading">Year 1</div>
 		<div class="cost-cell-heading">Year 2</div>
 		<div class="cost-cell-heading">Year 3</div>
@@ -468,7 +434,7 @@
 		<div class="cost-cell" id="comp-fuel3"></div>
 		<div class="cost-cell" id="comp-fuel4"></div>
 		<div class="cost-cell" id="comp-fuel5"></div>
-		<div class="cost-cell" id="comp-fuel-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-fuel-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Insurance</div>
@@ -477,7 +443,7 @@
 		<div class="cost-cell" id="comp-insurance3"></div>
 		<div class="cost-cell" id="comp-insurance4"></div>
 		<div class="cost-cell" id="comp-insurance5"></div>
-		<div class="cost-cell" id="comp-insurance-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-insurance-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Maintenance</div>
@@ -486,7 +452,7 @@
 		<div class="cost-cell" id="comp-maintenance3"></div>
 		<div class="cost-cell" id="comp-maintenance4"></div>
 		<div class="cost-cell" id="comp-maintenance5"></div>
-		<div class="cost-cell" id="comp-maintenance-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-maintenance-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Repairs</div>
@@ -495,7 +461,7 @@
 		<div class="cost-cell" id="comp-repairs3"></div>
 		<div class="cost-cell" id="comp-repairs4"></div>
 		<div class="cost-cell" id="comp-repairs5"></div>
-		<div class="cost-cell" id="comp-repairs-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-repairs-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Depreciation</div>
@@ -504,7 +470,7 @@
 		<div class="cost-cell" id="comp-depreciation3"></div>
 		<div class="cost-cell" id="comp-depreciation4"></div>
 		<div class="cost-cell" id="comp-depreciation5"></div>
-		<div class="cost-cell" id="comp-depreciation-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-depreciation-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Taxes and Fees</div>
@@ -513,7 +479,7 @@
 		<div class="cost-cell" id="comp-tax3"></div>
 		<div class="cost-cell" id="comp-tax4"></div>
 		<div class="cost-cell" id="comp-tax5"></div>
-		<div class="cost-cell" id="comp-tax-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-tax-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Financing</div>
@@ -522,7 +488,7 @@
 		<div class="cost-cell" id="comp-financing3"></div>
 		<div class="cost-cell" id="comp-financing4"></div>
 		<div class="cost-cell" id="comp-financing5"></div>
-		<div class="cost-cell" id="comp-financing-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-financing-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Tax Credit</div>
@@ -531,16 +497,16 @@
 		<div class="cost-cell" id="comp-tax-credit3"></div>
 		<div class="cost-cell" id="comp-tax-credit4"></div>
 		<div class="cost-cell" id="comp-tax-credit5"></div>
-		<div class="cost-cell" id="comp-tax-credit-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-tax-credit-total"></div>
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading">Total Cost</div>
-		<div class="cost-cell"></div>
-		<div class="cost-cell"></div>
-		<div class="cost-cell"></div>
-		<div class="cost-cell"></div>
-		<div class="cost-cell"></div>
-		<div class="cost-cell"></div>
+		<div class="cost-cell cost-cell-bold"></div>
+		<div class="cost-cell cost-cell-bold"></div>
+		<div class="cost-cell cost-cell-bold"></div>
+		<div class="cost-cell cost-cell-bold"></div>
+		<div class="cost-cell cost-cell-bold"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-grand-total"></div>
 	</div>
 </div>
 <footer>
@@ -554,8 +520,8 @@
 	<script src="js/jquery-ui.js"></script>
 	<script src="js/alertify.js"></script>
 	<script src="js/simple-slider.js"></script>
-	<!-- <script src="js/chosen.jquery.js"></script>
-	<script src="js/chosen.proto.js"></script> -->
+	<script src="js/chosen.jquery.js"></script>
+	<script src="js/chosen.proto.js"></script>
 	<script src="script.js"></script>
 </body>
 </html>
