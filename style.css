@@ -110,7 +110,7 @@ header {
 	width: 45%;
 	margin: 0 auto;
 	float: left;
-	margin-left: 5%;
+	margin-left: 4%;
 	margin-bottom: 2%;
 }
 
@@ -288,7 +288,7 @@ header {
 	margin-right: 3px;
 	width: 154px;
 	height: 31px;
-	padding-top: 5px;
+	padding-top: 7px;
 	color: white;
 	text-align: center;
 	text-decoration: none;
@@ -296,6 +296,13 @@ header {
 	border: solid #831c20 2px;
 	border-radius: 5px;
 	background-color: #333333;
+}
+
+.nav-light {
+	width: 15px;
+	float: right;
+	margin-right: 15px;
+	margin-top: 4px;
 }
 
 .bottom-nav {
@@ -311,6 +318,10 @@ header {
 .car-battle-display:before {
 	content: "";
 	display: block;
+}
+
+.car-battle-display {
+	display: none;
 }
 
 .comparison-display, .tesla-display {
@@ -366,6 +377,7 @@ header {
 	height: 24px;
 	background-color: #333333;
 	color: white;
+	display: none;
 }
 
 .fuel-bar-heading {
@@ -450,6 +462,7 @@ header {
 	border-right: solid #bf0021 2px;
 	border-top: solid #bf0021 2px;;
 	padding-top: 2%;
+	display: none;
 }
 
 
@@ -694,17 +707,25 @@ header {
 	display: block;
 }
 
+.performance-section {
+	display: none;
+}
+.performance-heading {
+
+}
+
 .performance-comparison {
 	border: solid black 2px;
 	width: 75%;
 	margin-left: 12.5%;
+	padding-top: 10px;
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
 	background-color: rgba(255,255,255,.76);
 }
 
 
 .performance-cell {
-	height: 20px;
+	height: 35px;
 	text-align: center;
 	
 	padding: 4px;
@@ -749,9 +770,15 @@ header {
 .cost-comparison {
 	border: solid black 2px;
 	width: 75%;
+	padding-top: 10px;
 	margin-left: 12.5%;
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
 	background-color: rgba(255,255,255,.76);
+	display: none;
+}
+
+.cost-heading {
+	display: none;
 }
 /* ----------------- Tables --------------------*/
 
@@ -786,33 +813,10 @@ header {
 }
 
 
-#fuel-economy-table {
-	width: 46%;
-	background-color: black;
-	float: left;
-	border: 2px solid #bf0021;
-	margin-left: 10%;
-	table-layout: fixed;
-}
-
-#fuel-economy-table th {
-	background-color: #bf0021;
-	color: white;
-	width: 30%;
-}
-
-#fuel-economy-table td {
-	text-align: center;
-	color: white;
-	overflow: visible;
-}
 
 #mileslide {
 	width: 5%;
 }
-
-
-
 
 /* ----------------- Tables --------------------*/
 
@@ -881,12 +885,6 @@ header {
 	color: #831c20;
 }
 
-.cost-heading {
-	color: white;
-	margin-left: 26%;
-	margin-top: 3%;
-	float: left;
-}
 
 .bottom-tables:after {
 	clear: both;
@@ -897,82 +895,17 @@ header {
 	display: block;
 }
 
-.cost-table {
-	width: 49%;
-	background-color: black;
-	float: left;
-	border: 2px solid #bf0021;
-	margin-left: 4%;
-
-}
-
-.cost-table td {
-	color: white;
-	width: 33.3333%;
-	border: solid white 1px;
-	text-align: center;
-	overflow: visible;
-}
-
-.performance-heading {
-	color: white;
-	margin-left: 38%;
-	margin-top: 3%;
-	float: left;
-}
-
-.performance-table {
-	width: 40%;
-	background-color: black;
-	float: left;
-	border: 2px solid #bf0021;
-	margin-left: 30px;
-}
-
-.performance-table td {
-	color: white;
-	border: solid white 1px;
-	text-align: center;
-}
-
-.performance-table th, .cost-table th {
-	background-color: #bf0021;
-	color: white;
-	width: 33.3333%;
-}
 
 /* ----------------- Annual Cost Tables --------------------*/
 
 .tesla-cost-heading {
-	color: white;
 	text-align: center;
 	margin-top: 2%;
+	font-family: 'Michroma', sans-serif;
 }
 
-.annual-cost-table {
-	width: 93.5%%;
-	background-color: black;
-	float: left;
-	border: 2px solid #bf0021;
-	margin-left: 30px;
-	margin-bottom: 1%;
-}
-
-.annual-cost-table td {
-	width: 10%;
-	color: white;
-	border: solid white 1px;
-	text-align: center;
-}
-
-.annual-cost-table th {
-	background-color: #bf0021;
-	color: white;
-	width: 15%;
-}
-
-.year-heading {
-	width: 10%;
+.tesla-table, .tesla-heading, .comp-heading, .comp-table  {
+	display: none;
 }
 
 .bottom-margin {
@@ -1008,7 +941,6 @@ footer:before {
 	padding-top: 2px;
 	text-decoration: none;
 	text-align: center;
-	text-decoration: underline;
 	border-right: solid 1px #831c20;
 	margin-top: 7px;
 }
@@ -1020,7 +952,6 @@ footer:before {
 	padding-top: 2px;
 	text-decoration: none;
 	text-align: center;
-	text-decoration: underline;
 	border-right: solid 1px #831c20;
 	margin-top: 7px;
 }

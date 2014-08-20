@@ -10,7 +10,7 @@
 	<link href="css/simple-slider-volume.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css" />
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
-	<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+	<!-- <link href="css/chosen.css" rel="stylesheet" type="text/css" /> -->
 	<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
 
 </head>
@@ -133,11 +133,11 @@
 			<button class="submit-button" type="button" onclick="reset()">Reset</button>
 		</div>
 	<div class="page-navigator">
-		<a class="navigator-cell" href="#fueleconcomparison">Fuel</a>
-		<a class="navigator-cell" href="#performance">Performance</a>
-		<a class="navigator-cell" href="#cost">Cost</a>
-		<a class="navigator-cell bottom-nav" href="#teslaannual">Tesla Annual</a>
-		<a class="navigator-cell bottom-nav disabled" href="#compannual">Comp Annual</a>
+		<a class="navigator-cell disabled" href="#fueleconcomparison" id="fuel-link">Fuel<img src="images/elements/empty-light.png" id="fuel-light"class="nav-light"></a>
+		<a class="navigator-cell disabled" href="#performance" id="performance-link">Performance<img src="images/elements/empty-light.png" id="performance-light" class="nav-light"></a>
+		<a class="navigator-cell disabled" href="#cost" id="cost-link">Cost<img src="images/elements/empty-light.png" id="cost-light" class="nav-light"></a>
+		<a class="navigator-cell bottom-nav disabled" href="#teslaannual" id="tesla-annual-link">Tesla Annual<img src="images/elements/empty-light.png" id="tesla-light" class="nav-light"></a>
+		<a class="navigator-cell bottom-nav disabled" href="#compannual" id="comp-annual-link">Comp Annual<img src="images/elements/empty-light.png" class="nav-light"></a>
 	</div>
 	
 </div>
@@ -225,7 +225,7 @@
 <h2 class="car-performance-title" id="comparison-title-performance">Comparison Auto</h2>
 </div>
 
-<h2 class="comparison-heading">Performance</h2>
+<h2 class="comparison-heading performance-heading">Performance</h2>
 
 <div class="performance-comparison">
 	<div class="performance-cell">
@@ -262,7 +262,7 @@
 
 </div>
 <a name="cost"></a>
-<h2 class="comparison-heading">Year One Cost</h2>
+<h2 class="comparison-heading cost-heading">Year One Cost</h2>
 
 <div class="cost-comparison">
 	<div class="performance-cell">
@@ -313,10 +313,10 @@
 </div>
 <a name="teslaannual"></a>
 <div class="bottom-table-headings">
-<h2 class="tesla-cost-heading">Tesla Annual Cost</h2>
+<h2 class="tesla-cost-heading tesla-heading">Tesla Annual Cost</h2>
 </div>
 
-<div class="bottom-tables">
+<div class="bottom-tables tesla-table">
 	<div class="cost-row">
 		<div class="cost-cell-heading" id="tesla-value"></div>
 		<div class="cost-cell-heading">Year 1</div>
@@ -409,12 +409,13 @@
 	</div>
 </div>
 
+<div class="comp-annual">
 <a name="compannual"></a>
 <div class="bottom-table-headings">
-<h2 class="tesla-cost-heading">Comparison Annual Cost</h2>
+<h2 class="tesla-cost-heading comp-heading">Comparison Annual Cost</h2>
 </div>
 
-<div class="bottom-tables">
+<div class="bottom-tables comp-table">
 	<div class="cost-row">
 		<div class="cost-cell-heading comp-color" id="comp-value"></div>
 		<div class="cost-cell-heading comp-color">Year 1</div>
@@ -498,13 +499,14 @@
 	</div>
 	<div class="cost-row">
 		<div class="cost-cell-heading comp-color">Total Cost</div>
-		<div class="cost-cell cost-cell-bold"></div>
-		<div class="cost-cell cost-cell-bold"></div>
-		<div class="cost-cell cost-cell-bold"></div>
-		<div class="cost-cell cost-cell-bold"></div>
-		<div class="cost-cell cost-cell-bold"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-year1-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-year2-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-year3-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-year4-total"></div>
+		<div class="cost-cell cost-cell-bold" id="comp-year5-total"></div>
 		<div class="cost-cell cost-cell-bold" id="comp-grand-total"></div>
 	</div>
+</div>
 </div>
 <footer>
 		<a href="mailto:sfd1987@gmail.com" class="footer-link">Contact</a>
