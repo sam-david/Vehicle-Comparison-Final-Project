@@ -52,8 +52,11 @@ body {
 
 .intro-paragraph p {
 	text-align: center;
-	margin-left: 40px;
-	margin-right: 40px;
+	color: #831c20;
+	font-size: 1.4em;
+	margin-bottom: 20px;
+	margin-top: 15px;
+	font-weight: bold;
 }
 
 a.disabled {
@@ -63,6 +66,7 @@ a.disabled {
 
 .clear-both {
 	clear: both;
+	margin-left: 35px;
 }
 
 /* ----------------- Header --------------------*/
@@ -130,6 +134,8 @@ header {
 	border-top: solid #bf0021 3px;
 	border-left: solid #bf0021 3px;
 	border-bottom: solid #bf0021 3px;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
 	clear: left;
 	margin-bottom: 4px;
 }
@@ -142,6 +148,8 @@ header {
 	border-top: solid #bf0021 3px;
 	border-right: solid #bf0021 3px;
 	border-bottom: solid #bf0021 3px;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
 	
 }
 
@@ -265,9 +273,13 @@ header {
 	margin-top: 3%;
 	margin-left: 3%;
 	border-radius: 5px;
-	border: solid #831c20 2px;
+	border: solid #bf0021 2px;
 	color: white;
 	background-color: black;
+}
+
+.submit-button:hover {
+	background-color: #FFB426;
 }
 
 .page-navigator:after {
@@ -284,7 +296,7 @@ header {
 }
 
 .navigator-cell {
-	margin-top: 10px;
+	margin-top: 5px;
 	margin-right: 3px;
 	width: 154px;
 	height: 31px;
@@ -303,6 +315,18 @@ header {
 	float: right;
 	margin-right: 15px;
 	margin-top: 4px;
+}
+
+.nav-info {
+	font-size: .7em;
+	float: left;
+
+}
+
+.tiny-light {
+	width: 10px;
+	margin-top: 3px;
+	margin-left: 48px;
 }
 
 .bottom-nav {
@@ -469,7 +493,7 @@ header {
 .tesla-fuel-economy,.comp-fuel-economy {
 	float: left;
 	width: 50%;
-
+	margin-bottom: 15px;
 }
 
 .tesla-fuel-background {
@@ -572,7 +596,7 @@ header {
 	color: white;
 	font-size: 1.2em; 
 	margin-left: 290px;
-	margin-top: 5px;
+	margin-top: 15px;
 }
 
 
@@ -590,6 +614,8 @@ header {
 .mile-box {
 	float: left;
 	width:6.2%;
+	margin-bottom: 10px;
+	margin-top: 3px;
 	color: white;
 	text-align: center;
 }
@@ -605,41 +631,36 @@ header {
 }
 
 .final-fuel-costs {
-	margin-left: 21%;
-	width: 70%;
+	margin-left: 8%;
 }
 
-.final-fuel-economy {
-	float: left;
-	width: 33%;
-}
-
-.final-fuel-economy-difference {
-	float: left;
-	width: 25%;
-}
 
 
 .final-fuel-cell {
 	float: left;
-	clear: left;
-	margin-bottom: 5%;
-	width: 85%;
-	height: 28px;
+	margin-bottom: 1%;
+	margin-top: 15px;
+	width: 30%;
+	height: 38px;
 	border: solid black 2px;
 	text-align: center;
-	padding-top: 1%;
+	font-size: 1.3em;
+	padding-top: 8px;
+	background: linear-gradient(#fff, #bdbdbd);
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
 }
 
 .final-fuel-cell-difference {
 	float: left;
-	clear: left;
-	margin-bottom:5%;
-	width: 80%;
-	height: 28px;
+	margin-bottom:3%;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 15px;
+	width: 25%;
+	height: 38px;
 	border: solid black 2px;
 	text-align: center;
+	font-size: 1.6em;
 	padding-top: 1%;
 	background: linear-gradient(#fff, #bdbdbd);
 	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.75);
@@ -727,7 +748,7 @@ header {
 .performance-cell {
 	height: 35px;
 	text-align: center;
-	
+	font-size: 1.5em;
 	padding: 4px;
 	
 }
@@ -754,6 +775,8 @@ header {
 	text-align: center;
 	font-family: 'Michroma', sans-serif;
 	font-size: 1.1em;
+	margin-bottom: 30px;
+	margin-top: 20px;
 }
 
 .car-photo-small {

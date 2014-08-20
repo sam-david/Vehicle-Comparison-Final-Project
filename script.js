@@ -11,6 +11,7 @@ var carMakes = [],
  gasPrice = 0,
  energyPrice = 0,
  vehiclePhoto = [],
+ yearTotals = {},
 
  carYear = 0,
  carIDs = [],
@@ -92,6 +93,28 @@ var carMakes = [],
 $(document).ready(function(){
 
 
+// google.load("visualization", "1", {packages:["corechart"]});
+//       google.setOnLoadCallback(drawChart);
+//       function drawChart() {
+//         var data = google.visualization.arrayToDataTable([
+//           ['Year', 'Sales', 'Expenses'],
+//           ['Year 1',  yearTotals[1],      400],
+//           ['Year 2',  1170,      460],
+//           ['Year 3',  660,       1120],
+//           ['Year 4',  1030,      540],
+//           ['Year 5',  1030,      540]
+//         ]);
+
+//         var options = {
+//           title: 'Total Annual Cost',
+//           curveType: 'function',
+//           backgroundColor: '#809BBF',
+//           legend: { position: 'bottom' }
+//         };
+
+//         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+//         chart.draw(data, options);
+//       }
         // Model S 60 icons mouseover functions
     	$("#60kwh").mouseover(function() {
             $("#60kwh").css("border-color", "#FFB426");
@@ -300,7 +323,7 @@ $(document).ready(function(){
         $('#modelSelect').children('option').remove();
         $('#specificModelSelect').children('option').remove();
         $('#makeSelect').append($("<option></option>").attr("value",0).text('Select Make'));
-        $('#modelSelect').append($("<option></option>").attr("value",0).text('Select Model'));
+        $('#modelSelect').append($("<option></option>").attr("value",0).text('Select Base Model'));
         $('#specificModelSelect').append($("<option></option>").attr("value",0).text('Select Specific Model')); 
         $("#modelSelect").prop('disabled', true);
         $("#specificModelSelect").prop('disabled', true);
@@ -323,7 +346,7 @@ $(document).ready(function(){
     function populateModelSelect (year, make) {
         $('#modelSelect').children('option').remove();
         $('#specificModelSelect').children('option').remove();
-        $('#modelSelect').append($("<option></option>").attr("value",0).text('Select Model'));
+        $('#modelSelect').append($("<option></option>").attr("value",0).text('Select Base Model'));
         $('#specificModelSelect').append($("<option></option>").attr("value",0).text('Select Specific Model')); 
         $("#specificModelSelect").prop('disabled', true);
         $("#stateSelect").prop('disabled', true);
@@ -390,19 +413,23 @@ $(document).ready(function(){
             populateGasPrices(state);
             setTimeout(function(){
                 populatePhoto(carID);
+            }, 1500);
+            setTimeout(function(){
                 totalCarValue(zip, carID, teslaType);
-                navLinks();
             }, 2500);
+            setTimeout(function(){
+                navLinks();
+            }, 3500);
             comparisonAlertify(carID);
             fightAppear();
             submitFirebase();
             
         } else if (zip.length === 5 & teslaType === "") { 
            alertify.alert("Please select Tesla Type");
-        } else if (zip.length != 5 & teslaType != "") { 
-           alertify.alert("Please select a Location");
-        } else {
-            alertify.alert("Please fill out all of the data forms");
+        } else if (zip.length != 5 & teslaType != "") {
+            alertify.alert("Please select a Comparison Car");
+        }  else {
+            alertify.alert("Please select a Tesla and Comparison Car");
         }
     }
 
@@ -460,7 +487,6 @@ $(document).ready(function(){
                     }
                 $("#comp-tax-credit").text('$' + 0);
                 $("#comp-total").text('$' + compCost);
-                var yearTotals = {};
                 for (j = 0; j < 5; j++) { //Annual Cost For Loop Through API
                     var y = j + 1;
                     yearTotals[y] = 0;
@@ -534,7 +560,13 @@ $(document).ready(function(){
         } else {
             $.getJSON('https://api.edmunds.com/api/tco/v1/details/allusedtcobystyleidzipandstate/' + id + '/' + zip + '/' + state + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
                 compCost = json.fuel.values[0] + json.insurance.values[0] + json.maintenance.values[0] + json.repairs.values[0] + json.depreciation.values[0] + json.taxandfees.values[0] + json.financing.values[0];
-                $("#comp-fuel").text('$' + json.fuel.values[0]);
+                if (isNaN(json.fuel.values[0]) === true ) {
+                        $("#comp-fuel").text("N/A");
+                    } else {
+                        $("#comp-fuel").text('$' + json.fuel.values[0]);
+                        compCost += json.fuel.values[0];
+                        compCostTest -= 1;
+                    }
                 $("#comp-insurance").text('$' + json.insurance.values[0]);
                 $("#comp-maintenance").text('$' + json.maintenance.values[0]);
                 $("#comp-repairs").text('$' + json.repairs.values[0]);

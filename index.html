@@ -12,6 +12,7 @@
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css" />
 	<!-- <link href="css/chosen.css" rel="stylesheet" type="text/css" /> -->
 	<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 </head>
 <body>
@@ -21,7 +22,7 @@
 	</header>
 
 	<article class="intro-paragraph">
-		<p>Pick your Tesla and Comparison car to get started!</p>
+		<p>Pick your Tesla and Comparison car to get started</p>
 	</article>
 <div class="all-selectors">
 	<div class="vehicle-selector">
@@ -138,9 +139,12 @@
 		<a class="navigator-cell disabled" href="#cost" id="cost-link">Cost<img src="images/elements/empty-light.png" id="cost-light" class="nav-light"></a>
 		<a class="navigator-cell bottom-nav disabled" href="#teslaannual" id="tesla-annual-link">Tesla Annual<img src="images/elements/empty-light.png" id="tesla-light" class="nav-light"></a>
 		<a class="navigator-cell bottom-nav disabled" href="#compannual" id="comp-annual-link">Comp Annual<img src="images/elements/empty-light.png" class="nav-light"></a>
+		<div class="nav-info"><img src="images/elements/green-light.png" class="tiny-light"> = Data Complete<img src="images/elements/yellow-light.png" class="tiny-light"> = Data Missing<img src="images/elements/red-light.png" class="tiny-light"> = No Data</div>
+
 	</div>
-	
+
 </div>
+
 <a name="fueleconcomparison"></a>
 <div class="car-battle-display">
 	<div class="tesla-display">
@@ -195,15 +199,9 @@
  		</div>
 	</div>
 	<div class="final-fuel-costs">
-		<div class="final-fuel-economy">
-			<div class="final-fuel-cell tesla-color-cell"><span id="tesla-fuel-cost">Move Slider</span><span class="small-label"></span></div>
-		</div>
-		<div class="final-fuel-economy-difference">
-			<div class="final-fuel-cell-difference gas-color"><span id="fuel-cost-difference"></span><span class="small-label"> +/-</span></div>
-		</div>
-		<div class="final-fuel-economy">
-			<div class="final-fuel-cell-comp comp-color-cell"><span id="comp-fuel-cost">Move Slider</span><span class="small-label"></span></div>
-		</div>
+		<div class="final-fuel-cell" id="tesla-fuel-cost">Move Slider</div>
+		<div class="final-fuel-cell-difference gas-color"><span id="fuel-cost-difference"></span><span class="small-label"> +/-</span></div>
+		<div class="final-fuel-cell" id="comp-fuel-cost"> Move Slider</div>
 	</div>
 </div>
 
@@ -508,6 +506,8 @@
 	</div>
 </div>
 </div>
+
+<!-- <div id="chart_div" style="width: 900px; height: 500px;"></div> -->
 <footer>
 		<a href="mailto:sfd1987@gmail.com" class="footer-link">Contact</a>
 		<a href="mailto:sfd1987@gmail.com" class="footer2-link">About</a>
