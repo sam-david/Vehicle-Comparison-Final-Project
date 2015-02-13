@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Tesla Vehicle Comparison : About</title>
+  <title>Tesla Vehicle Comparison</title>
   <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Michroma|Fredoka+One' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/foundation.css" />
@@ -12,7 +12,6 @@
   <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script src="js/modernizr.js"></script>
-  <script src="js/responsive-tables.js"></script>
 </head>
 <body>
   <header class="row">
@@ -22,7 +21,7 @@
   </header>
   <div class="row light-blue-background">
       <div class="large-12 columns">
-        <h2 class="section-heading">About Us</h2>
+        <h2 class="section-heading">Contact Us</h2>
       </div>
     </div>
     <div class="row light-blue-background">
@@ -31,11 +30,28 @@
       </div>
     </div>
   <div class="row light-blue-background">
-    <div class="large-6 medium-6 columns ">
-      <p class="website-content">This site was created as a tool for Tesla owners, potential owners, and fans to see how the Tesla models stack up against other vehicles on the market across a wide array of statistics. Thanks to Edmunds.com's amazing public database, we are able to do this by connecting directly to their site. We compare fuel, performance, and overall annual costs for Tesla vs any model on the market that Edmunds has data for. Try it out and see for yourself!</p>
+    <div class="large-12 columns ">
+      <p class="website-content">We are always looking for ways to improve our site. See something you like, or do you have a suggestion, please let us know using the contact form below.</p>
     </div>
-    <div class="large-6 medium-6 columns text-center">
-      <img src="images/tesla-logo.png" class="tesla-about-logo">
+  </div>
+  <div class="row light-blue-background">
+    <div class="large-1 medium-1 columns ">
+    </div>
+    <div class="large-4 medium-4 columns ">
+      <input type="text" id="contact-name" placeholder="Name">
+      <input type="email" id="contact-email" placeholder="Email">
+    </div>
+    <div class="large-7 medium-7 columns ">
+    </div>
+  </div>
+  <div class="row light-blue-background">
+    <div class="large-9 medium-9 columns text-center">
+      <textarea placeholder="Message" class="contact-box" id="contact-message"></textarea>
+    </div>
+  </div>
+  <div class="row light-blue-background">
+    <div class="large-2 medium-2 columns ">
+      <button type="button" class="contact-button" id="contact-submit-button" onclick="contactSubmit()">Submit</button>
     </div>
   </div>
   <div class="row ">
@@ -57,9 +73,7 @@
        <img src="images/elements/Footer.jpg" class="footer-image">
     </div>
   </div>
-  <script src="js/jquery-ui.js"></script>
   <script src="js/alertify.js"></script>
-  <script src="script.js"></script>
-  <script src="graph.js"></script>
+  <script src="js/contact.js"></script>
 </body>
 </html>
