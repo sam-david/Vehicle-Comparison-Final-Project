@@ -56,6 +56,8 @@ var edmundsApi = {
     makeUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     modelNewUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     modelUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
+    trimNewUrl: ["https://api.edmunds.com/api/vehicle/v2/","?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
+    trimUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/","?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     getTCOData: function(id, zip, state) {
         /* new or used? */
         if (compCar.year > 2014) {
@@ -69,31 +71,24 @@ var edmundsApi = {
         }
     },
     getMakeNames: function() {
-        console.log('get make names');
         View.makes = [];
-        testMakes = [];
         if (compCar.year > 2013) {
             $.getJSON(this.makeNewUrl[0] + compCar.year + this.makeNewUrl[1], function(json) {
                 for (var i = 0; i < json.makes.length; i++){
-                    console.log(json.makes[i].name);
                     View.makes.push(json.makes[i].name);
-                    testMakes.push(json.makes[i].name);
                 }
             });
         } else {
             $.getJSON(this.makeUsedUrl[0] + compCar.year + this.makeUsedUrl[1], function(json) {
                 for (var i = 0; i < json.makes.length; i++){
-                    console.log(json.makes[i].name);
-                    makes.push(json.makes[i].name);
+                    View.makes.push(json.makes[i].name);
                 }
-                return makes;
             });
         }
-        return testMakes;
     },
     getModelNames: function() {
-        var models = [];
-        if (compCar.year > 2014) {
+        View.models = [];
+        if (compCar.year > 2013) {
             $.getJSON(this.modelNewUrl[0] + compCar.year + this.modelNewUrl[1], function(json) {
                 for (j = 0; j < json.makes.length; j++) {
                     if (json.makes[j].name === compCar.make) {
@@ -115,7 +110,22 @@ var edmundsApi = {
                 }
             });
         }
-        return models;
+    },
+    getTrimNames: function() {
+        View.trims = [];
+        if (compCar.year > 2013){
+            $.getJSON(this.trimNewUrl[0] + compCar.make.toLowerCase() + '/' + compCar.model + this.trimNewUrl[1] + compCar.year + this.trimNewUrl[2], function(json) {
+                for (j = 0; j < json.years[0].styles.length; j++) {
+                   View.trims.push([json.years[0].styles[j].id, json.years[0].styles[j].name]);
+                }
+            });
+        } else {
+            $.getJSON(this.trimUsedUrl[0] + compCar.make.toLowerCase() + '/' + compCar.model + this.trimUsedUrl[1] + compCar.year + this.trimUsedUrl[2], function(json) {
+                for (j = 0; j < json.years[0].styles.length; j++) {
+                    View.trims.push([json.years[0].styles[j].id, json.years[0].styles[j].name]);
+                }
+            });
+        }
     }
 };
 
@@ -328,6 +338,7 @@ tesla = {
 var View = {
     makes: [],
     models: [],
+    trims: [],
     renderMakeSelect: function() {
         $('#makeSelect').children('option').remove();
         $('#modelSelect').children('option').remove();
@@ -343,19 +354,27 @@ var View = {
         }
         $("#makeSelect").prop('disabled', false);
     },
-    renderModelSelect: function(models) {
+    renderModelSelect: function() {
         $('#modelSelect').children('option').remove();
         $('#trimSelect').children('option').remove();
         $('#modelSelect').append($("<option></option>").attr("value",0).text('Model'));
         $('#trimSelect').append($("<option></option>").attr("value",0).text('Trim'));
         $("#trimSelect").prop('disabled', true);
         $("#stateSelect").prop('disabled', true);
-        for (var j = 0; j < models.length; j++){
-            $('#modelSelect').append('<option value="' + models[j] + '">' + models[j] + '</option>');
+        for (var j = 0; j < this.models.length; j++){
+            $('#modelSelect').append('<option value="' + this.models[j] + '">' + this.models[j] + '</option>');
         }
-        setTimeout(function(){
-            $("#modelSelect").prop('disabled', false);
-        }, 500);
+        $("#modelSelect").prop('disabled', false);
+    },
+    renderTrimSelect: function() {
+        $('#trimSelect').children('option').remove();
+        $('#trimSelect').append($("<option></option>").attr("value",0).text('Trim'));
+        $("#stateSelect").prop('disabled', true);
+        $('#zipCode').prop('disabled', true);
+        for (var j = 0; j < this.trims.length; j++){
+            $('#trimSelect').append('<option value="' + this.trims[j][0] + '">' + this.trims[j][1] + '</option>');
+        }
+        $("#trimSelect").prop('disabled', false);
     },
     loadTest: false,
     renderAnnualMiles: function() {
@@ -401,7 +420,7 @@ var View = {
     },
     renderCompAnnualCosts: function() {
         $("#comp-depreciation" + (j + 1)).text('$' + compCar.annualCosts.depreciation[j]);
-        // for loop here
+        // for loop here not finished above
         for (var index = 0; index < 5; index++) {
             $("#comp-year" + (index + 1) + "-total").text('$' + compCar.annualCosts.yearTotals[index]);
         }
@@ -424,22 +443,24 @@ var View = {
         compCar.year = $("#yearSelect").val();
         edmundsApi.getMakeNames();
         setTimeout(function(){
-            View.renderMakeSelect(carMakes);
+            View.renderMakeSelect();
         }, 800);
         
 	});
 
 	$("#makeSelect").change(function() {
         compCar.make = $("#makeSelect").val();
-        edmundsApi.getModelNames());
-        View.renderModelSelect();
+        edmundsApi.getModelNames();
+        setTimeout(function(){
+            View.renderModelSelect();
+        }, 800);
 	});
 
     $("#modelSelect").change(function() {
         compCar.model =  $("#modelSelect").val();
-        populateTrimSelect(compCar.model, compCar.make, compCar.year);
+        edmundsApi.getTrimNames();
         setTimeout(function(){
-            $("#trimSelect").prop('disabled', false);
+            View.renderTrimSelect();
         }, 500);
     });
 
@@ -447,67 +468,6 @@ var View = {
         $("#zipCode").prop('disabled', false);
         $("#stateSelect").prop('disabled', false);
     });
-
-
-// Populate Model select boxe by clearing all boxes after Model, then adding Edmunds Models to select box
-function populateModelSelect (year, make) {
-    $('#modelSelect').children('option').remove();
-    $('#trimSelect').children('option').remove();
-    $('#modelSelect').append($("<option></option>").attr("value",0).text('Model'));
-    $('#trimSelect').append($("<option></option>").attr("value",0).text('Trim'));
-    $("#trimSelect").prop('disabled', true);
-    $("#stateSelect").prop('disabled', true);
-    if (year > 2013) {
-        $.getJSON('https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=' + year + '&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-            for (j = 0; j < json.makes.length; j++) {
-                if (json.makes[j].name === make) {
-                    for (m = 0; m < json.makes[j].models.length; m++){
-                        $('#modelSelect').append('<option value="' + json.makes[j].models[m].niceName + '">' + json.makes[j].models[m].name + '</option>');
-                    }
-                } else {
-                }
-            }
-        });
-    } else {
-        $.getJSON('https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=' + year + '&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-            for (j = 0; j < json.makes.length; j++) {
-                if (json.makes[j].name === make) {
-                    for (m = 0; m < json.makes[j].models.length; m++){
-                        $('#modelSelect').append('<option value="' + json.makes[j].models[m].niceName + '">' + json.makes[j].models[m].name + '</option>');
-                    }
-                } else {
-                }
-            }
-        });
-    }
-}
-
-// Populate Trim select boxe by clearing Trim, then adding Edmunds Trims to select box
-function populateTrimSelect (model, make, year) {
-    $('#trimSelect').children('option').remove();
-    $('#trimSelect').append($("<option></option>").attr("value",0).text('Trim'));
-    $("#stateSelect").prop('disabled', true);
-    $('#zipCode').prop('disabled', true);
-    if (carYear > 2013){
-        $.getJSON('https://api.edmunds.com/api/vehicle/v2/' + make.toLowerCase() + '/' + model + '?state=new&year=' + year + '&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-            for (j = 0; j < json.years[0].styles.length; j++) {
-                $('#trimSelect').append('<option value="' + json.years[0].styles[j].id + '">' + json.years[0].styles[j].name + '</option>');
-            }
-         });
-    } else {
-        $.getJSON('https://api.edmunds.com/api/vehicle/v2/' + make.toLowerCase() + '/' + model + '?state=used&year=' + year + '&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-            for (j = 0; j < json.years[0].styles.length; j++) {
-
-                $('#trimSelect').append('<option value="' + json.years[0].styles[j].id + '">' + json.years[0].styles[j].name + '</option>');
-            }
-         });
-    }
-}
-
-
-//Annual cost for loop through Edmunds API from JSON request in other function
-
-
 
 // Populate performance data from two separate JSON requests, second reqeust delayed by 1.5 sec
 function populatePerformanceData (id) {
