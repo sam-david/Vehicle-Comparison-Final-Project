@@ -13,28 +13,31 @@ $(document).ready(function(){
     var myDataRef = new Firebase(firebaseUrl);
 
     $(document).foundation({
-    slider: {
-        on_change: function(){
-            user.annualMiles = $('#annual-milage-slider').attr('data-slider');
-            tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
-            tesla.fuelTotal = tesla.fuelCost * 5;
-            compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
-            compFuelTotal = compCar.fuelCost * 5;
+        slider: {
+            on_change: function(){
+                user.annualMiles = $('#annual-milage-slider').attr('data-slider');
+                tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
+                tesla.fuelTotal = tesla.fuelCost * 5;
+                compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
+                compFuelTotal = compCar.fuelCost * 5;
 
-            teslaAnnualCost(tesla.selectedType);
-            
-            View.renderAnnualMiles();
-            View.renderTeslaAnnualFuel();
-            View.renderCompAnnualFuel();
-            View.renderCostDifference();
+                teslaAnnualCost(tesla.selectedType);
+                
+                View.renderAnnualMiles();
+                View.renderTeslaAnnualFuel();
+                View.renderCompAnnualFuel();
+                View.renderCostDifference();
+            }
         }
-    }
-});
+    });
 });
 
 var eiaGov = {
     nationalGasAverage: "http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_NUS_DPG.W",
     nationalEnergyAverage: "http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.US-RES.M",
+    gasPriceBaseUrl: "http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.",
+    gasPriceUrls: [["ME,CT,NH,RI,VT", "EMM_EPMMU_PTE_R1X_DPG.W"],["DE,DC,MD,NJ,NY,PA","EMM_EPMMU_PTE_R1Y_DPG.W"],["GA,NC,SC,VA,WV","EMM_EPMMU_PTE_R1Z_DPG.W"],["IL,IN,IO,KS,KY,MI,MO,NE,ND,SD,OH,OK,TN,WI","EMM_EPMMU_PTE_R20_DPG.W"],["AL,AR,LA,MS,NM","EMM_EPMMU_PTE_R30_DPG.W"],["ID,MT,UT,WY","EMM_EPMMU_PTE_R40_DPG.W"],["AK,AZ,HI,NV,OR","EMM_EPMMU_PTE_R50_DPG.W"],["CA","EMM_EPMMR_PTE_SCA_DPG.W"],["CO","EMM_EPMMU_PTE_SCO_DPG.W"],["FL","EMM_EPMMU_PTE_SFL_DPG.W"],["MA","EMM_EPMMR_PTE_SMA_DPG.W"],["MN","EMM_EPMMU_PTE_SMN_DPG.W"],["NY","EMM_EPMMU_PTE_SNY_DPG.W"],["OH","EMM_EPMMU_PTE_SOH_DPG.W"],["TX","EMM_EPMMU_PTE_STX_DPG.W"],["WA","EMM_EPMMU_PTE_SWA_DPG.W"]],
+    energyPriceUrl: ["http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.","-RES.M"]
     getGasAverage: function() {
         $.getJSON(eiaGov.nationalGasAverage, function(json) {
             user.gasPrice = json.series[0].data[0][1];
@@ -45,6 +48,20 @@ var eiaGov = {
         $.getJSON(eiaGov.nationalEnergyAverage, function(json) {
             user.energyPrice = (json.series[0].data[0][1] / 100).toFixed(2);
             $("#currentenergy").text('$' + user.energyPrice);
+        });
+    },
+    getGasPrice: function() {
+        for (var i = 0; i < gasPriceUrls.length; i++) {
+            if (user.state.test(gasPriceUrls[i][0]) === true) {
+                $.getJSON(this.gasPriceBaseUrl + gasPriceUrls[i][1], function(json) {
+                    return json.series[0].data[0][1];
+                });
+            }
+        }
+    },
+    getEnergyPrice: function() {
+        $.getJSON(this.energyPriceUrl[0] + user.state + this.energyPriceUrl[1], function(json) {
+            return json.series[0].data[0][1] / 100;
         });
     }
 };
@@ -61,15 +78,27 @@ var edmundsApi = {
     getTCOData: function(id, zip, state) {
         /* new or used? */
         if (compCar.year > 2014) {
-            $.getJSON(this.tcoNewUrl[0] + id + '/' + zip + '/' + state + this.tcoNewUrl[1], function(json) {
+            $.getJSON(this.tcoNewUrl[0] + compCar.id + '/' + user.zip + '/' + user.state + this.tcoNewUrl[1], function(json) {
                 return json;
             });
         } else {
-            $.getJSON(this.tcoUsedUrl[0] + id + '/' + zip + '/' + state + this.tcoUsedUrl[1], function(json) {
+            $.getJSON(this.tcoUsedUrl[0] + compCar.id + '/' + user.zip + '/' + user.state + this.tcoUsedUrl[1], function(json) {
                 return json;
             });
         }
     },
+    getPerformanceData: function() {
+        performanceData = [];
+        $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + compCar.id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+            performanceData.push(json);
+        });
+        setTimeout(function(){
+            $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + compCar.id + '/equipment?availability=standard&equipmentType=OTHER&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+                performanceData.push(json);
+            });
+        }, 1500);
+        return performanceData;
+    }
     getMakeNames: function() {
         View.makes = [];
         if (compCar.year > 2013) {
@@ -126,18 +155,83 @@ var edmundsApi = {
                 }
             });
         }
+    },
+    getPhotoUrls: function() {
+        $.getJSON('https://api.edmunds.com/v1/api/vehiclephoto/service/findphotosbystyleid?styleId=' + compCar.id + '&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+            for(j = 0; j < json.length; j++) {
+                if (json[j].subType === "exterior" && json[j].shotTypeAbbreviation === "FQ") {
+                    for(i = 0; i < json[j].photoSrcs.length; i++) {
+                        var photo = json[j].photoSrcs[i];
+                        if (photo.indexOf(500) > -1) {
+                            compCar.photoUrls[0] = json[j].photoSrcs[i];
+                        }
+                    }
+                }
+            }
+        }).fail(function() {
+            console.log("image load failed");
+        });
     }
 };
 
-var firebaseUrl = 'https://tesla-comparison.firebaseio.com/',
-user = {
+var firebase = {
+    url: "https://tesla-comparison.firebaseio.com/",
+    submitFirebase: function() {
+        myDataRef.push({
+            caryear: compCar.year,
+            make: compCar.make,
+            model: compCar.model,
+            edmundsID: compCar.id,
+            state: user.state,
+            zipcode: user.zipCode,
+            fiveyeartotal: compCar.annualCosts.grandTotal
+        });
+    }
+}
+
+var user = {
     zipCode: 0,
     state: "",
     gasPrice: 0,
     energyPrice: 0,
-    annualMiles: 20000
-},
-compCar = {
+    annualMiles: 20000,
+    setGasPrice: function() {
+        this.gasPrice = 0;
+        user.gasPrice = eiaGov.getGasPrice();
+        View.renderGasPrice();
+    },
+    setEnergyPrice: function() {
+        this.energyPrice = 0;
+        user.energyPrice = eiaGov.getEnergyPrice();
+        View.renderEnergyPrice();
+    },
+    adjustEnergyPrice: function(adjust) {
+        if (user.energyPrice <= .01) {
+             alertify.alert("Energy must be more than .01");
+        } else {
+            if (adjust === "up") {
+                user.energyPrice = (parseFloat(user.energyPrice) + .01).toFixed(2);
+            } else if (adjust === "down") {
+                user.energyPrice = (parseFloat(user.energyPrice) - .01).toFixed(2);
+            }
+        }
+        View.renderEnergyPrice();
+    },
+    adjustGasPrice: function(adjust) {
+        if (user.gasPrice <= .01) {
+             alertify.alert("Gas must be more than .01");
+        } else {
+            if (adjust === "up") {
+                user.gasPrice = (parseFloat(user.gasPrice) + .01).toFixed(2);
+            } else if (adjust === "down") {
+                user.gasPrice = (parseFloat(user.gasPrice) - .01).toFixed(2);
+            }
+        }
+        View.renderGasPrice();
+    }
+};
+
+var compCar = {
     id: "",
     make: "",
     model: "",
@@ -145,6 +239,15 @@ compCar = {
     photoUrls: [],
     tankSize: 0,
     combinedMPG: 0,
+    cityMpg: 0,
+    hwyMpg: 0,
+    horsepower: 0,
+    torque: 0,
+    aeroDrag: 0,
+    weight: 0,
+    fuelCapacity: 0,
+    zeroSixty: 0,
+    turnRadius: 0,
     fuelCost: 0,
     annualCosts: {
         fuel: [],
@@ -165,7 +268,7 @@ compCar = {
     setFuelCosts: function() {
         this.fuelCost = ((20000 / this.combinedMPG) * user.gasPrice).toFixed(0);
     },
-    parseTCOData: function(json) {
+    parseTCOData: function(tcoData) {
         this.annualCosts.grandTotal = 0;
         this.annualCosts.insurance[5] = 0;
         this.annualCosts.maintenance[5] = 0;
@@ -175,71 +278,118 @@ compCar = {
         this.annualCosts.financing[5] = 0;
         /* check if doesn't exist first, then proceed to total and grand total */
         for (j = 0; j < 5; j++) {
-            if (isNaN(json.fuel.values[j]) === true ) {
+            if (isNaN(tcoData.fuel.values[j]) === true ) {
                 this.annualCosts.fuel[j] = "unknown";
             } else {
                 this.annualCosts.fuel[j] = this.fuelCost;
                 this.annualCosts.yearTotals[j] += this.fuelCost;
                 this.annualCosts.grandTotal += this.fuelCost;
             }
-            if (isNaN(json.insurance.values[j]) === true ) {
+            if (isNaN(tcoData.insurance.values[j]) === true ) {
                 this.annualCosts.insurance[j] = "unknown";
             } else {
-                this.annualCosts.insurance[j] = json.insurance.values[j];
-                this.annualCosts.insurance[5] += json.insurance.values[j];
-                this.annualCosts.yearTotals[j] += json.insurance.values[j];
-                this.annualCosts.grandTotal += json.insurance.values[j];
+                this.annualCosts.insurance[j] = tcoData.insurance.values[j];
+                this.annualCosts.insurance[5] += tcoData.insurance.values[j];
+                this.annualCosts.yearTotals[j] += tcoData.insurance.values[j];
+                this.annualCosts.grandTotal += tcoData.insurance.values[j];
                 this.tests.costs -= 1;
             }
-            if (isNaN(json.maintenance.values[j]) === true ) {
+            if (isNaN(tcoData.maintenance.values[j]) === true ) {
                 this.annualCosts.maintenance[j] = "unknown";
             } else {
-                this.annualCosts.maintenance[j] = json.maintenance.values[j];
-                this.annualCosts.maintenance[5] += json.maintenance.values[j];
-                this.annualCosts.yearTotals[j] += json.maintenance.values[j];
-                this.annualCosts.grandTotal += json.maintenance.values[j];
+                this.annualCosts.maintenance[j] = tcoData.maintenance.values[j];
+                this.annualCosts.maintenance[5] += tcoData.maintenance.values[j];
+                this.annualCosts.yearTotals[j] += tcoData.maintenance.values[j];
+                this.annualCosts.grandTotal += tcoData.maintenance.values[j];
                 this.tests.costs -= 1;
             }
-            if (isNaN(json.repairs.values[j]) === true ) {
+            if (isNaN(tcoData.repairs.values[j]) === true ) {
                 this.annualCosts.repairs[j] = "unknown";
             } else {
-                this.annualCosts.repairs[j] = json.repairs.values[j];
-                this.annualCosts.repairs[5] += json.repairs.values[j];
-                this.annualCosts.yearTotals[j] += json.repairs.values[j];
-                this.annualCosts.grandTotal += json.repairs.values[j];
+                this.annualCosts.repairs[j] = tcoData.repairs.values[j];
+                this.annualCosts.repairs[5] += tcoData.repairs.values[j];
+                this.annualCosts.yearTotals[j] += tcoData.repairs.values[j];
+                this.annualCosts.grandTotal += tcoData.repairs.values[j];
                 this.tests.costs -= 1;
             }
-            if (isNaN(json.depreciation.values[j]) === true ) {
+            if (isNaN(tcoData.depreciation.values[j]) === true ) {
                 this.annualCosts.depreciation[j] = "unknown";
             } else {
-                this.annualCosts.depreciation[j] = json.depreciation.values[j];
-                this.annualCosts.depreciation[5] += json.depreciation.values[j];
-                this.annualCosts.yearTotals[j] += json.depreciation.values[j];
-                this.annualCosts.grandTotal += json.depreciation.values[j];
+                this.annualCosts.depreciation[j] = tcoData.depreciation.values[j];
+                this.annualCosts.depreciation[5] += tcoData.depreciation.values[j];
+                this.annualCosts.yearTotals[j] += tcoData.depreciation.values[j];
+                this.annualCosts.grandTotal += tcoData.depreciation.values[j];
                 this.tests.costs -= 1;
             }
-            if (isNaN(json.taxandfees.values[j]) === true ) {
+            if (isNaN(tcoData.taxandfees.values[j]) === true ) {
                 this.annualCosts.taxandfees[j] = "unknown";
             } else {
-                this.annualCosts.taxandfees[j] = json.taxandfees.values[j];
-                this.annualCosts.taxandfees[5] += json.taxandfees.values[j];
-                this.annualCosts.yearTotals[j] += json.taxandfees.values[j];
-                this.annualCosts.grandTotal += json.taxandfees.values[j];
+                this.annualCosts.taxandfees[j] = tcoData.taxandfees.values[j];
+                this.annualCosts.taxandfees[5] += tcoData.taxandfees.values[j];
+                this.annualCosts.yearTotals[j] += tcoData.taxandfees.values[j];
+                this.annualCosts.grandTotal += tcoData.taxandfees.values[j];
                 this.tests.costs -= 1;
             }
-            if (isNaN(json.financing.values[j]) === true ) {
+            if (isNaN(tcoData.financing.values[j]) === true ) {
                 this.annualCosts.financing[j] = "unknown";
             } else {
-                this.annualCosts.financing[j] += json.financing.values[j];
-                this.annualCosts.financing[5] += json.financing.values[j];
-                this.annualCosts.yearTotals[j] += json.financing.values[j];
-                this.annualCosts.grandTotal += json.financing.values[j];
+                this.annualCosts.financing[j] += tcoData.financing.values[j];
+                this.annualCosts.financing[5] += tcoData.financing.values[j];
+                this.annualCosts.yearTotals[j] += tcoData.financing.values[j];
+                this.annualCosts.grandTotal += tcoData.financing.values[j];
                 this.tests.costs -= 1;
             }
         }
+    },
+    parsePerformanceData: function(performanceData) {
+        if (isNaN(performanceData[0].engine.horsepower) === false && isNaN(performanceData[0].engine.horsepower) === false) {
+            compCar.combinedMPG = Math.round((performanceData[0].MPG.city * .55) + (performanceData[0].MPG.highway * .45));
+            compCar.cityMpg = performanceData[0].MPG.city;
+            compCar.hwyMpg = performanceData[0].MPG.highway;
+            compCar.tests.mpg = true;
+        } else {
+            compCar.tests.mpg = false;
+        }
+        if (isNaN(performanceData[0].engine.horsepower) === true ) {
+            compCar.horsepower = "unknown";
+        } else {
+            compCar.horsepower = performanceData[0].engine.horsepower
+            compCar.tests.performance -= 1;
+        }
+        if (isNaN(performanceData[0].engine.torque) === true ) {
+            compCar.torque = "unknown";
+        } else {
+            compCar.torque = performanceData[0].engine.torque;
+            compCar.tests.performance -= 1;
+        }
+        /* second data query for certain statistics */
+        for (j = 0; j < performanceData[1].equipment.length; j++) {
+            if (performanceData[1].equipment[j].name === "Specifications") {
+                for (q = 0; q < performanceData[1].equipment[j].attributes.length; q++) {
+                    if (performanceData[1].equipment[j].attributes[q].name === "Aerodynamic Drag (cd)") {
+                        compCar.aeroDrag = performanceData[1].equipment[j].attributes[q].value
+                        compCar.tests.performance -= 1;
+                    } else if (performanceData[1].equipment[j].attributes[q].name === "Curb Weight") {
+                        compCar.weight = performanceData[1].equipment[j].attributes[q].value;
+                        compCar.tests.performance -= 1;
+                    } else if (performanceData[1].equipment[j].attributes[q].name === "Epa Combined Mpg") {
+                        compCar.combinedMPG = performanceData[1].equipment[j].attributes[q].value;
+                    } else if (performanceData[1].equipment[j].attributes[q].name === "Fuel Capacity") {
+                        compCar.tankSize = performanceData[1].equipment[j].attributes[q].value;
+                        compCar.fuelCapacity = (compCar.tankSize * compCar.combinedMPG).toFixed(0);
+                    } else if (performanceData[1].equipment[j].attributes[q].name === "Manufacturer 0 60mph Acceleration Time (seconds)") {
+                        compCar.tests.performance -= 1;
+                        compCar.zeroSixty = performanceData[1].equipment[j].attributes[q].value;
+                    } else if (performanceData[1].equipment[j].attributes[q].name === "Turning Diameter") {
+                        compCar.tests.performance -= 1;
+                        compCar.turnRadius = performanceData[1].equipment[j].attributes[q].value;
+                    }
+                }
+            }
+        }
     }
-},
-tesla = {
+};
+var tesla = {
     selectedType: "",
     weight: 4647, /* teslamotors.com */
     aeroDrag: .24, /* teslamotors.com */
@@ -266,6 +416,8 @@ tesla = {
         zeroSixty: 5.9,
         horsepower: 302,
         torque: 317,
+        imageUrl: "images/model-s-60.jpg",
+        title: "Tesla Model S 60",
         annualCosts: {
             insurance: [2274,2274,2274,2274,2274],
             financing: [2065,1635,1189,743,265],
@@ -285,6 +437,8 @@ tesla = {
         zeroSixty: 5.4,
         horsepower: 362,
         torque: 325,
+        imageUrl: "images/model-s-85.jpg",
+        title: "Tesla Model S 85",
         annualCosts: {
             insurance: [2274,2274,2274,2274,2274],
             financing: [2065,1635,1189,743,265],
@@ -303,6 +457,8 @@ tesla = {
         mileCapacity: 253,
         zeroSixty: 3.2,
         horsepower: 691, /* 221 hp front, 470 hp rear */
+        imageUrl: "images/model-s-p85.jpg",
+        title: "Tesla Model S p85D",
         annualCosts: {
             insurance: [2274,2274,2274,2274,2274],
             financing: [2065,1635,1189,743,265],
@@ -331,9 +487,6 @@ tesla = {
         }
     }
 };
-
-
-
 
 var View = {
     makes: [],
@@ -377,6 +530,9 @@ var View = {
         $("#trimSelect").prop('disabled', false);
     },
     loadTest: false,
+    renderPhoto: function() {
+        $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + compCar.photoUrls[0]);
+    }
     renderAnnualMiles: function() {
         if (user.annualMiles < 5000) {
             $("#annual-miles").text("00000" + user.annualMiles);
@@ -405,6 +561,35 @@ var View = {
         $("#tesla-fuel-total").text('$' + tesla.fuelTotal);
         $('#tesla-fuel-cost').text('$ ' + tesla.fuelCost);  
     },
+    renderGasPrice: function() {
+        $("#currentgas").text(user.state + ' $' + user.gasPrice.toFixed(2));
+    },
+    renderEnergyPrice: function() {
+        $("#currentenergy").text(user.state + ' $' + user.energyPrice.toFixed(2));
+    },
+    renderTeslaPerformanceData: function(selectedTesla) {
+        $("#tesla-horsepower").text(selectedTesla.horsepower + " hp");
+        $("#tesla-torque").text(selectedTesla.torque + " lbs");
+        $("#tesla-airdrag").text(tesla.aeroDrag);
+        $("#tesla-cargo-capacity").text(tesla.cargoCapacity);
+        $("#tesla-weight").text(tesla.weight + ' lbs');
+        $("#tesla-MPG-combined").text(selectedTesla.combinedMPG);
+        $("#tesla-MPG-city").text(selectedTesla.cityMpg);
+        $("#tesla-MPG-highway").text(selectedTesla.hwyMpg);
+        $("#tesla-0-60").text(selectedTesla.zeroSixty + ' sec.');
+        $("#tesla-radius").text(tesla.turnRadius + ' ft.');
+        $("#tesla-photo").attr('src', selectedTesla.imageUrl);
+        $("#tesla-title").text(selectedTesla.title);
+        $("#tesla-title-performance").text(selectedTesla.title);
+    },
+    renderCompPerformanceData: function() {
+        alertify.log("Tesla " + tesla.selectedType + " VS. " + compCar.make + " " + performanceData[0].model.name);
+                $("#comparison-title").text(compCar.make + " " + performanceData[0].model.name);
+                $("#comparison-title-performance").text(compCar.make + " " + performanceData[0].model.name);
+                $("#comp-annual-title").text(compCar.make + " " + performanceData[0].model.name);
+                var totalMilesCapacity = (compCar.tankSize * compCar.combinedMPG).toFixed(0);
+                        $("#comp-capacity").text(performanceData[1].equipment[j].attributes[q].value + ' gal (' + totalMilesCapacity + ' miles)');
+    }
     renderTeslaAnnualCosts: function(selectedTesla) {
         for(var year = 0; year < 5; year++) {
             $("#tesla-fuel" + (year + 1)).text('$' + selectedTesla.fuelCost.toFixed(0));
@@ -417,6 +602,15 @@ var View = {
             $("#tesla-tax-credit" + (i + 1)).text('$' + selectedTesla.annualCosts.taxcredit[year]);
             $("#tesla-total-year" + (i + 1)).text('$' + selectedTesla.annualCosts.yearTotals[year]);
         }
+        tesla.setCostTotals(selectedTesla);
+        $("#tesla-insurance-total").text('$' + tesla.totalCosts.insurance);
+        $("#tesla-maintenance-total").text('$' + tesla.totalCosts.maintenance);
+        $("#tesla-repairs-total").text('$' + tesla.totalCosts.repairs);
+        $("#tesla-depreciation-total").text('$' + tesla.totalCosts.depreciation);
+        $("#tesla-tax-total").text('$' + tesla.totalCosts.taxandfees);
+        $("#tesla-financing-total").text('$' + tesla.totalCosts.financing);
+        $("#tesla-tax-credit-total").text('$' + tesla.totalCosts.taxcredit);
+        $("#tesla-grand-total").text('$' + tesla.totalCosts.grandTotal);
     },
     renderCompAnnualCosts: function() {
         $("#comp-depreciation" + (j + 1)).text('$' + compCar.annualCosts.depreciation[j]);
@@ -470,434 +664,55 @@ var View = {
     });
 
 // Populate performance data from two separate JSON requests, second reqeust delayed by 1.5 sec
-function populatePerformanceData (id) {
-    $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-        if (isNaN(json.engine.horsepower) === false && isNaN(json.engine.horsepower) === false) {
-            compCar.combinedMPG = Math.round((json.MPG.city * .55) + (json.MPG.highway * .45));
-            $("#comp-MPG-combined").text(compCar.combinedMPG);
-            $("#comp-MPG-city").text(json.MPG.city);
-            $("#comp-MPG-highway").text(json.MPG.highway);
-            compCar.tests.mpg = true;
-        } else {
-            compCar.tests.mpg = false;
-        }
-
-        if (isNaN(json.engine.horsepower) === true ) {
-            $("#comp-horsepower").text('unknown');
-        } else {
-            $("#comp-horsepower").text(json.engine.horsepower + ' hp');
-            compCar.tests.performance -= 1;
-        }
-        if (isNaN(json.engine.torque) === true ) {
-            $("#comp-torque").text('unknown');
-        } else {
-            $("#comp-torque").text(json.engine.torque + ' lbs');
-            compCar.tests.performance -= 1;
-        }
-        alertify.log("Tesla " + tesla.selectedType + " VS. " + compCar.make + " " + json.model.name);
-        $("#comparison-title").text(compCar.make + " " + json.model.name);
-        $("#comparison-title-performance").text(compCar.make + " " + json.model.name);
-        $("#comp-annual-title").text(compCar.make + " " + json.model.name);
-    });
-    setTimeout(function(){
-            $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + id + '/equipment?availability=standard&equipmentType=OTHER&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-        for (j = 0; j < json.equipment.length; j++) {
-            if (json.equipment[j].name === "Specifications") {
-                for (q = 0; q < json.equipment[j].attributes.length; q++) {
-                    if (json.equipment[j].attributes[q].name === "Aerodynamic Drag (cd)") {
-                        compCar.tests.performance -= 1;
-                        $("#comp-airdrag").text(json.equipment[j].attributes[q].value);
-                    } else if (json.equipment[j].attributes[q].name === "Curb Weight") {
-                        compCar.tests.performance -= 1;
-                        $("#comp-weight").text(json.equipment[j].attributes[q].value + ' lbs');
-                    } else if (json.equipment[j].attributes[q].name === "Epa Combined Mpg") {
-                        compCar.combinedMPG = json.equipment[j].attributes[q].value;
-                    } else if (json.equipment[j].attributes[q].name === "Fuel Capacity") {
-                        compCar.tankSize = json.equipment[j].attributes[q].value;
-                        var totalMilesCapacity = (compCar.tankSize * compCar.combinedMPG).toFixed(0);
-                        $("#comp-capacity").text(json.equipment[j].attributes[q].value + ' gal (' + totalMilesCapacity + ' miles)');
-                    } else if (json.equipment[j].attributes[q].name === "Manufacturer 0 60mph Acceleration Time (seconds)") {
-                        compCar.tests.performance -= 1;
-                        $("#comp-0-60").text(json.equipment[j].attributes[q].value + ' sec.');
-                    } else if (json.equipment[j].attributes[q].name === "Turning Diameter") {
-                        compCar.tests.performance -= 1;
-                        $("#comp-radius").text(json.equipment[j].attributes[q].value + ' ft.');
-                    }
-                }
-            }
-        }
-    });
-}, 1500);
 
 
-}
 
-// Populate tesla performance data (very repetitive)
-function teslaData (tesla) {
-    if (tesla === "60") {
-        $("#tesla-horsepower").text(teslaHorsepower[0] + " hp");
-        $("#tesla-torque").text(teslaTorque[0] + " lbs");
-        $("#tesla-airdrag").text(tesla.aeroDrag);
-        $("#tesla-cargo-capacity").text(teslaCargoCapacity);
-        $("#tesla-weight").text(tesla.weight + ' lbs');
-        $("#tesla-MPG-combined").text(teslaCombinedMPG[0]);
-        $("#tesla-MPG-city").text(teslaCityMPG[0]);
-        $("#tesla-MPG-highway").text(teslaHwyMPG[0]);
-        $("#tesla-0-60").text(tesla60Sec[0] + ' sec.');
-        $("#tesla-radius").text(tesla.turnRadius + ' ft.');
-        $("#tesla-photo").attr('src','images/model-s-60.jpg');
-        $("#tesla-title").text('Tesla Model S 60');
-        $("#tesla-title-performance").text('Tesla Model S 60');
-    } else if (tesla === "85") {
-        $("#tesla-horsepower").text(teslaHorsepower[1] + " hp");
-        $("#tesla-torque").text(teslaTorque[1] + " lbs");
-        $("#tesla-airdrag").text(tesla.aeroDrag);
-        $("#tesla-cargo-capacity").text(teslaCargoCapacity);
-        $("#tesla-weight").text(tesla.weight + ' lbs');
-        $("#tesla-MPG-combined").text(teslaCombinedMPG[1]);
-        $("#tesla-MPG-city").text(teslaCityMPG[1]);
-        $("#tesla-MPG-highway").text(teslaHwyMPG[1]);
-        $("#tesla-0-60").text(tesla60Sec[1] + ' sec.');
-        $("#tesla-radius").text(tesla.turnRadius + ' ft.');
-        $("#tesla-photo").attr('src','images/model-s-85.jpg');
-        $("#tesla-title").text('Tesla Model S 85');
-        $("#tesla-title-performance").text('Tesla Model S 85');
-    } else {
-        $("#tesla-horsepower").text(teslaHorsepower[2] + " hp");
-        $("#tesla-torque").text(teslaTorque[2] + " lbs");
-        $("#tesla-airdrag").text(tesla.aeroDrag);
-        $("#tesla-cargo-capacity").text(teslaCargoCapacity);
-        $("#tesla-weight").text(tesla.weight + ' lbs');
-        $("#tesla-MPG-combined").text(teslaCombinedMPG[2]);
-        $("#tesla-MPG-city").text(teslaCityMPG[2]);
-        $("#tesla-MPG-highway").text(teslaHwyMPG[2]);
-        $("#tesla-0-60").text(tesla60Sec[2] + ' sec.');
-        $("#tesla-radius").text(tesla.turnRadius + ' ft.');
-        $("#tesla-photo").attr('src','images/model-s-p85.jpg');
-        $("#tesla-title").text('Tesla Model S p85');
-        $("#tesla-title-performance").text('Tesla Model S p85');
-    }
-}
-
-// Populate tesla annual cost data
-function teslaAnnualCost (tesla) {
-    teslaInsuranceTotal = 0, teslaMaintenanceTotal = 0, teslaRepairsTotal = 0,
-    teslaDepreciationTotal = 0, teslaTaxTotal = 0, teslaFinancingTotal = 0, teslaTaxCreditTotal = 0, teslaGrandTotal = 0;
-    if (tesla === "60") {
-        for(i = 0; i < 5; i++) {
-            $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost.toFixed(0));
-            $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
-            teslaInsuranceTotal += teslaInsurance[i];
-            $("#tesla-maintenance" + (i + 1)).text('$' + tesla60Maintenance[i]);
-            teslaMaintenanceTotal += tesla60Maintenance[i];
-            $("#tesla-repairs" + (i + 1)).text('$' + tesla60Repairs[i]);
-            teslaRepairsTotal += tesla60Repairs[i];
-            $("#tesla-depreciation" + (i + 1)).text('$' + tesla60Depreciation[i]);
-            teslaDepreciationTotal += tesla60Depreciation[i];
-            $("#tesla-tax" + (i + 1)).text('$' + tesla60Tax[i]);
-            teslaTaxTotal += tesla60Tax[i];
-            $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
-            teslaFinancingTotal += teslaFinancing[i];
-            $("#tesla-tax-credit" + (i + 1)).text('$' + tesla60TaxCredit[i]);
-            teslaTaxCreditTotal += tesla60TaxCredit[i];
-            var total = tesla.fuelCost + tesla60TaxCredit[i] + teslaInsurance[i] + tesla60Maintenance[i] + tesla60Repairs[i] + tesla60Depreciation[i] + tesla60Tax[i]  + teslaFinancing[i];
-            teslaGrandTotal += total;
-            $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
-        }
-
-    } else if (tesla === "85") {
-        for(i = 0; i < 5; i++) {
-            $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost.toFixed(0));
-            $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
-            teslaInsuranceTotal += teslaInsurance[i];
-            $("#tesla-maintenance" + (i + 1)).text('$' + tesla85Maintenance[i]);
-            teslaMaintenanceTotal += tesla85Maintenance[i];
-            $("#tesla-repairs" + (i + 1)).text('$' + tesla85Repairs[i]);
-            teslaRepairsTotal += tesla85Repairs[i];
-            $("#tesla-depreciation" + (i + 1)).text('$' + tesla85Depreciation[i]);
-            teslaDepreciationTotal += tesla85Depreciation[i];
-            $("#tesla-tax" + (i + 1)).text('$' + tesla85Tax[i]);
-            teslaTaxTotal += tesla85Tax[i];
-            $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
-            teslaFinancingTotal += teslaFinancing[i];
-            $("#tesla-tax-credit" + (i + 1)).text('$' + tesla85TaxCredit[i]);
-            teslaTaxCreditTotal += tesla85TaxCredit[i];
-            var total = tesla.fuelCost + tesla85TaxCredit[i] + teslaInsurance[i] + tesla85Maintenance[i] + tesla85Repairs[i] + tesla85Depreciation[i] + tesla85Tax[i]  + teslaFinancing[i];
-            teslaGrandTotal += total;
-            $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
-        }
-    } else if (tesla === "p85") {
-        for(i = 0; i < 5; i++) {
-            $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost.toFixed(0));
-            $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
-            teslaInsuranceTotal += teslaInsurance[i];
-            $("#tesla-maintenance" + (i + 1)).text('$' + teslap85Maintenance[i]);
-            teslaMaintenanceTotal += teslap85Maintenance[i];
-            $("#tesla-repairs" + (i + 1)).text('$' + teslap85Repairs[i]);
-            teslaRepairsTotal += teslap85Repairs[i];
-            $("#tesla-depreciation" + (i + 1)).text('$' + teslap85Depreciation[i]);
-            teslaDepreciationTotal += teslap85Depreciation[i];
-            $("#tesla-tax" + (i + 1)).text('$' + teslap85Tax[i]);
-            teslaTaxTotal += teslap85Tax[i];
-            $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
-            teslaFinancingTotal += teslaFinancing[i];
-            $("#tesla-tax-credit" + (i + 1)).text('$' + teslap85TaxCredit[i]);
-            teslaTaxCreditTotal += teslap85TaxCredit[i];
-            var total = tesla.fuelCost + teslap85TaxCredit[i] + teslaInsurance[i] + teslap85Maintenance[i] + teslap85Repairs[i] + teslap85Depreciation[i] + teslap85Tax[i]  + teslaFinancing[i];
-            teslaGrandTotal += total;
-            $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
-        }
-    }
-    $("#tesla-insurance-total").text('$' + teslaInsuranceTotal);
-    $("#tesla-maintenance-total").text('$' + teslaMaintenanceTotal);
-    $("#tesla-repairs-total").text('$' + teslaRepairsTotal);
-    $("#tesla-depreciation-total").text('$' + teslaDepreciationTotal);
-    $("#tesla-tax-total").text('$' + teslaTaxTotal);
-    $("#tesla-financing-total").text('$' + teslaFinancingTotal);
-    $("#tesla-tax-credit-total").text('$' + teslaTaxCreditTotal);
-    $("#tesla-grand-total").text('$' + teslaGrandTotal.toFixed(0));
-}
-
-
-function populateEnergyPrices (state) {
-    $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.' + state +'-RES.M ', function(json) {
-        user.energyPrice = (json.series[0].data[0][1] / 100);
-        $("#currentenergy").text(state + ' $' + user.energyPrice.toFixed(2));
-        });
-}
-
-function populateGasPrices (state) {
-    if (state === "ME" || state === "CT" || state === "NH" || state === "RI" || state === "VT") {
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1X_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "DE" || state === "DC" || state === "MD" || state === "NJ" || state === "NY"|| state === "PA"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Y_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "GA" || state === "NC" || state === "SC" || state === "VA"|| state === "WV"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Z_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "IL" || state === "IN" || state === "IO" || state === "KS" || state === "KY"|| state === "MI" || state === "MO" || state === "NE" || state === "ND" || state === "SD" || state === "OH" || state === "OK" || state === "TN" || state === "WI"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R20_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "AL" || state === "AR" || state === "LA" || state === "MS" || state === "NM"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R30_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "ID" || state === "MT" || state === "UT" || state === "WY"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R40_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "AK" || state === "AZ" || state === "HI" || state === "NV" || state === "OR"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R50_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "CA"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMR_PTE_SCA_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "CO"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SCO_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "FL"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SFL_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "MA"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMR_PTE_SMA_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "MN"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SMN_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "NY"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SNY_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "OH"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SOH_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "TX"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_STX_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    } else if (state === "WA"){
-        $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SWA_DPG.W', function(json) {
-
-        user.gasPrice = (json.series[0].data[0][1]);
-        $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
-        });
-    }
-}
-
-function reset () {
+function reset() {
 location.reload();
 }
 
-function populatePhoto (id) {
-$.getJSON('https://api.edmunds.com/v1/api/vehiclephoto/service/findphotosbystyleid?styleId=' + id + '&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    for(j = 0; j < json.length; j++) {
-        if (json[j].subType === "exterior" && json[j].shotTypeAbbreviation === "FQ") {
-            for(i = 0; i < json[j].photoSrcs.length; i++) {
-                var photo = json[j].photoSrcs[i];
-                if (photo.indexOf(500) > -1) {
-                    // compCar.photoUrls.push(json[j].photoSrcs[i]);
-                    compCar.photoUrls[0] = json[j].photoSrcs[i];
-                }
-            }
-        }
-    }
-    $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + compCar.photoUrls[0]);
-
-}).fail(function() {
-    console.log("image load failed");
-    });
-}
-
-
-
-
-
-function adjustEnergyPrice (adjust) {
-    if (user.energyPrice <= .01) {
-         alertify.alert("Energy must be more than .01");
+function showSections() {
+    if (compCar.tests.mpg === true ) {
+        $(".fuel-section-div1").fadeIn( 3000 );
+        $(".fuel-section-div2").fadeIn( 3000 );
+        setTimeout(function(){
+            $('.mile-slider').css('visibility','visible');
+        }, 2500);
+        $('#fuel-nav-button').css('border-color','green');
+        $('#fuel-nav-button').removeAttr('disabled');
     } else {
-            if (adjust === "up") {
-            user.energyPrice = (parseFloat(user.energyPrice) + .01).toFixed(2);
-            $("#currentenergy").text('$' + user.energyPrice);
-        } else if (adjust === "down") {
-            user.energyPrice = (parseFloat(user.energyPrice) - .01).toFixed(2);
-            $("#currentenergy").text('$' + user.energyPrice);
-        }
+        $('#fuel-nav-button').css('border-color','red');
     }
-}
-
-function adjustGasPrice (adjust) {
-    if (user.gasPrice <= .01) {
-         alertify.alert("Gas must be more than .01");
+    if (compCar.tests.performance < 2 ) {
+        $(".performance-section-div").fadeIn( 3000 );
+        $('#performance-nav-button').css('border-color','green');
+        $('#performance-nav-button').removeAttr('disabled');
+    } else if (compCar.tests.performance >= 2 && compCar.tests.performance < 5) {
+        $(".performance-section-div").fadeIn( 3000 );
+        $('#performance-nav-button').css('border-color','yellow');
+        $('#performance-nav-button').removeAttr('disabled');
     } else {
-            if (adjust === "up") {
-            user.gasPrice = (parseFloat(user.gasPrice) + .01).toFixed(2);
-            $("#currentgas").text('$' + user.gasPrice);
-        } else if (adjust === "down") {
-            user.gasPrice = (parseFloat(user.gasPrice) - .01).toFixed(2);
-            $("#currentgas").text('$' + user.gasPrice);
-        }
+        $('#performance-nav-button').css('border-color','red');
     }
-}
-
-function totalCarValue (zip, id, tesla) {
-$.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/' + id + '/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    $("#comp-value").text('$' + json.value);
-});
-setTimeout(function(){
-            if (tesla === "60") {
-    $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/200691966/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    $("#tesla-value").text('$' + json.value);
-    });
-} else if (tesla === "85") {
-    $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/200692320/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    $("#tesla-value").text('$' + json.value);
-    });
-} else if (tesla === "p85") {
-    $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/200691967/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
-    $("#tesla-value").text('$' + json.value);
-    });
-}
-        }, 3500);
-}
-
-function submitFirebase () {
-myDataRef.push({
-    caryear: compCar.year,
-    make: compCar.make,
-    model: compCar.model,
-    edmundsID: compCar.id,
-    state: state,
-    zipcode: user.zipCode,
-    fiveyeartotal: compGrandTotal
-    });
-}
-
-
-function navLinks () {
-if (compCar.tests.mpg === true ) {
-    $(".fuel-section-div1").fadeIn( 3000 );
-    $(".fuel-section-div2").fadeIn( 3000 );
-    setTimeout(function(){
-        $('.mile-slider').css('visibility','visible');
-    }, 2500);
-    $('#fuel-nav-button').css('border-color','green');
-    $('#fuel-nav-button').removeAttr('disabled');
-} else {
-    $('#fuel-nav-button').css('border-color','red');
-}
-if (compCar.tests.performance < 2 ) {
-    $(".performance-section-div").fadeIn( 3000 );
-    $('#performance-nav-button').css('border-color','green');
-    $('#performance-nav-button').removeAttr('disabled');
-} else if (compCar.tests.performance >= 2 && compCar.tests.performance < 5) {
-    $(".performance-section-div").fadeIn( 3000 );
-    $('#performance-nav-button').css('border-color','yellow');
-    $('#performance-nav-button').removeAttr('disabled');
-} else {
-    $('#performance-nav-button').css('border-color','red');
-}
-if (compCar.tests.costs < 10 ) {
-    $(".comp-annual-div").fadeIn( 3000 );
-    $('#comp-cost-nav-button').css('border-color','green');
-    $('#comp-cost-nav-button').removeAttr('disabled');
-} else if (compCar.tests.costs >= 10 && compCar.tests.costs < 25) {
-    $(".comp-annual-div").fadeIn( 3000 );
-    $('#comp-cost-nav-button').css('border-color','yellow');
-    $('#comp-cost-nav-button').removeAttr('disabled');
-} else {
-    $('#comp-cost-nav-button').css('border-color','red');
-}
-$(".tesla-annual-div").fadeIn( 3000 );
-$(".section-nav").fadeIn( 1000 );
-$('#tesla-cost-nav-button').css('border-color','green');
-$('#tesla-cost-nav-button').removeAttr('disabled');
+    if (compCar.tests.costs < 10 ) {
+        $(".comp-annual-div").fadeIn( 3000 );
+        $('#comp-cost-nav-button').css('border-color','green');
+        $('#comp-cost-nav-button').removeAttr('disabled');
+    } else if (compCar.tests.costs >= 10 && compCar.tests.costs < 25) {
+        $(".comp-annual-div").fadeIn( 3000 );
+        $('#comp-cost-nav-button').css('border-color','yellow');
+        $('#comp-cost-nav-button').removeAttr('disabled');
+    } else {
+        $('#comp-cost-nav-button').css('border-color','red');
+    }
+    $(".tesla-annual-div").fadeIn( 3000 );
+    $(".section-nav").fadeIn( 1000 );
+    $('#tesla-cost-nav-button').css('border-color','green');
+    $('#tesla-cost-nav-button').removeAttr('disabled');
 }
 
 function populateCar (carID,zip,state) {
-View.loadTest = true;
+
 teslaData(tesla.selectedType);
 teslaAnnualCost(tesla.selectedType);
 populatePerformanceData(carID);
@@ -908,7 +723,7 @@ setTimeout(function(){
     populatePhoto(carID);
 }, 3500);
 setTimeout(function(){
-    navLinks();
+    showSections();
     fuelPriceSet();
 }, 6500);
 setTimeout(function(){
@@ -920,10 +735,10 @@ setTimeout(function(){
 function submitCar () {
     compCar.id =  $("#trimSelect").val();
     user.zipCode = $("#zipCode").val();
-    // zip = $("#zipCode").val();
     user.state = $("#stateSelect").val();
         if (user.zipCode.length === 5 & tesla.selectedType != "") {
             if(View.loadTest === false) {
+                View.laodTest = true;
                 populateCar(compCar.id,user.zipCode,user.state);
             } else if(View.loadTest === true) {
                 $(".fuel-section-div1").hide();
@@ -943,6 +758,27 @@ function submitCar () {
             alertify.alert("Please select a Tesla and Comparison Car");
         }
     }
+
+// function totalCarValue (zip, id, tesla) {
+// $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/' + id + '/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+//     $("#comp-value").text('$' + json.value);
+// });
+// setTimeout(function(){
+//             if (tesla === "60") {
+//     $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/200691966/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+//     $("#tesla-value").text('$' + json.value);
+//     });
+// } else if (tesla === "85") {
+//     $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/200692320/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+//     $("#tesla-value").text('$' + json.value);
+//     });
+// } else if (tesla === "p85") {
+//     $.getJSON('https://api.edmunds.com/v1/api/tco/newtotalcashpricebystyleidandzip/200691967/' + zip + '?fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+//     $("#tesla-value").text('$' + json.value);
+//     });
+// }
+//         }, 3500);
+// }
 
 
 // function populateCompFuel () {
@@ -980,4 +816,183 @@ function submitCar () {
 //     compFuelCost = ((miles / combinedMPG) * gasPrice).toFixed(0);
 //     $("#comp-fuel-cost").text('$ ' + compFuelCost);
 //     $("#fuel-cost-difference").text('$ ' + (compFuelCost - teslaFuelCost));
+// }
+
+// function populateGasPrices (state) {
+//     if (state === "ME" || state === "CT" || state === "NH" || state === "RI" || state === "VT") {
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1X_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "DE" || state === "DC" || state === "MD" || state === "NJ" || state === "NY"|| state === "PA"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Y_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "GA" || state === "NC" || state === "SC" || state === "VA"|| state === "WV"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R1Z_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "IL" || state === "IN" || state === "IO" || state === "KS" || state === "KY"|| state === "MI" || state === "MO" || state === "NE" || state === "ND" || state === "SD" || state === "OH" || state === "OK" || state === "TN" || state === "WI"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R20_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "AL" || state === "AR" || state === "LA" || state === "MS" || state === "NM"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R30_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "ID" || state === "MT" || state === "UT" || state === "WY"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R40_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "AK" || state === "AZ" || state === "HI" || state === "NV" || state === "OR"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_R50_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "CA"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMR_PTE_SCA_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "CO"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SCO_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "FL"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SFL_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "MA"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMR_PTE_SMA_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "MN"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SMN_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "NY"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SNY_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "OH"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SOH_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "TX"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_STX_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     } else if (state === "WA"){
+//         $.getJSON('http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_SWA_DPG.W', function(json) {
+
+//         user.gasPrice = (json.series[0].data[0][1]);
+//         $("#currentgas").text(state + ' $' + user.gasPrice.toFixed(2));
+//         });
+//     }
+// }
+
+
+// function teslaAnnualCost (tesla) {
+//     teslaInsuranceTotal = 0, teslaMaintenanceTotal = 0, teslaRepairsTotal = 0,
+//     teslaDepreciationTotal = 0, teslaTaxTotal = 0, teslaFinancingTotal = 0, teslaTaxCreditTotal = 0, teslaGrandTotal = 0;
+//     if (tesla === "60") {
+//         for(i = 0; i < 5; i++) {
+//             $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost.toFixed(0));
+//             $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
+//             teslaInsuranceTotal += teslaInsurance[i];
+//             $("#tesla-maintenance" + (i + 1)).text('$' + tesla60Maintenance[i]);
+//             teslaMaintenanceTotal += tesla60Maintenance[i];
+//             $("#tesla-repairs" + (i + 1)).text('$' + tesla60Repairs[i]);
+//             teslaRepairsTotal += tesla60Repairs[i];
+//             $("#tesla-depreciation" + (i + 1)).text('$' + tesla60Depreciation[i]);
+//             teslaDepreciationTotal += tesla60Depreciation[i];
+//             $("#tesla-tax" + (i + 1)).text('$' + tesla60Tax[i]);
+//             teslaTaxTotal += tesla60Tax[i];
+//             $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
+//             teslaFinancingTotal += teslaFinancing[i];
+//             $("#tesla-tax-credit" + (i + 1)).text('$' + tesla60TaxCredit[i]);
+//             teslaTaxCreditTotal += tesla60TaxCredit[i];
+//             var total = tesla.fuelCost + tesla60TaxCredit[i] + teslaInsurance[i] + tesla60Maintenance[i] + tesla60Repairs[i] + tesla60Depreciation[i] + tesla60Tax[i]  + teslaFinancing[i];
+//             teslaGrandTotal += total;
+//             $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
+//         }
+
+//     } else if (tesla === "85") {
+//         for(i = 0; i < 5; i++) {
+//             $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost.toFixed(0));
+//             $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
+//             teslaInsuranceTotal += teslaInsurance[i];
+//             $("#tesla-maintenance" + (i + 1)).text('$' + tesla85Maintenance[i]);
+//             teslaMaintenanceTotal += tesla85Maintenance[i];
+//             $("#tesla-repairs" + (i + 1)).text('$' + tesla85Repairs[i]);
+//             teslaRepairsTotal += tesla85Repairs[i];
+//             $("#tesla-depreciation" + (i + 1)).text('$' + tesla85Depreciation[i]);
+//             teslaDepreciationTotal += tesla85Depreciation[i];
+//             $("#tesla-tax" + (i + 1)).text('$' + tesla85Tax[i]);
+//             teslaTaxTotal += tesla85Tax[i];
+//             $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
+//             teslaFinancingTotal += teslaFinancing[i];
+//             $("#tesla-tax-credit" + (i + 1)).text('$' + tesla85TaxCredit[i]);
+//             teslaTaxCreditTotal += tesla85TaxCredit[i];
+//             var total = tesla.fuelCost + tesla85TaxCredit[i] + teslaInsurance[i] + tesla85Maintenance[i] + tesla85Repairs[i] + tesla85Depreciation[i] + tesla85Tax[i]  + teslaFinancing[i];
+//             teslaGrandTotal += total;
+//             $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
+//         }
+//     } else if (tesla === "p85") {
+//         for(i = 0; i < 5; i++) {
+//             $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost.toFixed(0));
+//             $("#tesla-insurance" + (i + 1)).text('$' + teslaInsurance[i]);
+//             teslaInsuranceTotal += teslaInsurance[i];
+//             $("#tesla-maintenance" + (i + 1)).text('$' + teslap85Maintenance[i]);
+//             teslaMaintenanceTotal += teslap85Maintenance[i];
+//             $("#tesla-repairs" + (i + 1)).text('$' + teslap85Repairs[i]);
+//             teslaRepairsTotal += teslap85Repairs[i];
+//             $("#tesla-depreciation" + (i + 1)).text('$' + teslap85Depreciation[i]);
+//             teslaDepreciationTotal += teslap85Depreciation[i];
+//             $("#tesla-tax" + (i + 1)).text('$' + teslap85Tax[i]);
+//             teslaTaxTotal += teslap85Tax[i];
+//             $("#tesla-financing" + (i + 1)).text('$' + teslaFinancing[i]);
+//             teslaFinancingTotal += teslaFinancing[i];
+//             $("#tesla-tax-credit" + (i + 1)).text('$' + teslap85TaxCredit[i]);
+//             teslaTaxCreditTotal += teslap85TaxCredit[i];
+//             var total = tesla.fuelCost + teslap85TaxCredit[i] + teslaInsurance[i] + teslap85Maintenance[i] + teslap85Repairs[i] + teslap85Depreciation[i] + teslap85Tax[i]  + teslaFinancing[i];
+//             teslaGrandTotal += total;
+//             $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
+//         }
+//     }
+//     $("#tesla-insurance-total").text('$' + teslaInsuranceTotal);
+//     $("#tesla-maintenance-total").text('$' + teslaMaintenanceTotal);
+//     $("#tesla-repairs-total").text('$' + teslaRepairsTotal);
+//     $("#tesla-depreciation-total").text('$' + teslaDepreciationTotal);
+//     $("#tesla-tax-total").text('$' + teslaTaxTotal);
+//     $("#tesla-financing-total").text('$' + teslaFinancingTotal);
+//     $("#tesla-tax-credit-total").text('$' + teslaTaxCreditTotal);
+//     $("#tesla-grand-total").text('$' + teslaGrandTotal.toFixed(0));
 // }
