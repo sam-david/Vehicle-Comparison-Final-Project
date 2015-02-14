@@ -12,6 +12,24 @@ $(document).ready(function(){
     // firebase reference for database
     var myDataRef = new Firebase(firebaseUrl);
 
+    $(document).foundation({
+    slider: {
+        on_change: function(){
+            user.annualMiles = $('#annual-milage-slider').attr('data-slider');
+            tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
+            tesla.fuelTotal = tesla.fuelCost * 5;
+            compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
+            compFuelTotal = compCar.fuelCost * 5;
+
+            teslaAnnualCost(tesla.selectedType);
+            
+            View.renderAnnualMiles();
+            View.renderTeslaAnnualFuel();
+            View.renderCompAnnualFuel();
+            View.renderCostDifference();
+        }
+    }
+});
 });
 
 var eiaGov = {
@@ -36,7 +54,8 @@ var edmundsApi = {
     tcoUsedUrl: ["https://api.edmunds.com/api/tco/v1/details/allusedtcobystyleidzipandstate/","?fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     makeNewUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     makeUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
-    modelNewUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"]
+    modelNewUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
+    modelUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     getTCOData: function(id, zip, state) {
         /* new or used? */
         if (compCar.year > 2014) {
@@ -50,27 +69,34 @@ var edmundsApi = {
         }
     },
     getMakeNames: function() {
+        console.log('get make names');
         View.makes = [];
-        if (compCar.year > 2014) {
+        testMakes = [];
+        if (compCar.year > 2013) {
             $.getJSON(this.makeNewUrl[0] + compCar.year + this.makeNewUrl[1], function(json) {
                 for (var i = 0; i < json.makes.length; i++){
+                    console.log(json.makes[i].name);
                     View.makes.push(json.makes[i].name);
+                    testMakes.push(json.makes[i].name);
                 }
             });
         } else {
             $.getJSON(this.makeUsedUrl[0] + compCar.year + this.makeUsedUrl[1], function(json) {
                 for (var i = 0; i < json.makes.length; i++){
-                    View.makes.push(json.makes[i].name);
+                    console.log(json.makes[i].name);
+                    makes.push(json.makes[i].name);
                 }
+                return makes;
             });
         }
+        return testMakes;
     },
     getModelNames: function() {
-        View.models = [];
+        var models = [];
         if (compCar.year > 2014) {
             $.getJSON(this.modelNewUrl[0] + compCar.year + this.modelNewUrl[1], function(json) {
                 for (j = 0; j < json.makes.length; j++) {
-                    if (json.makes[j].name === make) {
+                    if (json.makes[j].name === compCar.make) {
                         for (m = 0; m < json.makes[j].models.length; m++){
                             /* json.makes.models.niceName for later */
                             View.models.push(json.makes[j].models[m].name);
@@ -79,17 +105,17 @@ var edmundsApi = {
                 }
             });
         } else {
-            $.getJSON('https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=' + compCar.year + '&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+            $.getJSON(this.modelUsedUrl[0] + compCar.year + this.modelUsedUrl[1], function(json) {
                 for (j = 0; j < json.makes.length; j++) {
-                    if (json.makes[j].name === make) {
+                    if (json.makes[j].name === compCar.make) {
                         for (m = 0; m < json.makes[j].models.length; m++){
                            View.models.push(json.makes[j].models[m].name);
                         }
-                    } else {
-                    }
+                    } 
                 }
             });
         }
+        return models;
     }
 };
 
@@ -297,25 +323,7 @@ tesla = {
 };
 
 
-$(document).foundation({
-    slider: {
-        on_change: function(){
-            user.annualMiles = $('#annual-milage-slider').attr('data-slider');
-            tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
-            tesla.fuelTotal = tesla.fuelCost * 5;
-            compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
-            compFuelTotal = compCar.fuelCost * 5;
-            tesla.annualCosts.fuel = [];
 
-            teslaAnnualCost(tesla.selectedType);
-            
-            View.renderAnnualMiles();
-            View.renderTeslaAnnualFuel();
-            View.renderCompAnnualFuel();
-            View.renderCostDifference();
-        }
-    }
-});
 
 var View = {
     makes: [],
@@ -330,22 +338,25 @@ var View = {
         $("#modelSelect").prop('disabled', true);
         $("#trimSelect").prop('disabled', true);
         $("#stateSelect").prop('disabled', true);
-        edmundsApi.getMakeNames();
         for (var j = 0; j < this.makes.length; j++){
             $('#makeSelect').append('<option value="' + this.makes[j] + '">' + this.makes[j] + '</option>');
         }
+        $("#makeSelect").prop('disabled', false);
     },
-    renderModelSelect: function() {
+    renderModelSelect: function(models) {
         $('#modelSelect').children('option').remove();
         $('#trimSelect').children('option').remove();
         $('#modelSelect').append($("<option></option>").attr("value",0).text('Model'));
         $('#trimSelect').append($("<option></option>").attr("value",0).text('Trim'));
         $("#trimSelect").prop('disabled', true);
         $("#stateSelect").prop('disabled', true);
-        for (var j = 0; j < this.models.length; j++){
-            $('#modelSelect').append('<option value="' + this.models[j] + '">' + json.makes[j].models[m].name + '</option>');
+        for (var j = 0; j < models.length; j++){
+            $('#modelSelect').append('<option value="' + models[j] + '">' + models[j] + '</option>');
         }
-    }
+        setTimeout(function(){
+            $("#modelSelect").prop('disabled', false);
+        }, 500);
+    },
     loadTest: false,
     renderAnnualMiles: function() {
         if (user.annualMiles < 5000) {
@@ -385,7 +396,7 @@ var View = {
             $("#tesla-tax" + (i + 1)).text('$' + selectedTesla.annualCosts.taxandfees[year]);
             $("#tesla-financing" + (i + 1)).text('$' + selectedTesla.annualCosts.financing[year]);
             $("#tesla-tax-credit" + (i + 1)).text('$' + selectedTesla.annualCosts.taxcredit[year]);
-            $("#tesla-total-year" + (i + 1)).text('$' + total.toFixed(0));
+            $("#tesla-total-year" + (i + 1)).text('$' + selectedTesla.annualCosts.yearTotals[year]);
         }
     },
     renderCompAnnualCosts: function() {
@@ -406,61 +417,22 @@ var View = {
     }
 };
 
-// function populateCompFuel () {
-
-// if (previousFuelCost == 0) {
-//     for (j = 0; j < 5; j++) {
-//     console.log("no previous");
-//     $("#comp-fuel" + (j + 1)).text('$' + compCar.fuelCost.toFixed(0));
-//     compAnnualCosts.yearTotals[j] += compCar.fuelCost;
-//     }
-// } else {
-//     for (j = 0; j < 5; j++) {
-//     console.log("pervoius");
-//     $("#comp-fuel" + (j + 1)).text('$' + compCar.fuelCost.toFixed(0));
-//     compAnnualCosts.yearTotals[j] -= previousFuelCost;
-//     compAnnualCosts.yearTotals[j] += compCar.fuelCost;
-//     previousFuelCost = compCar.fuelCost;
-//     }
-// }
-// }
-
-// mile slider change function, calculates
-// function fuelPriceUpdate(miles) {
-//     if (miles < 5000) {
-//         $("#annual-miles").text("00000" + miles);
-//     } else if (miles < 10000) {
-//         $("#annual-miles").text("00" + miles);
-//     } else if (miles < 100000 & miles >= 10000) {
-//         $("#annual-miles").text("0" + miles);
-//     } else {
-//         $("#annual-miles").text(miles);
-//     }
-//     teslaFuelCost = ((miles * .33) * energyPrice).toFixed(0);
-//     $('#tesla-fuel-cost').text('$ ' + teslaFuelCost);
-//     compFuelCost = ((miles / combinedMPG) * gasPrice).toFixed(0);
-//     $("#comp-fuel-cost").text('$ ' + compFuelCost);
-//     $("#fuel-cost-difference").text('$ ' + (compFuelCost - teslaFuelCost));
-// }
-
-
 
 // Select box on change functions
 
 	$("#yearSelect").change(function() {
         compCar.year = $("#yearSelect").val();
-        View.renderMakeSelect(compCar.year);
+        edmundsApi.getMakeNames();
         setTimeout(function(){
-            $("#makeSelect").prop('disabled', false);
+            View.renderMakeSelect(carMakes);
         }, 800);
+        
 	});
 
 	$("#makeSelect").change(function() {
         compCar.make = $("#makeSelect").val();
-        populateModelSelect(compCar.year,compCar.make);
-        setTimeout(function(){
-            $("#modelSelect").prop('disabled', false);
-        }, 500);
+        edmundsApi.getModelNames());
+        View.renderModelSelect();
 	});
 
     $("#modelSelect").change(function() {
@@ -1011,3 +983,41 @@ function submitCar () {
             alertify.alert("Please select a Tesla and Comparison Car");
         }
     }
+
+
+// function populateCompFuel () {
+
+// if (previousFuelCost == 0) {
+//     for (j = 0; j < 5; j++) {
+//     console.log("no previous");
+//     $("#comp-fuel" + (j + 1)).text('$' + compCar.fuelCost.toFixed(0));
+//     compAnnualCosts.yearTotals[j] += compCar.fuelCost;
+//     }
+// } else {
+//     for (j = 0; j < 5; j++) {
+//     console.log("pervoius");
+//     $("#comp-fuel" + (j + 1)).text('$' + compCar.fuelCost.toFixed(0));
+//     compAnnualCosts.yearTotals[j] -= previousFuelCost;
+//     compAnnualCosts.yearTotals[j] += compCar.fuelCost;
+//     previousFuelCost = compCar.fuelCost;
+//     }
+// }
+// }
+
+// mile slider change function, calculates
+// function fuelPriceUpdate(miles) {
+//     if (miles < 5000) {
+//         $("#annual-miles").text("00000" + miles);
+//     } else if (miles < 10000) {
+//         $("#annual-miles").text("00" + miles);
+//     } else if (miles < 100000 & miles >= 10000) {
+//         $("#annual-miles").text("0" + miles);
+//     } else {
+//         $("#annual-miles").text(miles);
+//     }
+//     teslaFuelCost = ((miles * .33) * energyPrice).toFixed(0);
+//     $('#tesla-fuel-cost').text('$ ' + teslaFuelCost);
+//     compFuelCost = ((miles / combinedMPG) * gasPrice).toFixed(0);
+//     $("#comp-fuel-cost").text('$ ' + compFuelCost);
+//     $("#fuel-cost-difference").text('$ ' + (compFuelCost - teslaFuelCost));
+// }
