@@ -25,23 +25,58 @@
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
-  <header class="row">
+<div class="fixed">
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <h1><a href="index.html" class="nav-title">Sam David</a></h1>
+      </li>
+       <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+    </ul>
+
+    <section class="top-bar-section">
+      <!-- Right Nav Section -->
+      <ul class="left">
+      <li><a href="#">Left Nav Button</a></li>
+      </ul>
+      <ul class="right">
+        <li><a class="nav-button" href="about.html">Contact</a></li>
+        <li><a class="nav-button" href="blog.html">About</a></li>
+        <li><a class="nav-button" target="_blank" href="http://www.teslamotors.com/">Tesla Motors</a></li>
+        <li><a class="nav-button" target="_blank" href="http://www.edmunds.com/">Edmunds</a></li>
+      </ul>
+    </section>
+  </nav>
+</div>
+  <header class="wide-row">
     <div class="large-12 columns header-div ">
       <a href="index.html"><img src="images/elements/Tesla-Header-1000-thin.jpg" class="header-image"></a>
     </div>
   </header>
   <div class="row light-blue-background">
-    <div class="large-12 columns ">
-      <h2 class="website-top-info">Select Tesla and Comparison car</h2>
+    <div class="large-12 columns">
+      <h2 class="website-top-info">Select Tesla Model S</h2>
+    </div>
+  </div>
+  <div class="row light-blue-background">
+    <div class="large-4 wide-column">
+      <div class="tesla-button" id="60kwh"><img src="images/new_60.png" class="battery-image"><p>60 kWh Battery</p><p>208 mile range | 0-60: 5.9 sec | 302 hp</p></div>
+    </div>
+    <div class="large-4 wide-column">
+      <div class="tesla-button" id="85kwh"><img src="images/new_85.png" class="battery-image"><p>85 kWh Battery</p><p>265 mile range | 0-60: 5.4 sec | 362 hp</p></div>
+    </div>
+    <div class="large-4 wide-column">
+      <div class="tesla-button" id="p85kwh"><img src="images/new_p85.png" class="battery-image-p85"><p>p85D kWh Battery</p><p>253 mile range | 0-60: 3.2 sec | 691 hp</p></div>
+    </div>
+  </div>
+  <div class="row light-blue-background">
+    <div class="large-12 columns">
+      <h2 class="website-top-info">Select Comparison car</h2>
     </div>
   </div>
   <div class="row light-blue-background upper-section">
-    <div class="large-5 medium-5 columns">
-      <div class="tesla-button" id="60kwh"><img src="images/new_60.png" class="battery-image"><p>60 kWh Battery</p><p>208 mile range | 0-60: 5.9 sec | 302 hp</p></div>
-      <div class="tesla-button" id="85kwh"><img src="images/new_85.png" class="battery-image"><p>85 kWh Battery</p><p>265 mile range | 0-60: 5.4 sec | 362 hp</p></div>
-      <div class="tesla-button" id="p85kwh"><img src="images/new_p85.png" class="battery-image-p85"><p>p85 kWh Battery</p><p>265 mile range | 0-60: 4.2 sec | 416 hp</p></div>
-    </div>
-    <div class="large-7 medium-7 columns">
+    <div class="large-10 medium-7 large-centered columns">
       <div class="comp-selector-box">
         <div class="row">
           <form>
@@ -89,14 +124,12 @@
           </div>
         </div>
         <div class="row">
-          <div class="large-12 medium-12 columns">
+          <div class="large-8 medium-8 columns">
             <select id="trimSelect" disabled>
               <option value="" disabled selected>Trim</option>
             </select>
           </div>
-        </div>
-        <div class="row">
-          <div class="large-3 medium-3 columns">
+          <div class="large-2 medium-2 columns">
             <select id="stateSelect" disabled>
               <option value="" disabled selected>State</option>
               <option value="AL">AL</option>
@@ -151,9 +184,12 @@
               <option value="WY">WY</option>
             </select>
           </div>
-          <div class="large-3 medium-3 columns">
+          <div class="large-2 medium-2 columns">
             <input class="zip-text" id="zipCode" type="text" placeholder="Zip Code" disabled>
           </div>
+        </div>
+        <div class="row">
+
           <div class="large-3 medium-3 columns">
             <button type="button" class="comp-button" onclick="submitCar()"><span class="underline-button">Submit</span></button>
           </div>
@@ -162,11 +198,6 @@
           </div>
         </div>
         <div class="section-nav">
-          <div class="row">
-            <div class="large-12 columns">
-              <p class="comp-section-heading">Jump to Section</p>
-            </div>
-          </div>
           <div class="row">
             <div class="large-3 medium-3 columns">
               <button type="button" class="comp-button" id="fuel-nav-button" onclick="window.location.href='#fuel-section'" disabled><span class="underline-button">Fuel</span></button>
@@ -621,20 +652,6 @@
       <div id="chart2_div" class="google-graph"></div>
     </div>
   </div> -->
-  <div class="row ">
-    <div class="large-3 medium-3 columns bottom-nav-div-left">
-      <a href="contact.html" class="bottom-nav-link">Contact</a>
-    </div>
-    <div class="large-3 medium-3 columns bottom-nav-div">
-      <a href="about.html" class="bottom-nav-link">About</a>
-    </div>
-    <div class="large-3 medium-3 columns bottom-nav-div">
-      <a href="http://www.teslamotors.com/" target="_blank" class="bottom-nav-link">Tesla</a>
-    </div>
-    <div class="large-3 medium-3 columns bottom-nav-div-right">
-      <a href="http://www.edmunds.com/" target="_blank" class="bottom-nav-link">Edmunds</a>
-    </div>
-  </div>
   <div class="row">
     <div class="large-12 columns footer-div">
        <img src="images/elements/Footer.jpg" class="footer-image">
@@ -660,6 +677,7 @@
   <script src="js/jquery-ui.js"></script>
   <script src="js/foundation.js"></script>
   <script src="js/foundation.slider.js"></script>
+  <script src="js/foundation.topbar.js"></script>
   <script src="js/alertify.js"></script>
   <script src="script.js"></script>
 
