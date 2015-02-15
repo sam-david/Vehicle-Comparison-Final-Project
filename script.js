@@ -15,23 +15,23 @@ $(document).ready(function(){
     $(document).foundation({
         slider: {
             on_change: function(){
-                // user.annualMiles = $('#annual-milage-slider').attr('data-slider');
-                // tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
-                // tesla.fuelTotal = tesla.fuelCost * 5;
-                // compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
-                // compFuelTotal = compCar.fuelCost * 5;
-
-                // teslaAnnualCost(tesla.selectedType);
-                
-                // View.renderAnnualMiles();
-                // View.renderTeslaAnnualFuel();
-                // View.renderCompAnnualFuel();
-                // View.renderCostDifference();
+                if (isCarLoaded === true) {
+                    user.annualMiles = $('#annual-milage-slider').attr('data-slider');
+                    tesla.setFuelCosts();
+                    compCar.setFuelCosts();
+                    View.renderAnnualMiles();
+                    View.renderTeslaAnnualFuel(tesla.selectedType);
+                    View.renderCompAnnualFuel();
+                    View.renderCostDifference();
+                    View.renderCompAnnualCosts();
+                    View.renderTeslaAnnualCosts(tesla.selectedType);
+                }
             }
         }
     });
 });
 
+var isCarLoaded = false;
 var eiaGov = {
     nationalGasAverage: "http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=PET.EMM_EPMMU_PTE_NUS_DPG.W",
     nationalEnergyAverage: "http://api.eia.gov/series/?api_key=A6B96A76EB253D25661793034E944760&series_id=ELEC.PRICE.US-RES.M",
@@ -52,9 +52,7 @@ var eiaGov = {
     },
     getGasPrice: function() {
         for (var i = 0; i < this.gasPriceUrls.length; i++) {
-            console.log(this.gasPriceUrls[i]);
             if (user.state.indexOf(this.gasPriceUrls[i][0]) != -1) {
-                console.log(this.gasPriceUrls[i]);
                 $.getJSON(this.gasPriceBaseUrl + this.gasPriceUrls[i][1], function(json) {
                     user.gasPrice = json.series[0].data[0][1];
                 });
@@ -272,16 +270,15 @@ var compCar = {
         performance: 6
     },
     setFuelCosts: function() {
-        this.fuelCost = ((20000 / this.combinedMPG) * user.gasPrice);
+        this.fuelCost = ((user.annualMiles / this.combinedMPG) * user.gasPrice);
+        this.annualCosts.fuel[5] = 0;
         for (i = 0; i < 5; i++) {
             this.annualCosts.fuel[i] = this.fuelCost;
             this.annualCosts.fuel[5] += this.fuelCost;
         }
-        console.log(this.fuelCost);
     },
     parseTCOData: function() {
         var tcoData = compCar.jsonTcoData[0];
-        console.log(tcoData);
         this.annualCosts.grandTotal = 0;
         this.annualCosts.insurance[5] = 0;
         this.annualCosts.maintenance[5] = 0;
@@ -355,7 +352,6 @@ var compCar = {
                 this.tests.costs -= 1;
             }
         }
-        console.log(this.annualCosts);
     },
     parsePerformanceData: function() {
         var performanceData = compCar.jsonPerformanceData;
@@ -489,7 +485,7 @@ var tesla = {
         }
     },
     setFuelCosts: function() {
-        this.fuelCost = ((20000 * .33) * user.energyPrice).toFixed(0);
+        this.fuelCost = ((user.annualMiles * .33) * user.energyPrice).toFixed(0);
         this.fuelTotal = tesla.fuelCost * 5;
     },
     setCostTotals: function(selectedTesla) {
@@ -569,16 +565,16 @@ var View = {
     },
     renderCompAnnualFuel: function() {
         $("#comparison-title").text(compCar.make + " " + compCar.model);
-        $("#comp-MPG-combined").text('$ ' + compCar.combinedMPG);
-        $("#comp-MPG-city").text('$ ' + compCar.cityMpg);
-        $("#comp-MPG-highway").text('$ ' + compCar.hwyMpg);
+        $("#comp-MPG-combined").text(compCar.combinedMPG);
+        $("#comp-MPG-city").text(compCar.cityMpg);
+        $("#comp-MPG-highway").text(compCar.hwyMpg);
         $("#comp-fuel-cost").text('$ ' + compCar.fuelCost.toFixed(0));
     },
     renderTeslaAnnualFuel: function(selectedTesla) {
         $("#tesla-title").text(selectedTesla.title);
-        $("#tesla-MPG-combined").text('$ ' + selectedTesla.combinedMPG);
-        $("#tesla-MPG-city").text('$ ' + selectedTesla.cityMpg);
-        $("#tesla-MPG-highway").text('$ ' + selectedTesla.hwyMpg);
+        $("#tesla-MPG-combined").text(selectedTesla.combinedMPG);
+        $("#tesla-MPG-city").text(selectedTesla.cityMpg);
+        $("#tesla-MPG-highway").text(selectedTesla.hwyMpg);
         $('#tesla-fuel-cost').text('$ ' + tesla.fuelCost);  
     },
     renderGasPrice: function() {
@@ -631,7 +627,6 @@ var View = {
     },
     renderCompAnnualCosts: function() {
         for (var year = 0; year < 5; year++) {
-            console.log('tots happened');
             $("#comp-fuel" + (year + 1)).text('$' + compCar.fuelCost.toFixed(0));
             $("#comp-insurance" + (year + 1)).text('$' + compCar.annualCosts.insurance[year]);
             $("#comp-maintenance" + (year + 1)).text('$' + compCar.annualCosts.maintenance[year]);
@@ -796,6 +791,7 @@ function submitController() {
 }
 
 function submitCar() {
+    isCarLoaded = true;
     compCar.id =  $("#trimSelect").val();
     user.zipCode = $("#zipCode").val();
     user.state = $("#stateSelect").val();
