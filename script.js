@@ -52,16 +52,18 @@ var eiaGov = {
     },
     getGasPrice: function() {
         for (var i = 0; i < this.gasPriceUrls.length; i++) {
-            if (/user.state/.test(this.gasPriceUrls[i][0]) === true) {
+            console.log(this.gasPriceUrls[i]);
+            if (user.state.indexOf(this.gasPriceUrls[i][0]) != -1) {
+                console.log(this.gasPriceUrls[i]);
                 $.getJSON(this.gasPriceBaseUrl + this.gasPriceUrls[i][1], function(json) {
-                    return json.series[0].data[0][1];
+                    user.gasPrice = json.series[0].data[0][1];
                 });
             }
         }
     },
     getEnergyPrice: function() {
         $.getJSON(this.energyPriceUrl[0] + user.state + this.energyPriceUrl[1], function(json) {
-            return json.series[0].data[0][1] / 100;
+            user.energyPrice = json.series[0].data[0][1] / 100;
         });
     }
 };
@@ -198,12 +200,12 @@ var user = {
     annualMiles: 20000,
     setGasPrice: function() {
         this.gasPrice = 0;
-        this.gasPrice = eiaGov.getGasPrice();
+        eiaGov.getGasPrice();
         View.renderGasPrice();
     },
     setEnergyPrice: function() {
         this.energyPrice = 0;
-        user.energyPrice = eiaGov.getEnergyPrice();
+        eiaGov.getEnergyPrice();
         View.renderEnergyPrice();
     },
     adjustEnergyPrice: function(adjust) {
@@ -260,6 +262,7 @@ var compCar = {
         depreciation: [],
         taxandfees: [],
         financing: [],
+        taxcredit: 0,
         yearTotals: [0,0,0,0,0],
         grandTotal: 0
     },
@@ -269,10 +272,16 @@ var compCar = {
         performance: 6
     },
     setFuelCosts: function() {
-        this.fuelCost = ((20000 / this.combinedMPG) * user.gasPrice).toFixed(0);
+        this.fuelCost = ((20000 / this.combinedMPG) * user.gasPrice);
+        for (i = 0; i < 5; i++) {
+            this.annualCosts.fuel[i] = this.fuelCost;
+            this.annualCosts.fuel[5] += this.fuelCost;
+        }
+        console.log(this.fuelCost);
     },
     parseTCOData: function() {
         var tcoData = compCar.jsonTcoData[0];
+        console.log(tcoData);
         this.annualCosts.grandTotal = 0;
         this.annualCosts.insurance[5] = 0;
         this.annualCosts.maintenance[5] = 0;
@@ -280,12 +289,14 @@ var compCar = {
         this.annualCosts.depreciation[5] = 0;
         this.annualCosts.taxandfees[5] = 0;
         this.annualCosts.financing[5] = 0;
+        this.annualCosts.fuel[5] = 0;
         /* check if doesn't exist first, then proceed to total and grand total */
         for (j = 0; j < 5; j++) {
             if (isNaN(tcoData.fuel.values[j]) === true ) {
                 this.annualCosts.fuel[j] = "unknown";
             } else {
                 this.annualCosts.fuel[j] = this.fuelCost;
+                this.annualCosts.fuel[5] += this.fuelCost;
                 this.annualCosts.yearTotals[j] += this.fuelCost;
                 this.annualCosts.grandTotal += this.fuelCost;
             }
@@ -337,13 +348,14 @@ var compCar = {
             if (isNaN(tcoData.financing.values[j]) === true ) {
                 this.annualCosts.financing[j] = "unknown";
             } else {
-                this.annualCosts.financing[j] += tcoData.financing.values[j];
+                this.annualCosts.financing[j] = tcoData.financing.values[j];
                 this.annualCosts.financing[5] += tcoData.financing.values[j];
                 this.annualCosts.yearTotals[j] += tcoData.financing.values[j];
                 this.annualCosts.grandTotal += tcoData.financing.values[j];
                 this.tests.costs -= 1;
             }
         }
+        console.log(this.annualCosts);
     },
     parsePerformanceData: function() {
         var performanceData = compCar.jsonPerformanceData;
@@ -411,7 +423,8 @@ var tesla = {
         taxandfees: 0,
         financing: 0,
         taxcredit: 0,
-        grandTotal: 0
+        grandTotal: 0,
+        yearTotals: []
     },
     sixty: {
         cityMpg: 94,
@@ -488,6 +501,7 @@ var tesla = {
             this.totalCosts.taxandfees += selectedTesla.annualCosts.taxandfees[year];
             this.totalCosts.financing += selectedTesla.annualCosts.financing[year];
             this.totalCosts.taxcredit += selectedTesla.annualCosts.taxcredit[year];
+            this.totalCosts.yearTotals[year] = selectedTesla.annualCosts.insurance[year] + selectedTesla.annualCosts.maintenance[year] + selectedTesla.annualCosts.repairs[year] + selectedTesla.annualCosts.depreciation[year] + selectedTesla.annualCosts.taxandfees[year] + selectedTesla.annualCosts.financing[year]  + selectedTesla.annualCosts.taxcredit[year];
             this.totalCosts.grandTotal += selectedTesla.annualCosts.insurance[year] + selectedTesla.annualCosts.maintenance[year] + selectedTesla.annualCosts.repairs[year] + selectedTesla.annualCosts.depreciation[year] + selectedTesla.annualCosts.taxandfees[year] + selectedTesla.annualCosts.financing[year]  + selectedTesla.annualCosts.taxcredit[year];
         }
     }
@@ -551,14 +565,14 @@ var View = {
         }
     },
     renderCostDifference: function() {
-        $("#fuel-cost-difference").text('$ ' + (compCar.fuelCost - tesla.fuelCost));
+        $("#fuel-cost-difference").text('$ ' + (compCar.fuelCost - tesla.fuelCost).toFixed(0));
     },
     renderCompAnnualFuel: function() {
         $("#comparison-title").text(compCar.make + " " + compCar.model);
         $("#comp-MPG-combined").text('$ ' + compCar.combinedMPG);
         $("#comp-MPG-city").text('$ ' + compCar.cityMpg);
         $("#comp-MPG-highway").text('$ ' + compCar.hwyMpg);
-        $("#comp-fuel-cost").text('$ ' + compCar.fuelCost);
+        $("#comp-fuel-cost").text('$ ' + compCar.fuelCost.toFixed(0));
     },
     renderTeslaAnnualFuel: function(selectedTesla) {
         $("#tesla-title").text(selectedTesla.title);
@@ -595,18 +609,18 @@ var View = {
     },
     renderTeslaAnnualCosts: function(selectedTesla) {
         for(var year = 0; year < 5; year++) {
-            $("#tesla-fuel" + (year + 1)).text('$' + tesla.fuelCost.toFixed(0));
+            $("#tesla-fuel" + (year + 1)).text('$' + tesla.fuelCost);
             $("#tesla-insurance" + (year + 1)).text('$' + selectedTesla.annualCosts.insurance[year]);
-            $("#tesla-maintenance" + (i + 1)).text('$' + selectedTesla.annualCosts.maintenance[year]);
-            $("#tesla-repairs" + (i + 1)).text('$' + selectedTesla.annualCosts.repairs[year]);
-            $("#tesla-depreciation" + (i + 1)).text('$' + selectedTesla.annualCosts.depreciation[year]);
-            $("#tesla-tax" + (i + 1)).text('$' + selectedTesla.annualCosts.taxandfees[year]);
-            $("#tesla-financing" + (i + 1)).text('$' + selectedTesla.annualCosts.financing[year]);
-            $("#tesla-tax-credit" + (i + 1)).text('$' + selectedTesla.annualCosts.taxcredit[year]);
-            $("#tesla-total-year" + (i + 1)).text('$' + selectedTesla.annualCosts.yearTotals[year]);
+            $("#tesla-maintenance" + (year + 1)).text('$' + selectedTesla.annualCosts.maintenance[year]);
+            $("#tesla-repairs" + (year + 1)).text('$' + selectedTesla.annualCosts.repairs[year]);
+            $("#tesla-depreciation" + (year + 1)).text('$' + selectedTesla.annualCosts.depreciation[year]);
+            $("#tesla-tax" + (year + 1)).text('$' + selectedTesla.annualCosts.taxandfees[year]);
+            $("#tesla-financing" + (year + 1)).text('$' + selectedTesla.annualCosts.financing[year]);
+            $("#tesla-tax-credit" + (year + 1)).text('$' + selectedTesla.annualCosts.taxcredit[year]);
+            $("#tesla-total-year" + (year + 1)).text('$' + selectedTesla.annualCosts.yearTotals[year]);
         }
-        tesla.setCostTotals(selectedTesla);
         $("#tesla-insurance-total").text('$' + tesla.totalCosts.insurance);
+        $("#tesla-fuel-total").text('$' + tesla.fuelTotal);
         $("#tesla-maintenance-total").text('$' + tesla.totalCosts.maintenance);
         $("#tesla-repairs-total").text('$' + tesla.totalCosts.repairs);
         $("#tesla-depreciation-total").text('$' + tesla.totalCosts.depreciation);
@@ -616,25 +630,26 @@ var View = {
         $("#tesla-grand-total").text('$' + tesla.totalCosts.grandTotal);
     },
     renderCompAnnualCosts: function() {
-        for(var year = 0; year < 5; year++) {
+        for (var year = 0; year < 5; year++) {
+            console.log('tots happened');
             $("#comp-fuel" + (year + 1)).text('$' + compCar.fuelCost.toFixed(0));
             $("#comp-insurance" + (year + 1)).text('$' + compCar.annualCosts.insurance[year]);
-            $("#comp-maintenance" + (i + 1)).text('$' + compCar.annualCosts.maintenance[year]);
-            $("#comp-repairs" + (i + 1)).text('$' + compCar.annualCosts.repairs[year]);
-            $("#comp-depreciation" + (i + 1)).text('$' + compCar.annualCosts.depreciation[year]);
-            $("#comp-tax" + (i + 1)).text('$' + compCar.annualCosts.taxandfees[year]);
-            $("#comp-financing" + (i + 1)).text('$' + compCar.annualCosts.financing[year]);
-            $("#comp-tax-credit" + (i + 1)).text('$' + compCar.annualCosts.taxcredit[year]);
-            $("#comp-total-year" + (i + 1)).text('$' + compCar.annualCosts.yearTotals[year]);
+            $("#comp-maintenance" + (year + 1)).text('$' + compCar.annualCosts.maintenance[year]);
+            $("#comp-repairs" + (year + 1)).text('$' + compCar.annualCosts.repairs[year]);
+            $("#comp-depreciation" + (year + 1)).text('$' + compCar.annualCosts.depreciation[year]);
+            $("#comp-tax" + (year + 1)).text('$' + compCar.annualCosts.taxandfees[year]);
+            $("#comp-financing" + (year + 1)).text('$' + compCar.annualCosts.financing[year]);
+            $("#comp-tax-credit" + (year + 1)).text('$' + compCar.annualCosts.taxcredit);
+            $("#comp-total-year" + (year + 1)).text('$' + compCar.annualCosts.yearTotals[year]);
         }
-        $("#comp-fuel-total").text('$' + compFuelTotal.toFixed(0));
+        $("#comp-fuel-total").text('$' + compCar.annualCosts.fuel[5].toFixed(0));
         $("#comp-insurance-total").text('$' + compCar.annualCosts.insurance[5]);
         $("#comp-maintenance-total").text('$' + compCar.annualCosts.maintenance[5]);
         $("#comp-repairs-total").text('$' + compCar.annualCosts.repairs[5]);
         $("#comp-depreciation-total").text('$' + compCar.annualCosts.depreciation[5]);
         $("#comp-tax-total").text('$' + compCar.annualCosts.taxandfees[5]);
         $("#comp-financing-total").text('$' + compCar.annualCosts.financing[5]);
-        $("#comp-tax-credit-total").text('$' + 0);
+        $("#comp-tax-credit-total").text('$' + compCar.annualCosts.taxcredit);
         $("#comp-grand-total").text('$' + compCar.annualCosts.grandTotal);
     }
 };
@@ -743,9 +758,13 @@ function showSections() {
 function submitController() {
     edmundsApi.getPerformanceData();
     tesla.setCostTotals(tesla.selectedType);
+
     user.setGasPrice();
     user.setEnergyPrice();
+
     setTimeout(function(){
+        tesla.setFuelCosts();
+        
         compCar.parsePerformanceData();
         edmundsApi.getTCOData()
     }, 2000);
@@ -754,6 +773,7 @@ function submitController() {
         edmundsApi.getPhotoUrls();
     }, 4000);
     setTimeout(function(){
+        compCar.setFuelCosts();
         View.renderPhoto(tesla.selectedType);
         View.renderAnnualMiles();
         View.renderCostDifference();
