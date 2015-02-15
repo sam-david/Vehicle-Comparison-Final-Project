@@ -15,18 +15,18 @@ $(document).ready(function(){
     $(document).foundation({
         slider: {
             on_change: function(){
-                user.annualMiles = $('#annual-milage-slider').attr('data-slider');
-                tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
-                tesla.fuelTotal = tesla.fuelCost * 5;
-                compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
-                compFuelTotal = compCar.fuelCost * 5;
+                // user.annualMiles = $('#annual-milage-slider').attr('data-slider');
+                // tesla.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
+                // tesla.fuelTotal = tesla.fuelCost * 5;
+                // compCar.fuelCost = ((user.annualMiles / compCar.combinedMPG) * user.gasPrice);
+                // compFuelTotal = compCar.fuelCost * 5;
 
-                teslaAnnualCost(tesla.selectedType);
+                // teslaAnnualCost(tesla.selectedType);
                 
-                View.renderAnnualMiles();
-                View.renderTeslaAnnualFuel();
-                View.renderCompAnnualFuel();
-                View.renderCostDifference();
+                // View.renderAnnualMiles();
+                // View.renderTeslaAnnualFuel();
+                // View.renderCompAnnualFuel();
+                // View.renderCostDifference();
             }
         }
     });
@@ -69,13 +69,15 @@ var eiaGov = {
 var edmundsApi = {
     tcoNewUrl: ["https://api.edmunds.com/api/tco/v1/details/allnewtcobystyleidzipandstate/", "?fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     tcoUsedUrl: ["https://api.edmunds.com/api/tco/v1/details/allusedtcobystyleidzipandstate/","?fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
+    performance1Url: ["https://api.edmunds.com/api/vehicle/v2/styles/","?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
+    performance2Url: ["https://api.edmunds.com/api/vehicle/v2/styles/","/equipment?availability=standard&equipmentType=OTHER&fmt=json&api_key=s65k59axsr9w63js5dbespvw"]
     makeNewUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     makeUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     modelNewUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     modelUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/makes?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     trimNewUrl: ["https://api.edmunds.com/api/vehicle/v2/","?state=new&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
     trimUsedUrl: ["https://api.edmunds.com/api/vehicle/v2/","?state=used&year=","&view=basic&fmt=json&api_key=s65k59axsr9w63js5dbespvw"],
-    getTCOData: function(id, zip, state) {
+    getTCOData: function() {
         /* new or used? */
         if (compCar.year > 2014) {
             $.getJSON(this.tcoNewUrl[0] + compCar.id + '/' + user.zip + '/' + user.state + this.tcoNewUrl[1], function(json) {
@@ -89,11 +91,11 @@ var edmundsApi = {
     },
     getPerformanceData: function() {
         performanceData = [];
-        $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + compCar.id + '?view=full&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+        $.getJSON(this.performance1Url[0] + compCar.id + this.performance1Url[1], function(json) {
             performanceData.push(json);
         });
         setTimeout(function(){
-            $.getJSON('https://api.edmunds.com/api/vehicle/v2/styles/' + compCar.id + '/equipment?availability=standard&equipmentType=OTHER&fmt=json&api_key=s65k59axsr9w63js5dbespvw', function(json) {
+            $.getJSON(this.performance2Url[0] + compCar.id + this.performance2Url[1], function(json) {
                 performanceData.push(json);
             });
         }, 1500);
@@ -532,6 +534,7 @@ var View = {
     loadTest: false,
     renderPhoto: function() {
         $("#comparison-photo").attr('src','http://media.ed.edmunds-media.com' + compCar.photoUrls[0]);
+        $("#tesla-photo").attr('src', selectedTesla.imageUrl);
     }
     renderAnnualMiles: function() {
         if (user.annualMiles < 5000) {
@@ -548,17 +551,17 @@ var View = {
         $("#fuel-cost-difference").text('$ ' + (compCar.fuelCost - tesla.fuelCost).toFixed(0));
     },
     renderCompAnnualFuel: function() {
-        for (var year = 0; year < 5; year++) {
-            $("#comp-fuel" + (year + 1)).text('$' + compCar.fuelCost.toFixed(0));
-        }
+        $("#comparison-title").text(compCar.make + " " + compCar.model);
+        $("#comp-MPG-combined").text('$ ' + compCar.combinedMPG.toFixed(0));
+        $("#comp-MPG-city").text('$ ' + compCar.cityMpg.toFixed(0));
+        $("#comp-MPG-highway").text('$ ' + compCar.hwyMpg.toFixed(0));
         $("#comp-fuel-cost").text('$ ' + compCar.fuelCost.toFixed(0));
-        $("#comp-fuel-total").text('$' + compCar.fuelCost.toFixed(0) * 5);
     },
-    renderTeslaAnnualFuel: function() {
-        for(i = 0; i < 5; i++) {
-            $("#tesla-fuel" + (i + 1)).text('$' + tesla.fuelCost);
-        }
-        $("#tesla-fuel-total").text('$' + tesla.fuelTotal);
+    renderTeslaAnnualFuel: function(selectedTesla) {
+        $("#tesla-title").text(selectedTesla.title);
+        $("#comp-MPG-combined").text('$ ' + selectedTesla.combinedMPG.toFixed(0));
+        $("#comp-MPG-city").text('$ ' + selectedTesla.cityMpg.toFixed(0));
+        $("#comp-MPG-highway").text('$ ' + selectedTesla.hwyMpg.toFixed(0));
         $('#tesla-fuel-cost').text('$ ' + tesla.fuelCost);  
     },
     renderGasPrice: function() {
@@ -568,31 +571,28 @@ var View = {
         $("#currentenergy").text(user.state + ' $' + user.energyPrice.toFixed(2));
     },
     renderTeslaPerformanceData: function(selectedTesla) {
+        $("#tesla-title-performance").text(selectedTesla.title);
         $("#tesla-horsepower").text(selectedTesla.horsepower + " hp");
         $("#tesla-torque").text(selectedTesla.torque + " lbs");
-        $("#tesla-airdrag").text(tesla.aeroDrag);
-        $("#tesla-cargo-capacity").text(tesla.cargoCapacity);
-        $("#tesla-weight").text(tesla.weight + ' lbs');
-        $("#tesla-MPG-combined").text(selectedTesla.combinedMPG);
-        $("#tesla-MPG-city").text(selectedTesla.cityMpg);
-        $("#tesla-MPG-highway").text(selectedTesla.hwyMpg);
         $("#tesla-0-60").text(selectedTesla.zeroSixty + ' sec.');
         $("#tesla-radius").text(tesla.turnRadius + ' ft.');
-        $("#tesla-photo").attr('src', selectedTesla.imageUrl);
-        $("#tesla-title").text(selectedTesla.title);
-        $("#tesla-title-performance").text(selectedTesla.title);
+        $("#tesla-airdrag").text(tesla.aeroDrag);
+        $("#tesla-weight").text(tesla.weight + ' lbs');
     },
     renderCompPerformanceData: function() {
-        alertify.log("Tesla " + tesla.selectedType + " VS. " + compCar.make + " " + performanceData[0].model.name);
-                $("#comparison-title").text(compCar.make + " " + performanceData[0].model.name);
-                $("#comparison-title-performance").text(compCar.make + " " + performanceData[0].model.name);
-                $("#comp-annual-title").text(compCar.make + " " + performanceData[0].model.name);
-                var totalMilesCapacity = (compCar.tankSize * compCar.combinedMPG).toFixed(0);
-                        $("#comp-capacity").text(performanceData[1].equipment[j].attributes[q].value + ' gal (' + totalMilesCapacity + ' miles)');
+        alertify.log("Tesla " + tesla.selectedType + " VS. " + compCar.make + " " + compCar.model); 
+        $("#comparison-title-performance").text(compCar.make + " " + compCar.model);
+        $("#comp-annual-title").text(compCar.make + " " + compCar.model);
+        $("#comp-horsepower").text(compCar.horsepower + " hp");
+        $("#comp-torque").text(compCar.torque + " lbs");
+        $("#comp-0-60").text(compCar.zeroSixty + ' sec.');
+        $("#comp-radius").text(compCar.turnRadius + ' ft.');
+        $("#comp-airdrag").text(compCar.aeroDrag);
+        $("#comp-weight").text(compCar.weight + ' lbs');
     }
     renderTeslaAnnualCosts: function(selectedTesla) {
         for(var year = 0; year < 5; year++) {
-            $("#tesla-fuel" + (year + 1)).text('$' + selectedTesla.fuelCost.toFixed(0));
+            $("#tesla-fuel" + (year + 1)).text('$' + tesla.fuelCost.toFixed(0));
             $("#tesla-insurance" + (year + 1)).text('$' + selectedTesla.annualCosts.insurance[year]);
             $("#tesla-maintenance" + (i + 1)).text('$' + selectedTesla.annualCosts.maintenance[year]);
             $("#tesla-repairs" + (i + 1)).text('$' + selectedTesla.annualCosts.repairs[year]);
@@ -613,10 +613,16 @@ var View = {
         $("#tesla-grand-total").text('$' + tesla.totalCosts.grandTotal);
     },
     renderCompAnnualCosts: function() {
-        $("#comp-depreciation" + (j + 1)).text('$' + compCar.annualCosts.depreciation[j]);
-        // for loop here not finished above
-        for (var index = 0; index < 5; index++) {
-            $("#comp-year" + (index + 1) + "-total").text('$' + compCar.annualCosts.yearTotals[index]);
+        for(var year = 0; year < 5; year++) {
+            $("#comp-fuel" + (year + 1)).text('$' + compCar.fuelCost.toFixed(0));
+            $("#comp-insurance" + (year + 1)).text('$' + compCar.annualCosts.insurance[year]);
+            $("#comp-maintenance" + (i + 1)).text('$' + compCar.annualCosts.maintenance[year]);
+            $("#comp-repairs" + (i + 1)).text('$' + compCar.annualCosts.repairs[year]);
+            $("#comp-depreciation" + (i + 1)).text('$' + compCar.annualCosts.depreciation[year]);
+            $("#comp-tax" + (i + 1)).text('$' + compCar.annualCosts.taxandfees[year]);
+            $("#comp-financing" + (i + 1)).text('$' + compCar.annualCosts.financing[year]);
+            $("#comp-tax-credit" + (i + 1)).text('$' + compCar.annualCosts.taxcredit[year]);
+            $("#comp-total-year" + (i + 1)).text('$' + compCar.annualCosts.yearTotals[year]);
         }
         $("#comp-fuel-total").text('$' + compFuelTotal.toFixed(0));
         $("#comp-insurance-total").text('$' + compCar.annualCosts.insurance[5]);
@@ -663,9 +669,29 @@ var View = {
         $("#stateSelect").prop('disabled', false);
     });
 
-// Populate performance data from two separate JSON requests, second reqeust delayed by 1.5 sec
+    $("#60kwh").click(function () {
+        tesla.selectedType = tesla.60;
+        $("#60kwh").css("border-color", "#FFB426");
+        $("#85kwh").css("border-color", "#bf0021");
+        $("#p85kwh").css("border-color", "#bf0021");
+    });
 
+    $("#85kwh").click(function () {
+        tesla.selectedType = tesla.85;
+        $("#85kwh").css("border-color", "#FFB426");
+        $("#60kwh").css("border-color", "#bf0021");
+        $("#p85kwh").css("border-color", "#bf0021");
+    });
 
+    $("#p85kwh").click(function () {
+        tesla.selectedType = tesla.P85D;
+        $("#p85kwh").css("border-color", "#FFB426");
+        $("#85kwh").css("border-color", "#bf0021");
+        $("#60kwh").css("border-color", "#bf0021");
+        $("#60kwh-description").css("border-color", "#bf0021");
+        $("#85kwh-description").css("border-color", "#bf0021");
+        $("#p85kwh-description").css("border-color", "#FFB426");
+    });
 
 function reset() {
 location.reload();
@@ -711,35 +737,50 @@ function showSections() {
     $('#tesla-cost-nav-button').removeAttr('disabled');
 }
 
-function populateCar (carID,zip,state) {
+function submitController() {
+    
+    compCar.parsePerformanceData(edmundsApi.getPerformanceData());
+    tesla.setCostTotals(tesla.selectedType);
+    user.setGasPrice()
+    user.setEnergyPrice();
 
-teslaData(tesla.selectedType);
-teslaAnnualCost(tesla.selectedType);
-populatePerformanceData(carID);
-populateEnergyPrices(state);
-populateGasPrices(state);
-setTimeout(function(){
-    populateTCOData(carID,zip,state); //change to get
-    populatePhoto(carID);
-}, 3500);
-setTimeout(function(){
-    showSections();
-    fuelPriceSet();
-}, 6500);
-setTimeout(function(){
-    submitFirebase();
-}, 7000);
+    setTimeout(function(){
+        compCar.parseTCOData(edmundsApi.getTCOData());
+    }, 2000);
+    setTimeout(function(){
+        edmundsApi.getPhotoUrls();
+    }, 4000);
+    setTimeout(function(){
+        View.renderPhoto();
+        View.renderAnnualMiles();
+        View.renderCostDifference();
+        View.renderCompAnnualFuel();
+        View.renderTeslaAnnualFuel();
+        View.renderGasPrice();
+        View.renderEnergyPrice();
+        View.renderTeslaPerformanceData();
+        View.renderCompPerformanceData();
+        View.renderTeslaAnnualCosts();
+        View.renderCompAnnualCosts();
+    }, 5000);
+    setTimeout(function(){
+        //all view stuff
+        showSections();
+        fuelPriceSet();
+    }, 5500);
+    setTimeout(function(){
+        // submitFirebase();
+    }, 7000);
 }
 
-
-function submitCar () {
+function submitCar() {
     compCar.id =  $("#trimSelect").val();
     user.zipCode = $("#zipCode").val();
     user.state = $("#stateSelect").val();
         if (user.zipCode.length === 5 & tesla.selectedType != "") {
             if(View.loadTest === false) {
-                View.laodTest = true;
-                populateCar(compCar.id,user.zipCode,user.state);
+                View.loadTest = true;
+                submitController();
             } else if(View.loadTest === true) {
                 $(".fuel-section-div1").hide();
                 $(".fuel-section-div2").hide();
@@ -748,7 +789,7 @@ function submitCar () {
                 $(".comp-annual-div").hide();
                 $(".tesla-annual-div").hide();
                 $(".section-nav").hide();
-                populateCar(compCar.id,user.zipCode,user.state);
+                submitController();
             }
         } else if (user.zipCode.length === 5 & tesla.selectedType === "") {
            alertify.alert("Please select Tesla Type");
