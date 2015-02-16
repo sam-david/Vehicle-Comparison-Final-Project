@@ -1,6 +1,4 @@
 
-console.log('graph loaded');
-
 google.load("visualization", "1.1", {packages:["corechart"]});
 
       google.setOnLoadCallback(drawChart);
@@ -49,7 +47,6 @@ google.load("visualization", "1.1", {packages:["corechart"]});
     //       ['Curb Weight', 1030, 5940]];
 
     function reDrawChart(chart_data) {
-      console.log('chart redrawn with:', chart_data);
         var data = google.visualization.arrayToDataTable(chart_data);
          var options = {
           width: 900,

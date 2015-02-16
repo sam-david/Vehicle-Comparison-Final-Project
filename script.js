@@ -10,7 +10,7 @@ $(document).ready(function(){
     eiaGov.getEnergyAverage();
 
     // firebase reference for database
-    var myDataRef = new Firebase(firebase.url);
+    
 
     $(document).foundation({
         slider: {
@@ -196,15 +196,29 @@ var edmundsApi = {
 var firebase = {
     url: "https://tesla-comparison.firebaseio.com/",
     submitFirebase: function() {
+        var myDataRef = new Firebase(this.url);
         myDataRef.push({
             caryear: compCar.year,
             make: compCar.make,
             model: compCar.model,
+            horsepower: compCar.horsepower,
+            torque: compCar.torque,
             edmundsID: compCar.id,
             state: user.state,
             zipcode: user.zipCode,
-            fiveyeartotal: compCar.annualCosts.grandTotal
+            annualCosts: {
+                fuel: compCar.annualCosts.fuel,
+                insurance: compCar.annualCosts.insurance,
+                maintenance: compCar.annualCosts.maintenance,
+                repairs: compCar.annualCosts.repairs,
+                depreciation: compCar.annualCosts.depreciation,
+                taxandfees: compCar.annualCosts.taxandfees,
+                financing: compCar.annualCosts.financing,
+                yearTotals: compCar.annualCosts.yearTotals,
+                grandTotal: compCar.annualCosts.grandTotal
+            }
         });
+        console.log(myDataRef);
     }
 }
 
@@ -830,6 +844,7 @@ function submitController() {
         showSections();
     }, 3500);
     setTimeout(function(){
+        firebase.submitFirebase();
         // submitFirebase();
     }, 7000);
 }
