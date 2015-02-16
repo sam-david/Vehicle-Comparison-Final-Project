@@ -44,7 +44,8 @@
         <li><a href="#performance-section" id="performance-nav-button" disabled>Performance</li>
         <li><a href="#teslaannual" id="tesla-cost-nav-button" disabled>Tesla</li>
         <li><a href="#compannual" id="comp-cost-nav-button" disabled>Comp</li>
-
+        <li class="energy-price-box"><span class="energy-price">| Energy Price:  </span><span id="currentenergy" class="energy-price">$.11</span><img src="images/elements/electric-button-up-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('up')"><img src="images/elements/electric-button-down-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('down')"><img src="images/elements/electric-icon-small.png" class="electric-icon"><span class="energy-price"> | </span></li>
+        <li class="energy-price-box"><span class="gas-price">  | Gas Price: </span><span id="currentgas" class="gas-price">$3.67</span><img src="images/elements/gas-button-up-normal.png" class="gas-arrow" onclick="adjustGasPrice('up')"><img src="images/elements/gas-button-down-normal2.png" class="gas-arrow" onclick="adjustGasPrice('down')"><img src="images/elements/fuel-icon-small.png" class="gas-icon"><span class="gas-price">  |</span></li>
 
       </div>
       </ul>
@@ -230,12 +231,12 @@
               <p class="mpg-combined-text">Combined</p>
           </div>
           <div class="large-4 columns">
-            <p class="mpg-number"><span id="tesla-MPG-city">28</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">City</p>
+            <h2 class="mpg-combined-number"><span id="tesla-MPG-combined">28</span><span class="baby-mpg">mpg</span></h2>
+              <p class="mpg-combined-text">City</p>
           </div>
           <div class="large-4 columns">
-            <p class="mpg-number"><span id="tesla-MPG-highway">21</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">Highway</p>
+            <h2 class="mpg-combined-number"><span id="tesla-MPG-combined">21</span><span class="baby-mpg">mpg</span></h2>
+              <p class="mpg-combined-text">Highway</p>
           </div>
         </div>
       </div>
@@ -248,12 +249,12 @@
               <p class="mpg-combined-text">Combined</p>
           </div>
           <div class="large-4 columns">
-            <p class="mpg-number"><span id="comp-MPG-city">28</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">City</p>
+            <h2 class="mpg-combined-number"><span id="comp-MPG-combined">28</span><span class="baby-mpg">mpg</span></h2>
+              <p class="mpg-combined-text">City</p>
           </div>
           <div class="large-4 columns">
-            <p class="mpg-number"><span id="comp-MPG-highway">21</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">Highway</p>
+            <h2 class="mpg-combined-number"><span id="comp-MPG-combined">21</span><span class="baby-mpg">mpg</span></h2>
+              <p class="mpg-combined-text">Highway</p>
           </div>
         </div>
       </div>
