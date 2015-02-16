@@ -94,12 +94,13 @@ var edmundsApi = {
         compCar.jsonPerformanceData = [];
         $.getJSON(this.performance1Url[0] + compCar.id + this.performance1Url[1], function(json) {
             compCar.jsonPerformanceData.push(json);
+            console.log(json);
         }).done(function() {
-            console.log('first performance got')
             $.getJSON(edmundsApi.performance2Url[0] + compCar.id + edmundsApi.performance2Url[1], function(json) {
                 compCar.jsonPerformanceData.push(json);
+                console.log(json);
             }).done(function() {
-                console.log('second performance got');
+                
             });
         });
     },
@@ -288,7 +289,6 @@ var compCar = {
     },
     setFuelCosts: function() {
         this.fuelCost = ((user.annualMiles / this.combinedMPG) * user.gasPrice);
-        console.log(this.fuelCost);
         this.annualCosts.fuel[5] = 0;
         this.annualCosts.grandTotal = 0;
         for (i = 0; i < 5; i++) {
@@ -328,10 +328,7 @@ var compCar = {
             } else {
                 this.annualCosts.insurance[j] = tcoData.insurance.values[j];
                 this.annualCosts.insurance[5] += tcoData.insurance.values[j];
-                console.log(this.annualCosts.insurance[5]);
-                console.log(tcoData.insurance.values[j]);
                 this.annualCosts.yearTotals[j] += tcoData.insurance.values[j];
-                console.log(this.annualCosts.yearTotals[j]);
                 this.annualCosts.grandTotal += tcoData.insurance.values[j];
                 this.tests.costs -= 1;
             }
