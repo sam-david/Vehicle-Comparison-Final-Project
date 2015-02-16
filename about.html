@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Tesla Vehicle Comparison : About</title>
+  <title>Tesla Comparison : About</title>
   <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Michroma|Fredoka+One' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/foundation.css" />
@@ -15,6 +15,33 @@
   <script src="js/responsive-tables.js"></script>
 </head>
 <body>
+  <div class="fixed">
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="index.html" class="nav-title">Tesla Comparison</a></h1>
+        </li>
+         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="left">
+        <div class="section-nav">
+          
+        </div>
+        </ul>
+
+        <ul class="right">
+          <li><a class="nav-button" href="contact.html">Contact</a></li>
+          <li><a class="nav-button" href="about.html">About</a></li>
+          <li><a class="nav-button" target="_blank" href="http://www.teslamotors.com/">Tesla Motors</a></li>
+          <li><a class="nav-button" target="_blank" href="http://www.edmunds.com/">Edmunds</a></li>
+        </ul>
+      </section>
+    </nav>
+  </div>
   <header class="row">
     <div class="large-12 columns header-div ">
       <a href="index.html"><img src="images/elements/Tesla-Header-1000-thin.jpg" class="header-image"></a>
@@ -32,7 +59,7 @@
     </div>
   <div class="row light-blue-background">
     <div class="large-6 medium-6 columns ">
-      <p class="website-content">This site was created as a tool for Tesla owners, potential owners, and fans to see how the Tesla models stack up against other vehicles on the market across a wide array of statistics. Thanks to Edmunds.com's amazing public database, we are able to do this by connecting directly to their site. We compare fuel, performance, and overall annual costs for Tesla vs any model on the market that Edmunds has data for. Try it out and see for yourself!</p>
+      <p class="website-content">This site was created as a tool for Tesla owners, potential owners, and fans to see how the Tesla models stack up against other vehicles on the market across a wide array of statistics. Thanks to Edmunds.com's amazing public API, we are able to do this. We compare fuel, performance, and overall annual costs for Tesla vs any model on the market that Edmunds has data for. Try it out and see for yourself!</p>
     </div>
     <div class="large-6 medium-6 columns text-center">
       <img src="images/tesla-logo.png" class="tesla-about-logo">
@@ -57,9 +84,31 @@
        <img src="images/elements/Footer.jpg" class="footer-image">
     </div>
   </div>
+  <div class="row">
+    <div class="large-6 columns">
+       <p class="small-footer-text">No affiliation with Tesla Motors</p>
+    </div>
+    <div class="large-6 columns">
+       <p class="copyright">Copyright &copy; 2015 Teslacomparison.com</p>
+    </div>
+  </div>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49226266-4', 'auto');
+  ga('send', 'pageview');
+
+  </script>
   <script src="js/jquery-ui.js"></script>
+  <script src="js/foundation.js"></script>
+  <script src="js/foundation.topbar.js"></script>
   <script src="js/alertify.js"></script>
-  <script src="script.js"></script>
-  <script src="graph.js"></script>
+  <script src="js/contact.js"></script>
+  <script>
+  $(document).foundation();
+  </script>
 </body>
 </html>

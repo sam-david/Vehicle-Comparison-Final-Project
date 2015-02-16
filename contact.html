@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Tesla Vehicle Comparison</title>
+  <title>Tesla Comparison : Contact</title>
   <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Michroma|Fredoka+One' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/foundation.css" />
@@ -14,7 +14,34 @@
   <script src="js/modernizr.js"></script>
 </head>
 <body>
-  <header class="row">
+  <div class="fixed">
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="index.html" class="nav-title">Tesla Comparison</a></h1>
+        </li>
+         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="left">
+        <div class="section-nav">
+          
+        </div>
+        </ul>
+
+        <ul class="right">
+          <li><a class="nav-button" href="contact.html">Contact</a></li>
+          <li><a class="nav-button" href="about.html">About</a></li>
+          <li><a class="nav-button" target="_blank" href="http://www.teslamotors.com/">Tesla Motors</a></li>
+          <li><a class="nav-button" target="_blank" href="http://www.edmunds.com/">Edmunds</a></li>
+        </ul>
+      </section>
+    </nav>
+  </div>
+  <header class="wide-row">
     <div class="large-12 columns header-div ">
       <a href="index.html"><img src="images/elements/Tesla-Header-1000-thin.jpg" class="header-image"></a>
     </div>
@@ -54,26 +81,36 @@
       <button type="button" class="contact-button" id="contact-submit-button" onclick="contactSubmit()">Submit</button>
     </div>
   </div>
-  <div class="row ">
-    <div class="large-3 medium-3 columns bottom-nav-div-left">
-      <a href="contact.html" class="bottom-nav-link">Contact</a>
-    </div>
-    <div class="large-3 medium-3 columns bottom-nav-div">
-      <a href="about.html" class="bottom-nav-link">About</a>
-    </div>
-    <div class="large-3 medium-3 columns bottom-nav-div">
-      <a href="http://www.teslamotors.com/" target="_blank" class="bottom-nav-link">Tesla</a>
-    </div>
-    <div class="large-3 medium-3 columns bottom-nav-div-right">
-      <a href="http://www.edmunds.com/" target="_blank" class="bottom-nav-link">Edmunds</a>
-    </div>
-  </div>
   <div class="row">
     <div class="large-12 columns footer-div">
        <img src="images/elements/Footer.jpg" class="footer-image">
     </div>
   </div>
+  <div class="row">
+    <div class="large-6 columns">
+       <p class="small-footer-text">No affiliation with Tesla Motors</p>
+    </div>
+    <div class="large-6 columns">
+       <p class="copyright">Copyright &copy; 2015 Teslacomparison.com</p>
+    </div>
+  </div>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49226266-4', 'auto');
+  ga('send', 'pageview');
+
+  </script>
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/foundation.js"></script>
+  <script src="js/foundation.topbar.js"></script>
   <script src="js/alertify.js"></script>
   <script src="js/contact.js"></script>
+  <script>
+  $(document).foundation();
+  </script>
 </body>
 </html>

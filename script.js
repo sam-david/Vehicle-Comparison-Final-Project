@@ -288,6 +288,7 @@ var compCar = {
     },
     setFuelCosts: function() {
         this.fuelCost = ((user.annualMiles / this.combinedMPG) * user.gasPrice);
+        console.log(this.fuelCost);
         this.annualCosts.fuel[5] = 0;
         this.annualCosts.grandTotal = 0;
         for (i = 0; i < 5; i++) {
@@ -296,6 +297,7 @@ var compCar = {
         }
         for (var j = 0; j < 5; j++) {
             this.annualCosts.yearTotals[j] = this.annualCosts.fuel[j] + this.annualCosts.insurance[j] + this.annualCosts.maintenance[j] + this.annualCosts.repairs[j] + this.annualCosts.depreciation[j] + this.annualCosts.taxandfees[j] + this.annualCosts.financing[j];
+            this.annualCosts.yearTotals[j] = this.annualCosts.yearTotals[j];
         }
         for (var t = 0; t < 5; t++) {
             this.annualCosts.grandTotal += this.annualCosts.yearTotals[t];
@@ -326,7 +328,10 @@ var compCar = {
             } else {
                 this.annualCosts.insurance[j] = tcoData.insurance.values[j];
                 this.annualCosts.insurance[5] += tcoData.insurance.values[j];
+                console.log(this.annualCosts.insurance[5]);
+                console.log(tcoData.insurance.values[j]);
                 this.annualCosts.yearTotals[j] += tcoData.insurance.values[j];
+                console.log(this.annualCosts.yearTotals[j]);
                 this.annualCosts.grandTotal += tcoData.insurance.values[j];
                 this.tests.costs -= 1;
             }
@@ -375,6 +380,7 @@ var compCar = {
                 this.annualCosts.grandTotal += tcoData.financing.values[j];
                 this.tests.costs -= 1;
             }
+            this.annualCosts.yearTotals[j] = this.annualCosts.yearTotals[j];
         }
     },
     parsePerformanceData: function() {
@@ -506,7 +512,7 @@ var tesla = {
         }
     },
     setFuelCosts: function() {
-        this.fuelCost = ((user.annualMiles * .33) * user.energyPrice).toFixed(0);
+        this.fuelCost = ((user.annualMiles * .33) * user.energyPrice);
         this.fuelTotal = parseInt(tesla.fuelCost * 5);
         this.annualCosts.grandTotal = 0;
         for (var j = 0; j < 5; j++) {
@@ -624,7 +630,7 @@ var View = {
         $("#tesla-MPG-combined").text(selectedTesla.combinedMPG);
         $("#tesla-MPG-city").text(selectedTesla.cityMpg);
         $("#tesla-MPG-highway").text(selectedTesla.hwyMpg);
-        $('#tesla-fuel-cost').text('$ ' + tesla.fuelCost);  
+        $('#tesla-fuel-cost').text('$ ' + tesla.fuelCost.toFixed(0));  
     },
     renderGasPrice: function() {
         $("#currentgas").text(user.state + ' $' + user.gasPrice);
@@ -653,16 +659,16 @@ var View = {
     },
     renderAnnualCostChart: function(selectedTesla) {
         var data = [['Year', 'Tesla', compCar.make],
-          ['2015', tesla.annualCosts.yearTotals[0], compCar.annualCosts.yearTotals[0]],
-          ['2016', tesla.annualCosts.yearTotals[1], compCar.annualCosts.yearTotals[1]],
-          ['2017', tesla.annualCosts.yearTotals[2], compCar.annualCosts.yearTotals[2]],
-          ['2018', tesla.annualCosts.yearTotals[3], compCar.annualCosts.yearTotals[3]],
-          ['2019', tesla.annualCosts.yearTotals[4], compCar.annualCosts.yearTotals[4]]];
+          ['2015', tesla.annualCosts.yearTotals[0], Math.floor(compCar.annualCosts.yearTotals[0])],
+          ['2016', tesla.annualCosts.yearTotals[1], Math.floor(compCar.annualCosts.yearTotals[1])],
+          ['2017', tesla.annualCosts.yearTotals[2], Math.floor(compCar.annualCosts.yearTotals[2])],
+          ['2018', tesla.annualCosts.yearTotals[3], Math.floor(compCar.annualCosts.yearTotals[3])],
+          ['2019', tesla.annualCosts.yearTotals[4], Math.floor(compCar.annualCosts.yearTotals[4])]];
         reDrawChart(data);
     },
     renderTeslaAnnualCosts: function(selectedTesla) {
         for(var year = 0; year < 5; year++) {
-            $("#tesla-fuel" + (year + 1)).text('$' + tesla.fuelCost);
+            $("#tesla-fuel" + (year + 1)).text('$' + tesla.fuelCost.toFixed(0));
             $("#tesla-insurance" + (year + 1)).text('$' + tesla.annualCosts.insurance[year]);
             $("#tesla-maintenance" + (year + 1)).text('$' + tesla.annualCosts.maintenance[year]);
             $("#tesla-repairs" + (year + 1)).text('$' + tesla.annualCosts.repairs[year]);
@@ -695,12 +701,12 @@ var View = {
             $("#comp-total-year" + (year + 1)).text('$' + compCar.annualCosts.yearTotals[year].toFixed(0));
         }
         $("#comp-fuel-total").text('$' + compCar.annualCosts.fuel[5].toFixed(0));
-        $("#comp-insurance-total").text('$' + compCar.annualCosts.insurance[5].toFixed(0));
-        $("#comp-maintenance-total").text('$' + compCar.annualCosts.maintenance[5].toFixed(0));
-        $("#comp-repairs-total").text('$' + compCar.annualCosts.repairs[5].toFixed(0));
-        $("#comp-depreciation-total").text('$' + compCar.annualCosts.depreciation[5].toFixed(0));
-        $("#comp-tax-total").text('$' + compCar.annualCosts.taxandfees[5].toFixed(0));
-        $("#comp-financing-total").text('$' + compCar.annualCosts.financing[5].toFixed(0));
+        $("#comp-insurance-total").text('$' + compCar.annualCosts.insurance[5]);
+        $("#comp-maintenance-total").text('$' + compCar.annualCosts.maintenance[5]);
+        $("#comp-repairs-total").text('$' + compCar.annualCosts.repairs[5]);
+        $("#comp-depreciation-total").text('$' + compCar.annualCosts.depreciation[5]);
+        $("#comp-tax-total").text('$' + compCar.annualCosts.taxandfees[5]);
+        $("#comp-financing-total").text('$' + compCar.annualCosts.financing[5]);
         $("#comp-tax-credit-total").text('$' + compCar.annualCosts.taxcredit);
         $("#comp-grand-total").text('$' + compCar.annualCosts.grandTotal.toFixed(0));
     },
@@ -763,42 +769,30 @@ location.reload();
 
 function showSections() {
     if (compCar.tests.mpg === true ) {
-        $(".fuel-section-div1").fadeIn( 3000 );
-        $(".fuel-section-div2").fadeIn( 3000 );
+        $(".fuel-section-div1").fadeIn( 2000 );
+        $(".fuel-section-div2").fadeIn( 2000 );
         setTimeout(function(){
             $('.mile-slider').css('visibility','visible');
-        }, 2500);
-        $('#fuel-nav-button').css('border-bottom','solid green 1px');
+        }, 1800);
         $('#fuel-nav-button').removeAttr('disabled');
     } else {
-        $('#fuel-nav-button').css('border-bottom','red');
+        $('#fuel-nav-button').css('display','none');
     }
-    if (compCar.tests.performance < 2 ) {
-        $(".performance-section-div").fadeIn( 3000 );
-        $('#performance-nav-button').css('border-bottom','green');
-        $('#performance-nav-button').removeAttr('disabled');
-    } else if (compCar.tests.performance >= 2 && compCar.tests.performance < 5) {
-        $(".performance-section-div").fadeIn( 3000 );
-        $('#performance-nav-button').css('border-bottom','yellow');
+    if (compCar.tests.performance < 5 ) {
+        $(".performance-section-div").fadeIn( 2000 );
         $('#performance-nav-button').removeAttr('disabled');
     } else {
-        $('#performance-nav-button').css('border-bottom','red');
+        $('#performance-nav-button').css('display','none');
     }
-    if (compCar.tests.costs < 10 ) {
-        $(".comp-annual-div").fadeIn( 3000 );
-        $('#comp-cost-nav-button').css('border-bottom','green');
+    if (compCar.tests.costs < 25 ) {
+        $(".comp-annual-div").fadeIn( 2000 );
+        $(".tesla-annual-div").fadeIn( 2000 );
         $('#comp-cost-nav-button').removeAttr('disabled');
-    } else if (compCar.tests.costs >= 10 && compCar.tests.costs < 25) {
-        $(".comp-annual-div").fadeIn( 3000 );
-        $('#comp-cost-nav-button').css('border-bottom','yellow');
-        $('#comp-cost-nav-button').removeAttr('disabled');
+        $('#tesla-cost-nav-button').removeAttr('disabled');
     } else {
-        $('#comp-cost-nav-button').css('border-bottom','red');
+        $('#comp-cost-nav-button').css('display','none');
     }
-    $(".tesla-annual-div").fadeIn( 3000 );
-    $(".section-nav").fadeIn( 1000 );
-    $('#tesla-cost-nav-button').css('border-bottom','green');
-    $('#tesla-cost-nav-button').removeAttr('disabled');
+    $(".section-nav").fadeIn( 1000 );    
 }
 
 function submitController() {

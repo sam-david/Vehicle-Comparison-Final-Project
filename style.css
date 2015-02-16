@@ -113,7 +113,6 @@ a.disabled {
 .section-heading {
 	color: #831c20;
 	font-family: 'Lato', sans-serif;
-	margin-top: 2%;
 }
 
 .page-divider {
@@ -133,6 +132,16 @@ a.disabled {
 .nav-title {
 	font-family: 'Lato';
 	font-size: 1.2em;
+}
+
+.nav-text {
+	font-family: 'Lato' !important;
+	font-size: .9em !important;
+}
+
+.nav-button {
+	font-family: 'Lato' !important;
+	font-size: .9em !important;
 }
 
 /* ------- Hide the divs to start -----------*/
@@ -201,6 +210,11 @@ a.disabled {
 .line-divider {
 	border-left: solid black 1px;
 	height: 40%;
+}
+
+.comp-button:hover {
+	border-color: rgb(255, 180, 38);
+	background-color: #4D5D73;
 }
 
 /* ----------------- Comp Selector --------------------*/
@@ -287,6 +301,10 @@ button[disabled]:hover {
 	float: left;
 	margin-top: 3px;
 	margin-right: 1px;
+}
+
+.social-box {
+	padding-bottom: 1%;
 }
 
 .facebook-share {
@@ -414,16 +432,16 @@ button[disabled]:hover {
 	text-align: center;
 	color: white;
 	font-size: 2.2em;
-	margin-top: 4%;
+	margin-top: 6%;
 	margin-bottom: 0;
 }
 
 .odometer-text {
 	background-color: black;
-	padding: 1%;
+	padding: 1.2%;
+	font-size: 1.7em;
 	border: solid white 2px;
 	font-family: monospace;
-/*	background-image: linear-gradient(to bottom, #333333 0%, #333333 40%, #101010 60%, #333333 80%, #333333 100%);*/
 }
 
 .miles-label {
@@ -490,15 +508,19 @@ button[disabled]:hover {
 
 .gas-price, .energy-price {
 	font-family: 'Audiowide', cursive;
-	font-size: .75em;
+	font-size: .8em;
 }
 
+.gas-price-text, .energy-price-text {
+	font-family: 'Lato', monospace !important;
+	font-size: .8em;
+}
 
-.gas-price {
+.gas-price,.gas-price-text {
 	color: #00FF1B;
 }
 
-.energy-price {
+.energy-price,.energy-price-text {
 	color: #fcff00;
 }
 

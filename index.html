@@ -40,12 +40,12 @@
       <!-- Right Nav Section -->
       <ul class="left">
       <div class="section-nav">
-        <li><a href="#fuel-section" id="fuel-nav-button" disabled><p>Fuel</p></li>
-        <li><a href="#performance-section" id="performance-nav-button" disabled>Performance</li>
-        <li><a href="#teslaannual" id="tesla-cost-nav-button" disabled>Tesla</li>
-        <li><a href="#compannual" id="comp-cost-nav-button" disabled>Comp</li>
-        <li class="energy-price-box"><span class="energy-price">| Energy Price:  </span><span id="currentenergy" class="energy-price">$.11</span><img src="images/elements/electric-button-up-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('up')"><img src="images/elements/electric-button-down-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('down')"><img src="images/elements/electric-icon-small.png" class="electric-icon"><span class="energy-price"> | </span></li>
-        <li class="energy-price-box"><span class="gas-price">  | Gas Price: </span><span id="currentgas" class="gas-price">$3.67</span><img src="images/elements/gas-button-up-normal.png" class="gas-arrow" onclick="adjustGasPrice('up')"><img src="images/elements/gas-button-down-normal2.png" class="gas-arrow" onclick="adjustGasPrice('down')"><img src="images/elements/fuel-icon-small.png" class="gas-icon"><span class="gas-price">  |</span></li>
+        <li><a class="nav-text" href="#fuel-section" id="fuel-nav-button" disabled>Fuel</a></li>
+        <li><a class="nav-text" href="#performance-section" id="performance-nav-button" disabled>Performance</a></li>
+        <li><a class="nav-text" href="#teslaannual" id="tesla-cost-nav-button" disabled>Tesla</a></li>
+        <li><a class="nav-text" href="#compannual" id="comp-cost-nav-button" disabled>Comp</a></li>
+        <li class="energy-price-box"><span class="energy-price-text">| Energy Price:  </span><span id="currentenergy" class="energy-price">$.11</span><img src="images/elements/electric-button-up-normal.png" class="energy-arrow" onclick="user.adjustEnergyPrice('up')"><img src="images/elements/electric-button-down-normal.png" class="energy-arrow" onclick="user.adjustEnergyPrice('down')"><img src="images/elements/electric-icon-small.png" class="electric-icon"><span class="energy-price-text"> | </span></li>
+        <li class="energy-price-box"><span class="gas-price-text">  | Gas Price: </span><span id="currentgas" class="gas-price">$3.67</span><img src="images/elements/gas-button-up-normal.png" class="gas-arrow" onclick="user.adjustGasPrice('up')"><img src="images/elements/gas-button-down-normal2.png" class="gas-arrow" onclick="user.adjustGasPrice('down')"><img src="images/elements/fuel-icon-small.png" class="gas-icon"><span class="gas-price-text">  |</span></li>
 
       </div>
       </ul>
@@ -231,11 +231,11 @@
               <p class="mpg-combined-text">Combined</p>
           </div>
           <div class="large-4 columns">
-            <h2 class="mpg-combined-number"><span id="tesla-MPG-combined">28</span><span class="baby-mpg">mpg</span></h2>
+            <h2 class="mpg-combined-number"><span id="tesla-MPG-city">28</span><span class="baby-mpg">mpg</span></h2>
               <p class="mpg-combined-text">City</p>
           </div>
           <div class="large-4 columns">
-            <h2 class="mpg-combined-number"><span id="tesla-MPG-combined">21</span><span class="baby-mpg">mpg</span></h2>
+            <h2 class="mpg-combined-number"><span id="tesla-MPG-highway">21</span><span class="baby-mpg">mpg</span></h2>
               <p class="mpg-combined-text">Highway</p>
           </div>
         </div>
@@ -249,11 +249,11 @@
               <p class="mpg-combined-text">Combined</p>
           </div>
           <div class="large-4 columns">
-            <h2 class="mpg-combined-number"><span id="comp-MPG-combined">28</span><span class="baby-mpg">mpg</span></h2>
+            <h2 class="mpg-combined-number"><span id="comp-MPG-city">28</span><span class="baby-mpg">mpg</span></h2>
               <p class="mpg-combined-text">City</p>
           </div>
           <div class="large-4 columns">
-            <h2 class="mpg-combined-number"><span id="comp-MPG-combined">21</span><span class="baby-mpg">mpg</span></h2>
+            <h2 class="mpg-combined-number"><span id="comp-MPG-highway">21</span><span class="baby-mpg">mpg</span></h2>
               <p class="mpg-combined-text">Highway</p>
           </div>
         </div>
@@ -286,14 +286,6 @@
       </div>
       <div class="large-4 medium-4 columns">
         <p class="gas-cost-text">Gas Cost</br><span id="comp-fuel-cost">$1000</span></p>
-      </div>
-    </div>
-    <div class="row price-bar-background">
-      <div class="large-6 medium-6 columns">
-        <span>Current Energy Price: </span><img src="images/elements/electric-button-up-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('up')"><img src="images/elements/electric-button-down-normal.png" class="energy-arrow" onclick="adjustEnergyPrice('down')"><span id="currentenergy" class="energy-price">$.11</span><img src="images/elements/electric-icon-small.png" class="electric-icon">
-      </div>
-      <div class="large-6 medium-6 columns">
-        <span>Current Gas Price: </span><img src="images/elements/gas-button-up-normal.png" class="gas-arrow" onclick="adjustGasPrice('up')"><img src="images/elements/gas-button-down-normal2.png" class="gas-arrow" onclick="adjustGasPrice('down')"><span id="currentgas" class="gas-price">$3.67</span><img src="images/elements/fuel-icon-small.png" class="gas-icon">
       </div>
     </div>
   </div>
@@ -616,7 +608,7 @@
         <div id="chart_div" style="width: 900px; height: 500px;"></div>
       </div>
     </div>
-    <div class="row light-blue-background">
+    <div class="row light-blue-background social-box">
         <div class="large-8 columns">
           <div class="facebook-share"><div class="fb-share-button" data-href="http://www.teslacomparison.com/"></div></div>
           <a href="https://twitter.com/share" class="twitter-share-button" data-text="I just compared the Tesla on Teslacomparison.com" data-count="none">Tweet</a>
