@@ -40,7 +40,7 @@
       <!-- Right Nav Section -->
       <ul class="left">
       <div class="section-nav">
-        <li><a href="#fuel-section" id="fuel-nav-button" disabled>Fuel</li>
+        <li><a href="#fuel-section" id="fuel-nav-button" disabled><p>Fuel</p></li>
         <li><a href="#performance-section" id="performance-nav-button" disabled>Performance</li>
         <li><a href="#teslaannual" id="tesla-cost-nav-button" disabled>Tesla</li>
         <li><a href="#compannual" id="comp-cost-nav-button" disabled>Comp</li>
@@ -198,26 +198,18 @@
           </div>
         </div>
       </div>
+      
       <div class="row">
-            <div class="large-3 medium-3 columns comp-button" onclick="submitCar()" >
-              <p class="button-text">Submit</p>
+          <div class ="large-8 large-centered columns">
+            <div class="row">
+              <div class="large-5 medium-5 columns">
+                <div class="comp-button" onclick="submitCar()">Submit</div>
+              </div>
+              <div class="large-5 large-offset-2 medium-6 columns left">
+                <div class="comp-button" onclick="submitCar()">Reset</div>
+              </div>
             </div>
-            <div class="large-3 medium-3 columns left comp-button" onclick="reset()">
-              <p class="button-text">Reset</p>
-            </div>
-      </div>
-      <div class="row">
-        <div class="large-8 columns">
-          <div class="facebook-share"><div class="fb-share-button" data-href="http://www.teslacomparison.com/"></div></div>
-          <a href="https://twitter.com/share" class="twitter-share-button" data-text="I just compared the Tesla on Teslacomparison.com" data-count="none">Tweet</a>
-          <div class="google-plus-button">
-          <div class="g-plus" data-action="share" data-annotation="none" data-href="http://www.teslacomparison.com/"></div></div>
-          <a href="mailto:?subject=Compare Tesla to any other vehicle...&amp;body=Check out Tesla Comparison.com http://www.teslacomparison.com." title="Compare Tesla to any other vehicle..."><img src="images/elements/icons/Mail.png" class="social-icon"></a>
-          <a href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.teslacomparison.com/&title=Tesla%20Comparison&summary=I%20just%20compared%20the%20Tesla%20on%20TeslaComparison.com.%20 Check%20out%20this%20site!&source=Teslacomparison.com
-"target="_blank"><img src="images/elements/icons/LinkedIn.png" class="social-icon"></a>
-          <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=http://www.teslacomparison.com/' + encodeURIComponent(window.location); return false"> <img src="images/elements/icons/Reddit.png" class="social-icon"> </a>
-
-        </div>
+          </div>
       </div>
     </div>
   </div>
@@ -230,54 +222,47 @@
     <a name="fuel-section"></a>
     <div class="wide-row light-blue-background">
       <div class="large-6 medium-6 small-6 columns">
+        <h2 class="car-display-title photo-border" id="tesla-title">Tesla</h2>
         <img src="images/model-s-60.jpg" class="car-photo-left" id="tesla-photo">
-        <h2 class="car-display-title" id="tesla-title">Tesla</h2>
+        <div class="row photo-border-bottom">
+          <div class="large-4 columns">
+            <h2 class="mpg-combined-number"><span id="tesla-MPG-combined">25</span><span class="baby-mpg">mpge</span></h2>
+              <p class="mpg-combined-text">Combined</p>
+          </div>
+          <div class="large-4 columns">
+            <p class="mpg-number"><span id="tesla-MPG-city">28</span><span class="baby-mpg">mpg</span></p>
+              <p class="mpg-text">City</p>
+          </div>
+          <div class="large-4 columns">
+            <p class="mpg-number"><span id="tesla-MPG-highway">21</span><span class="baby-mpg">mpg</span></p>
+              <p class="mpg-text">Highway</p>
+          </div>
+        </div>
       </div>
       <div class="large-6 medium-6 small-6 columns">
+        <h2 class="car-display-title photo-border"  id="comparison-title">Comparison Car</h2>
         <img src="images/model-s-60.jpg" class="car-photo-right" id="comparison-photo">
-        <h2 class="car-display-title"  id="comparison-title">Comparison Car</h2>
+        <div class="row photo-border-bottom">
+          <div class="large-4 columns">
+            <h2 class="mpg-combined-number"><span id="comp-MPG-combined">25</span><span class="baby-mpg">mpge</span></h2>
+              <p class="mpg-combined-text">Combined</p>
+          </div>
+          <div class="large-4 columns">
+            <p class="mpg-number"><span id="comp-MPG-city">28</span><span class="baby-mpg">mpg</span></p>
+              <p class="mpg-text">City</p>
+          </div>
+          <div class="large-4 columns">
+            <p class="mpg-number"><span id="comp-MPG-highway">21</span><span class="baby-mpg">mpg</span></p>
+              <p class="mpg-text">Highway</p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row light-blue-background">
-      <div class="large-4 medium-4 small-4 columns mpg-padding">
-        <div class="mpg-box">
-          <div class="row">
-            <div class="large-4 medium-4 columns">
-              <h2 class="mpg-combined-number"><span id="tesla-MPG-combined">25</span><span class="baby-mpg">mpge</span></h2>
-              <p class="mpg-combined-text">Combined</p>
-            </div>
-            <div class="large-4 medium-4 columns">
-              <p class="mpg-number"><span id="tesla-MPG-city">28</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">City</p>
-            </div>
-            <div class="large-4 medium-4 columns">
-              <p class="mpg-number"><span id="tesla-MPG-highway">21</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">Highway</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="large-4 medium-4 small-4 columns">
+      
+      <div class="large-4 large-centered medium-4 small-4 columns">
         <p class="odometer"><span class="odometer-text" id="annual-miles">020000</span></p>
         <p class="miles-label">Miles / Year</p>
-      </div>
-      <div class="large-4 medium-4 small-4 columns mpg-padding-right">
-        <div class="mpg-box">
-          <div class="row">
-            <div class="large-4 medium-4 columns">
-              <h2 class="mpg-combined-number" ><span id="comp-MPG-combined">25</span><span class="baby-mpg">mpg</span></h2>
-              <p class="mpg-combined-text">Combined</p>
-            </div>
-            <div class="large-4 medium-4 columns">
-              <p class="mpg-number"><span id="comp-MPG-city">28</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">City</p>
-            </div>
-            <div class="large-4 medium-4 columns">
-              <p class="mpg-number"><span id="comp-MPG-highway">21</span><span class="baby-mpg">mpg</span></p>
-              <p class="mpg-text">Highway</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -319,12 +304,6 @@
         <h2 class="section-heading">Performance</h2>
       </div>
     </div>
-    <div class="row light-blue-background">
-      <div class="large-10 large-centered columns">
-        <div id="chart_div" style="width: 900px; height: 500px;"></div>
-      </div>
-    </div>
-    
     <div class="row light-blue-background">
       <div class="large-12 columns section-bar-div">
         <img src="images/elements/section-bar.png" class="left-section-bar">
@@ -630,6 +609,25 @@
         </table>
       </div>
     </div>
+
+    <div class="row light-blue-background">
+      <div class="large-10 large-centered columns">
+        <div id="chart_div" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
+    <div class="row light-blue-background">
+        <div class="large-8 columns">
+          <div class="facebook-share"><div class="fb-share-button" data-href="http://www.teslacomparison.com/"></div></div>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-text="I just compared the Tesla on Teslacomparison.com" data-count="none">Tweet</a>
+          <div class="google-plus-button">
+          <div class="g-plus" data-action="share" data-annotation="none" data-href="http://www.teslacomparison.com/"></div></div>
+          <a href="mailto:?subject=Compare Tesla to any other vehicle...&amp;body=Check out Tesla Comparison.com http://www.teslacomparison.com." title="Compare Tesla to any other vehicle..."><img src="images/elements/icons/Mail.png" class="social-icon"></a>
+          <a href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.teslacomparison.com/&title=Tesla%20Comparison&summary=I%20just%20compared%20the%20Tesla%20on%20TeslaComparison.com.%20 Check%20out%20this%20site!&source=Teslacomparison.com
+"target="_blank"><img src="images/elements/icons/LinkedIn.png" class="social-icon"></a>
+          <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=http://www.teslacomparison.com/' + encodeURIComponent(window.location); return false"> <img src="images/elements/icons/Reddit.png" class="social-icon"> </a>
+
+        </div>
+      </div>
   </div>
   <!-- <div class="row light-blue-background">
     <div class="large-6 medium-6 columns">
@@ -645,8 +643,11 @@
     </div>
   </div>
   <div class="row">
-    <div class="large-12 columns">
-       <p class="copyright">Copyright &copy; 2014 Teslacomparison.com</p>
+    <div class="large-6 columns">
+       <p class="small-footer-text">No affiliation with Tesla Motors</p>
+    </div>
+    <div class="large-6 columns">
+       <p class="copyright">Copyright &copy; 2015 Teslacomparison.com</p>
     </div>
   </div>
   <script>

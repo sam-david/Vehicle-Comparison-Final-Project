@@ -25,6 +25,7 @@ $(document).ready(function(){
                     View.renderCostDifference();
                     View.renderCompAnnualCosts();
                     View.renderTeslaAnnualCosts(tesla.selectedType);
+                    View.renderAnnualCostChart(tesla.selectedType);
                 }
             }
         }
@@ -54,14 +55,14 @@ var eiaGov = {
         for (var i = 0; i < this.gasPriceUrls.length; i++) {
             if (user.state.indexOf(this.gasPriceUrls[i][0]) != -1) {
                 $.getJSON(this.gasPriceBaseUrl + this.gasPriceUrls[i][1], function(json) {
-                    user.gasPrice = json.series[0].data[0][1];
+                    user.gasPrice = json.series[0].data[0][1].toFixed(2);
                 });
             }
         }
     },
     getEnergyPrice: function() {
         $.getJSON(this.energyPriceUrl[0] + user.state + this.energyPriceUrl[1], function(json) {
-            user.energyPrice = json.series[0].data[0][1] / 100;
+            user.energyPrice = (json.series[0].data[0][1] / 100).toFixed(2);
         });
     }
 };
@@ -650,6 +651,15 @@ var View = {
         if(compCar.turnRadius != 0) { $("#comp-radius").text(compCar.turnRadius + ' ft.'); }
         if(compCar.weight != 0) { $("#comp-weight").text(compCar.weight + ' lbs'); }
     },
+    renderAnnualCostChart: function(selectedTesla) {
+        var data = [['Year', 'Tesla', compCar.make],
+          ['2015', tesla.annualCosts.yearTotals[0], compCar.annualCosts.yearTotals[0]],
+          ['2016', tesla.annualCosts.yearTotals[1], compCar.annualCosts.yearTotals[1]],
+          ['2017', tesla.annualCosts.yearTotals[2], compCar.annualCosts.yearTotals[2]],
+          ['2018', tesla.annualCosts.yearTotals[3], compCar.annualCosts.yearTotals[3]],
+          ['2019', tesla.annualCosts.yearTotals[4], compCar.annualCosts.yearTotals[4]]];
+        reDrawChart(data);
+    },
     renderTeslaAnnualCosts: function(selectedTesla) {
         for(var year = 0; year < 5; year++) {
             $("#tesla-fuel" + (year + 1)).text('$' + tesla.fuelCost);
@@ -758,36 +768,36 @@ function showSections() {
         setTimeout(function(){
             $('.mile-slider').css('visibility','visible');
         }, 2500);
-        $('#fuel-nav-button').css('color','green');
+        $('#fuel-nav-button').css('border-bottom','solid green 1px');
         $('#fuel-nav-button').removeAttr('disabled');
     } else {
-        $('#fuel-nav-button').css('color','red');
+        $('#fuel-nav-button').css('border-bottom','red');
     }
     if (compCar.tests.performance < 2 ) {
         $(".performance-section-div").fadeIn( 3000 );
-        $('#performance-nav-button').css('color','green');
+        $('#performance-nav-button').css('border-bottom','green');
         $('#performance-nav-button').removeAttr('disabled');
     } else if (compCar.tests.performance >= 2 && compCar.tests.performance < 5) {
         $(".performance-section-div").fadeIn( 3000 );
-        $('#performance-nav-button').css('color','yellow');
+        $('#performance-nav-button').css('border-bottom','yellow');
         $('#performance-nav-button').removeAttr('disabled');
     } else {
-        $('#performance-nav-button').css('color','red');
+        $('#performance-nav-button').css('border-bottom','red');
     }
     if (compCar.tests.costs < 10 ) {
         $(".comp-annual-div").fadeIn( 3000 );
-        $('#comp-cost-nav-button').css('color','green');
+        $('#comp-cost-nav-button').css('border-bottom','green');
         $('#comp-cost-nav-button').removeAttr('disabled');
     } else if (compCar.tests.costs >= 10 && compCar.tests.costs < 25) {
         $(".comp-annual-div").fadeIn( 3000 );
-        $('#comp-cost-nav-button').css('color','yellow');
+        $('#comp-cost-nav-button').css('border-bottom','yellow');
         $('#comp-cost-nav-button').removeAttr('disabled');
     } else {
-        $('#comp-cost-nav-button').css('color','red');
+        $('#comp-cost-nav-button').css('border-bottom','red');
     }
     $(".tesla-annual-div").fadeIn( 3000 );
     $(".section-nav").fadeIn( 1000 );
-    $('#tesla-cost-nav-button').css('color','green');
+    $('#tesla-cost-nav-button').css('border-bottom','green');
     $('#tesla-cost-nav-button').removeAttr('disabled');
 }
 
@@ -822,6 +832,7 @@ function submitController() {
         View.renderCompPerformanceData();
         View.renderTeslaAnnualCosts(tesla.selectedType);
         View.renderCompAnnualCosts();
+        View.renderAnnualCostChart(tesla.selectedType);
     }, 3000);
     setTimeout(function(){
         //all view stuff

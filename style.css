@@ -127,7 +127,7 @@ a.disabled {
 }
 
 .upper-section {
-	padding-bottom: 2%;
+	
 }
 
 /* ------- Hide the divs to start -----------*/
@@ -240,14 +240,16 @@ select:hover {
 }
 
 .comp-button {
+	color: white;
 	padding-top: .8%;
 	background-color: #333333;
 	border: solid #bf0021 2px;
 	margin-bottom: 1%;
-	margin-top: 1%;
+	margin-top: 10%;
 	padding-bottom: 1%;
 	border-radius: 4px;
-	font-size: .9em;
+	font-size: 1.4em;
+	text-align: center;
 }
 
 .button-text {
@@ -309,15 +311,26 @@ button[disabled]:hover {
 /* ----------------- VS Display --------------------*/
 
 .car-photo-left {
-	margin-top: 10%;
 	border: solid #bf0021 3px;
 	width: 100%;
 }
 
 .car-photo-right {
-	margin-top: 10%;
 	border: solid #bf0021 3px;
 	width: 100%;
+}
+
+.photo-border {
+	background-color: #4D5D73;
+	border: solid #bf0021 2px;
+	color: white;
+}
+
+.photo-border-bottom {
+	background-color: #4D5D73;
+	border: solid #bf0021 2px;
+	border-top: none;
+	color: white;
 }
 
 .pad-right {
@@ -621,6 +634,11 @@ button[disabled]:hover {
 
 .footer-image {
 	width: 100%;
+}
+
+.small-footer-text {
+	font-size: .7em;
+	color: #831c20;
 }
 
 .copyright {
