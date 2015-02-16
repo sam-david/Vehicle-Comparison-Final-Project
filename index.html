@@ -12,6 +12,7 @@
   <script src="js/jquery-2.1.0.js"></script>
   <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="js/graph.js"></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="js/modernizr.js"></script>
   <script src="js/responsive-tables.js"></script>
@@ -29,7 +30,7 @@
   <nav class="top-bar" data-topbar role="navigation">
     <ul class="title-area">
       <li class="name">
-        <h1><a href="index.html" class="nav-title">Sam David</a></h1>
+        <h1><a href="index.html" class="nav-title">Tesla Comparison</a></h1>
       </li>
        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
       <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
@@ -38,11 +39,19 @@
     <section class="top-bar-section">
       <!-- Right Nav Section -->
       <ul class="left">
-      <li><a href="#">Left Nav Button</a></li>
+      <div class="section-nav">
+        <li><a href="#fuel-section" id="fuel-nav-button" disabled>Fuel</li>
+        <li><a href="#performance-section" id="performance-nav-button" disabled>Performance</li>
+        <li><a href="#teslaannual" id="tesla-cost-nav-button" disabled>Tesla</li>
+        <li><a href="#compannual" id="comp-cost-nav-button" disabled>Comp</li>
+
+
+      </div>
       </ul>
+
       <ul class="right">
-        <li><a class="nav-button" href="about.html">Contact</a></li>
-        <li><a class="nav-button" href="blog.html">About</a></li>
+        <li><a class="nav-button" href="contact.html">Contact</a></li>
+        <li><a class="nav-button" href="about.html">About</a></li>
         <li><a class="nav-button" target="_blank" href="http://www.teslamotors.com/">Tesla Motors</a></li>
         <li><a class="nav-button" target="_blank" href="http://www.edmunds.com/">Edmunds</a></li>
       </ul>
@@ -60,14 +69,14 @@
     </div>
   </div>
   <div class="row light-blue-background">
-    <div class="large-4 wide-column">
-      <div class="tesla-button" id="60kwh"><img src="images/new_60.png" class="battery-image"><p>60 kWh Battery</p><p>208 mile range | 0-60: 5.9 sec | 302 hp</p></div>
+    <div id="60kwh" class="large-4 medium-4 column tesla-button">
+      <div class="" ><img src="images/model-s/60.png" class="battery-image"><p>60 kWh Battery</p><p>208 mile range | 0-60: 5.9 sec | 380 hp</p></div>
     </div>
-    <div class="large-4 wide-column">
-      <div class="tesla-button" id="85kwh"><img src="images/new_85.png" class="battery-image"><p>85 kWh Battery</p><p>265 mile range | 0-60: 5.4 sec | 362 hp</p></div>
+    <div id="85kwh" class="large-4 medium-4 column tesla-button">
+      <div class="" ><img src="images/model-s/85.png" class="battery-image"><p>85 kWh Battery</p><p>265 mile range | 0-60: 5.4 sec | 380 hp</p></div>
     </div>
-    <div class="large-4 wide-column">
-      <div class="tesla-button" id="p85kwh"><img src="images/new_p85.png" class="battery-image-p85"><p>p85D kWh Battery</p><p>253 mile range | 0-60: 3.2 sec | 691 hp</p></div>
+    <div id="p85kwh" class="large-4 medium-4 column tesla-button">
+      <div class="" ><img src="images/model-s/p85d.png" class="battery-image"><p>p85D kWh Battery</p><p>253 mile range | 0-60: 3.2 sec | 691 hp</p></div>
     </div>
   </div>
   <div class="row light-blue-background">
@@ -188,39 +197,17 @@
             <input class="zip-text" id="zipCode" type="text" placeholder="Zip Code" disabled>
           </div>
         </div>
-        <div class="row">
-
-          <div class="large-3 medium-3 columns">
-            <button type="button" class="comp-button" onclick="submitCar()"><span class="underline-button">Submit</span></button>
-          </div>
-          <div class="large-3 medium-3 columns">
-            <button type="button" class="comp-button" onclick="reset()"><span class="underline-button">Reset</span></button>
-          </div>
-        </div>
-        <div class="section-nav">
-          <div class="row">
-            <div class="large-3 medium-3 columns">
-              <button type="button" class="comp-button" id="fuel-nav-button" onclick="window.location.href='#fuel-section'" disabled><span class="underline-button">Fuel</span></button>
-            </div>
-            <div class="large-3 medium-3 columns">
-              <button type="button" class="comp-button" id="performance-nav-button" onclick="window.location.href='#performance-section'" disabled><span class="underline-button">Performance</span></button>
-            </div>
-            <div class="large-3 medium-3 columns">
-              <button type="button" class="comp-button" id="tesla-cost-nav-button" onclick="window.location.href='#teslaannual'" disabled><span class="underline-button">Tesla Cost</span></button>
-            </div>
-            <div class="large-3 medium-3 columns">
-              <button type="button" class="comp-button" id="comp-cost-nav-button" onclick="window.location.href='#compannual'" disabled><span class="underline-button">Comp Cost</span></button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="large-12 columns">
-              <p class="comp-section-heading-colors">|<span class="section-green"> Full Data </span>: <span class="section-yellow"> Missing Data </span>: <span class="section-red"> No Data </span>|</p>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="row">
-        <div class="large-12 columns">
+            <div class="large-3 medium-3 columns comp-button" onclick="submitCar()" >
+              <p class="button-text">Submit</p>
+            </div>
+            <div class="large-3 medium-3 columns left comp-button" onclick="reset()">
+              <p class="button-text">Reset</p>
+            </div>
+      </div>
+      <div class="row">
+        <div class="large-8 columns">
           <div class="facebook-share"><div class="fb-share-button" data-href="http://www.teslacomparison.com/"></div></div>
           <a href="https://twitter.com/share" class="twitter-share-button" data-text="I just compared the Tesla on Teslacomparison.com" data-count="none">Tweet</a>
           <div class="google-plus-button">
@@ -241,21 +228,14 @@
     </div>
   </div>
     <a name="fuel-section"></a>
-    <div class="row light-blue-background">
-      <div class="large-5 medium-5 small-5 columns">
-        <div class="pad-left">
+    <div class="wide-row light-blue-background">
+      <div class="large-6 medium-6 small-6 columns">
         <img src="images/model-s-60.jpg" class="car-photo-left" id="tesla-photo">
         <h2 class="car-display-title" id="tesla-title">Tesla</h2>
-        </div>
       </div>
-      <div class="large-2 medium-2 small-2 columns">
-        <img src="images/elements/vs-formal.png" class="vs-icon">
-      </div>
-      <div class="large-5 medium-5 small-5 columns">
-        <div class="pad-right">
+      <div class="large-6 medium-6 small-6 columns">
         <img src="images/model-s-60.jpg" class="car-photo-right" id="comparison-photo">
         <h2 class="car-display-title"  id="comparison-title">Comparison Car</h2>
-        </div>
       </div>
     </div>
     <div class="row light-blue-background">
@@ -331,13 +311,20 @@
       </div>
     </div>
   </div>
+  <a name="performance-section"></a>
   <div class="performance-section-div">
-    <a name="performance-section"></a>
+    
     <div class="row light-blue-background">
       <div class="large-12 columns">
         <h2 class="section-heading">Performance</h2>
       </div>
     </div>
+    <div class="row light-blue-background">
+      <div class="large-10 large-centered columns">
+        <div id="chart_div" style="width: 900px; height: 500px;"></div>
+      </div>
+    </div>
+    
     <div class="row light-blue-background">
       <div class="large-12 columns section-bar-div">
         <img src="images/elements/section-bar.png" class="left-section-bar">
